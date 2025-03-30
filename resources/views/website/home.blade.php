@@ -3,6 +3,14 @@
 @section('title', 'Home Page')
 
 @section('content')
+<style>
+  .swiper-button-next svg,.swiper-button-prev svg {
+    width: 100%;
+    height: 64%;
+    object-fit: contain;
+    transform-origin: center
+}
+</style>
 
   <section class="relative bg-gradient-to-r from-[#161c44] to-[#0c3c7c] text-white overflow-hidden">
     <div class="container mx-auto px-4 py-16 md:py-24">
@@ -133,7 +141,7 @@
       </p>
 
       <!-- Navigation Tabs -->
-      <div class="mt-8 overflow-x-auto scroll-smooth hide-scrollbar">
+      <div class="mt-8 oscroll-smooth hide-scrollbar">
         <div class="inline-flex w-full md:w-auto md:justify-center">
           <ul class="flex space-x-4 whitespace-nowrap">
             <li>
@@ -857,8 +865,7 @@
             <!-- Testimonial Items -->
             <div class="swiper-slide">
               <div class="bg-white p-8 rounded-3xl shadow-lg border border-gray-100 relative">
-                <div class="absolute top-0 left-0 -translate-y-4 text-orange-500 text-6xl">“</div>
-                <p class="text-gray-600 text-lg relative z-10">
+                       <p class="text-gray-600 text-lg relative z-10">
                   "The quality of instruction here is unmatched. The trainers' expertise and teaching methods helped me transition into a React developer role seamlessly."
                 </p>
                 <div class="flex items-center gap-6 mt-8">
@@ -880,7 +887,7 @@
             </div>
   <div class="swiper-slide">
               <div class="bg-white p-8 rounded-3xl shadow-lg border border-gray-100 relative">
-                <div class="absolute top-0 left-0 -translate-y-4 text-orange-500 text-6xl">“</div>
+                
                 <p class="text-gray-600 text-lg relative z-10">
                   "The quality of instruction here is unmatched. The trainers' expertise and teaching methods helped me transition into a React developer role seamlessly."
                 </p>
@@ -903,7 +910,7 @@
             </div>
             <div class="swiper-slide">
               <div class="bg-white p-8 rounded-3xl shadow-lg border border-gray-100 relative">
-                <div class="absolute top-0 left-0 -translate-y-4 text-orange-500 text-6xl">“</div>
+            
                 <p class="text-gray-600 text-lg relative z-10">
                   "The quality of instruction here is unmatched. The trainers' expertise and teaching methods helped me transition into a React developer role seamlessly."
                 </p>
@@ -916,7 +923,7 @@
                     <p class="text-gray-600">Senior React Developer</p>
                     <div class="flex items-center mt-2">
                       <div class="flex text-amber-400">
-                        ★★★★☆
+
                       </div>
                       <span class="ml-2 text-gray-500">4.8/5</span>
                     </div>
@@ -1014,10 +1021,10 @@
 <script>
   // Add custom arrow icons
   document.querySelectorAll('.swiper-button-prev').forEach(btn => {
-    btn.innerHTML = `<svg class="w-5 h-5 text-white"><use href="#left-arrow"></use></svg>`;
+    btn.innerHTML = `<svg class="w-5 h-2 text-white bg-[#2c0b57] rounded-full"><use href="#left-arrow"></use></svg>`;
   });
   document.querySelectorAll('.swiper-button-next').forEach(btn => {
-    btn.innerHTML = `<svg class="w-5 h-5 text-white"><use href="#right-arrow"></use></svg>`;
+    btn.innerHTML = `<svg class="w-5 h-2 text-white bg-[#2c0b57] rounded-full"><use href="#right-arrow"></use></svg>`;
   });
 </script>
 
