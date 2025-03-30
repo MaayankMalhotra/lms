@@ -463,7 +463,7 @@
           <img
             src="https://cdn.builder.io/api/v1/image/assets/TEMP/0f938c1f3d199500f30705cd757a025543cd56a6a374094b8fbbaa4f83e5a0b0"
             alt="Student Success"
-            class="relative w-full rounded-2xl shadow-2xl transition transform group-hover:rotate-1">
+            class="relative w-full rounded-2xl shadow-2xl">
         </div>
 
         <!-- Content -->
