@@ -844,7 +844,7 @@
       <div class="order-1 lg:order-none">
         <img src="./images/testimonals.png" 
              alt="Happy students" 
-             class="w-full h-auto rounded-3xl shadow-2xl transform hover:rotate-1 transition duration-300">
+             class="w-full h-auto rounded-xl shadow-xl border-2">
       </div>
 
       <!-- Testimonials Carousel -->
