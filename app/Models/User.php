@@ -52,4 +52,12 @@ public function studentQuizSetAttempts()
 {
     return $this->hasMany(StudentQuizSetAttempt::class, 'user_id');
 }
+public function batches()
+    {
+        return $this->hasMany(Batch::class, 'teacher_id');
+    }
+    public function codingSubmissions()
+    {
+        return $this->hasMany(CodingSubmission::class);
+    }
 }

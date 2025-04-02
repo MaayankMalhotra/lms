@@ -1,0 +1,86 @@
+@extends('admin.layouts.app')
+
+@section('content')
+<div class="min-h-screen bg-gradient-to-r from-gray-50 to-gray-100 p-8">
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <div class="mb-8 flex justify-between items-center">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-800">
+                    <i class="fas fa-code mr-2 text-blue-500"></i>Coding Questions
+                </h1>
+                <p class="text-gray-500 mt-2">Manage all coding questions in the system</p>
+            </div>
+            <a href="{{ route('admin.coding_questions.create') }}"
+               class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg transition-all">
+                <i class="fas fa-plus-circle mr-2"></i>Add New Question
+            </a>
+        </div>
+
+        <!-- Coding Questions Table -->
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+            <table class="w-full">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Title</th>
+                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Description</th>
+                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Solutions</th>
+                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    @foreach($codingQuestions as $question)
+                    <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="px-6 py-4">
+                            <div class="text-sm font-medium text-gray-900">{{ $question->title }}</div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="text-sm text-gray-700">{{ Str::limit($question->description, 100) }}</div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="text-sm text-gray-700">
+                                <ul class="list-disc pl-5">
+                                    @foreach($question->solutions as $solution)
+                                        <li>{{ $solution }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="flex space-x-4">
+                                <a href="{{ route('admin.coding_questions.edit', $question->id) }}"
+                                   class="text-blue-500 hover:text-blue-600">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <form action="{{ route('admin.coding_questions.destroy', $question->id) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="text-red-500 hover:text-red-600"
+                                            onclick="return confirm('Are you sure you want to delete this question?')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+
+            @if($codingQuestions->isEmpty())
+            <div class="p-12 text-center text-gray-500">
+                <i class="fas fa-inbox text-4xl mb-4"></i>
+                <p class="text-lg">No coding questions found. Start by adding a new question!</p>
+            </div>
+            @endif
+        </div>
+
+        <!-- Pagination -->
+        @if($codingQuestions->hasPages())
+        <div class="mt-8">
+            {{ $codingQuestions->links() }}
+        </div>
+        @endif
+    </div>
+</div>
+@endsection

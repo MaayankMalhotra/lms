@@ -3084,18 +3084,15 @@ function getQueryParam(param) {
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get(param);
 }
-
+const courseId = "{{ $course->id ?? '' }}";
 // Function to fetch batches dynamically
 async function fetchBatches() {
-    const courseId = getQueryParam('id');
-    if (!courseId) {
-        console.error('Course ID not found in URL');
-        return;
-    }
+   // const courseId = getQueryParam('id');
+    console.log(courseId);
 
     try {
         // const response = await fetch(`/api/batches?id=${courseId}`);
-        const response = await fetch(`https://think-champ.com/thinkchampion/public/api/batches?id=${courseId}`);
+        const response = await fetch(`http://localhost:8000/api/batches?id=${courseId}`);
         batches = await response.json();
 console.log(batches)
         if (response.ok) {
@@ -3185,8 +3182,8 @@ document.getElementById("batch-enroll-button").addEventListener("click", functio
             status: batch.status,
             startDate: batch.startDate,
         });
-        // window.location.href = `/public/register?${params.toString()}`;
-        window.location.href = `https://think-champ.com/thinkchampion/public/register?${params.toString()}`;
+         window.location.href = `/register?${params.toString()}`;
+       // window.location.href = `https://think-champ.com/thinkchampion/public/register?${params.toString()}`;
     }
 });
 function selectBatch(date) {

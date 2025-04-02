@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Batch;
+use App\Models\Payment;
 use App\Models\User;
 use App\Models\Course;
 use App\Models\Student;
@@ -270,6 +271,13 @@ class BatchController extends Controller
             'user_id' => $user->id,
             'batch_id' => $validated['batch_id'],
         ]);
+        // Payments table mein entry
+    $payment = Payment::create([
+        'amount' => $validated['price'], // Price ko amount ke roop mein use karo
+        'batch_id' => $validated['batch_id'], // Batch ID
+        'student_id' => $student->id, // Student ID
+        'enrollment_id' => $enrollment->id, // Student ID
+    ]);
     
         // Success message ke saath redirect, jaise pyar bhara jawab
         return redirect()->back()->with('success', 'Registration successful! Welcome to the journey.');

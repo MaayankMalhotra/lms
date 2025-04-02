@@ -132,29 +132,21 @@ public function destroy($id)
     }
 }
 
-public function courseDetails(Request $request)
-    {
-        // User role check karo aur redirect karo
-      
-
-        // Request se id nikal lo
-        $courseId = $request->query('id');
-
-        if (!$courseId) {
-            // Agar id nahi mili toh error ya default view
-            return view('website.course_details')->with('error', 'Course ID not found!');
-        }
-
-        // Course ki row database se fetch karo
-        $course = Course::where('id', $courseId)->first();
-
-        if (!$course) {
-            // Agar course nahi mila toh error message
-            return view('website.course_details')->with('error', 'Course not found!');
-        }
-
-        // Course details ke saath view pe bhejo
-        return view('website.course_details', ['course' => $course]);
+public function courseDetails($slug)
+{
+    // Slug directly parameter se mil gaya
+    if (!$slug || !is_string($slug) || empty(trim($slug))) {
+        return view('website.course_details')->with('error', 'Invalid or missing course slug!');
     }
 
+    // Slug se course ki row database se fetch karo
+    $course = Course::where('slug', $slug)->first();
+
+    if (!$course) {
+        return view('website.course_details')->with('error', 'Course not found!');
+    }
+
+    // Course details ke saath view pe bhejo
+    return view('website.course_details', ['course' => $course]);
+}
 }

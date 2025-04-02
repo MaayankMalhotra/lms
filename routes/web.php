@@ -8,6 +8,9 @@ use App\Http\Controllers\ImageUploadController;
 use App\Http\Controllers\InternshipController;
 use App\Http\Controllers\BatchController;
 use App\Http\Controllers\StudentQuizController;
+use App\Http\Controllers\EnrollmentController;
+use App\Http\Controllers\CodingQuestionController;
+use App\Http\Controllers\CodingTestController;
 use App\Models\Course;
 use App\Models\Internship;
 use App\Models\Batch;
@@ -151,7 +154,8 @@ Route::get('/internship_details', function () {
 // })->name('website.course_details');
 
 
-Route::get('/course_details', [CourseController::class, 'courseDetails'])->name('website.course_details');
+// Route::get('/course_details', [CourseController::class, 'courseDetails'])->name('website.course_details');
+Route::get('/course-details/{slug?}', [CourseController::class, 'courseDetails'])->name('website.course_details');
 
 Route::get('/login', function () {
     if (Auth::user() && Auth::user()->role == 1) {
@@ -245,3 +249,31 @@ Route::get('/api/batches', [BatchController::class, 'getBatchesByCourse'])->name
 Route::get('/register', [BatchController::class, 'showr'])->name('register');
 // Route::post('/register/submit', [BatchController::class, 'submit'])->name('register.submit');
 Route::post('/register/submit', [BatchController::class, 'submitr'])->name('register.submit');
+
+// Enrollment Management Routes
+Route::get('/admin/enrollments', [EnrollmentController::class, 'index'])->name('admin.enrollment.index');
+Route::get('/admin/enrollment/add', [EnrollmentController::class, 'create'])->name('admin.enrollment.add');
+Route::get('/admin/enrollment/edit/{id}', [EnrollmentController::class, 'edit'])->name('admin.enrollment.edit');
+Route::put('/admin/enrollment/update/{id}', [EnrollmentController::class, 'update'])->name('admin.enrollment.update');
+Route::delete('/admin/enrollment/destroy/{id}', [EnrollmentController::class, 'destroy'])->name('admin.enrollment.destroy');
+
+// Add this to your existing enrollment routes
+Route::post('/admin/enrollment/approve/{id}', [EnrollmentController::class, 'approve'])->name('admin.enrollment.approve');
+// Admin routes for coding questions
+Route::prefix('admin')->group(function () {
+    Route::get('/coding-questions', [CodingQuestionController::class, 'index'])->name('admin.coding_questions.index');
+    Route::get('/coding-questions/create', [CodingQuestionController::class, 'create'])->name('admin.coding_questions.create');
+    Route::post('/coding-questions', [CodingQuestionController::class, 'store'])->name('admin.coding_questions.store');
+    Route::get('/coding-questions/{id}/edit', [CodingQuestionController::class, 'edit'])->name('admin.coding_questions.edit');
+    Route::put('/coding-questions/{id}', [CodingQuestionController::class, 'update'])->name('admin.coding_questions.update');
+    Route::delete('/coding-questions/{id}', [CodingQuestionController::class, 'destroy'])->name('admin.coding_questions.destroy');
+});
+// Student routes for coding tests
+Route::prefix('student')->middleware('auth')->group(function () {
+    Route::get('/coding-tests', [CodingTestController::class, 'index'])->name('student.coding_tests.index');
+    Route::get('/coding-tests/{id}', [CodingTestController::class, 'show'])->name('student.coding_tests.show');
+    Route::post('/coding-tests/{id}/submit', [CodingTestController::class, 'submit'])->name('student.coding_tests.submit');
+});
+
+// Add this to your existing admin routes
+Route::get('/admin/coding-questions/{id}/submissions', [CodingQuestionController::class, 'showSubmissions'])->name('admin.coding_questions.show_submissions');

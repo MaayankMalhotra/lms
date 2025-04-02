@@ -27,6 +27,9 @@
             <a href="{{ route('student.quiz_sets') }}" class="flex items-center p-3 {{ request()->routeIs('student.quiz_sets') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
                 <i class="fas fa-question-circle mr-3 text-lg"></i> Quiz Management
             </a>
+            <a href="{{ route('student.coding_tests.index') }}" class="flex items-center p-3 {{ request()->routeIs('student.coding_tests.index') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
+                <i class="fas fa-question-circle mr-3 text-lg"></i> Coding Module
+            </a>
         </li>
         @endif
         <!-- Admin ke liye baaki sections (Sirf role == 1 ko dikhega) -->
@@ -74,6 +77,41 @@
                     </li>
                 </ul>
             </li>
+
+                        <!-- enrollment Management -->
+                        <li x-data="{ isOpen: {{ request()->routeIs('admin.enrollment.*') ? 'true' : 'false' }} }">
+                            <a href="javascript:void(0)" @click="isOpen = !isOpen" class="flex items-center justify-between p-3 {{ request()->routeIs('admin.enrollment.*') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
+                                <span class="flex items-center">
+                                    <i class="fas fa-briefcase mr-3 text-lg"></i> Enrollment Management
+                                </span>
+                                <i class="fas fa-chevron-down text-sm transition-transform" :class="{ 'rotate-180': isOpen }"></i>
+                            </a>
+                            <ul x-show="isOpen" x-collapse class="ml-6 mt-2 space-y-2 border-l-2 border-gray-300 pl-4">
+
+                                <li>
+                                    <a href="{{ route('admin.enrollment.index') }}" class="flex items-center p-2 text-sm {{ request()->routeIs('admin.enrollment.list') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
+                                        <i class="fas fa-list mr-2"></i> View Enrollments
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                           <!-- Coding Module -->
+                           <li x-data="{ isOpen: {{ request()->routeIs('admin.enrollment.*') ? 'true' : 'false' }} }">
+                            <a href="javascript:void(0)" @click="isOpen = !isOpen" class="flex items-center justify-between p-3 {{ request()->routeIs('admin.enrollment.*') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
+                                <span class="flex items-center">
+                                    <i class="fas fa-briefcase mr-3 text-lg"></i> Coding Module
+                                </span>
+                                <i class="fas fa-chevron-down text-sm transition-transform" :class="{ 'rotate-180': isOpen }"></i>
+                            </a>
+                            <ul x-show="isOpen" x-collapse class="ml-6 mt-2 space-y-2 border-l-2 border-gray-300 pl-4">
+
+                                <li>
+                                    <a href="{{ route('admin.coding_questions.index') }}" class="flex items-center p-2 text-sm {{ request()->routeIs('admin.coding_questions.index') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
+                                        <i class="fas fa-list mr-2"></i> Coding Module
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
 
             <!-- Batch Management -->
             <li x-data="{ isOpen: {{ request()->routeIs('admin.batches.*') ? 'true' : 'false' }} }">

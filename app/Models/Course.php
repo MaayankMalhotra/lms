@@ -24,4 +24,8 @@ class Course extends Model
     {
         return $this->hasMany(Recording::class, 'course_id');
     }
+    public function batches()
+    {
+        return $this->hasMany(Batch::class);
+    }
 }
