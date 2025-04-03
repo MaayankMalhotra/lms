@@ -134,7 +134,7 @@
     <div class="container mx-auto px-4">
       <!-- Title -->
       <h2 class="text-3xl lg:text-5xl font-bold text-center text-[#2c0b57]">
-        Instantly & <span class="text-[#ffb31a]">Interactively</span>
+        Instantly & <span class="text-[#ffb31a]">Interactively Maayank</span>
       </h2>
       <p class="text-lg text-center text-gray-600 mt-4">
         Learn from carefully curated learning paths with up-to-date interactive courses.
