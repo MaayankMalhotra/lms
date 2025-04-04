@@ -129,7 +129,7 @@
     let message = document.getElementById('message').value;
 
     // GET request ke liye data ko query string mein convert karo
-    const url = `${appUrl}/message/send?receiver_id=${receiverId}&message=${encodeURIComponent(message)}`;
+    const url = `http://3.110.55.14:8000/message/send?receiver_id=${receiverId}&message=${encodeURIComponent(message)}`;
 
     fetch(url, {
         method: 'GET',
