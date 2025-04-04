@@ -106,24 +106,41 @@
                 });
         }
 
+        // document.getElementById('message-form').addEventListener('submit', function(e) {
+        //     e.preventDefault();
+        //     let message = document.getElementById('message').value;
+        //     fetch('/message/send', {
+        //         method: 'get',
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //             'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        //         },
+        //         body: JSON.stringify({
+        //             receiver_id: receiverId,
+        //             message: message
+        //         })
+        //     }).then(() => {
+        //         document.getElementById('message').value = '';
+        //         fetchMessages();
+        //     });
+        // });
         document.getElementById('message-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            let message = document.getElementById('message').value;
-            fetch('/message/send', {
-                method: 'get',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({
-                    receiver_id: receiverId,
-                    message: message
-                })
-            }).then(() => {
-                document.getElementById('message').value = '';
-                fetchMessages();
-            });
-        });
+    e.preventDefault();
+    let message = document.getElementById('message').value;
+
+    // GET request ke liye data ko query string mein convert karo
+    const url = `${appUrl}/message/send?receiver_id=${receiverId}&message=${encodeURIComponent(message)}`;
+
+    fetch(url, {
+        method: 'GET',
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        }
+    }).then(() => {
+        document.getElementById('message').value = '';
+        fetchMessages();
+    });
+});
 
         // Real-time message listening
         Echo.channel(`chat.{{ auth()->id() }}`)
