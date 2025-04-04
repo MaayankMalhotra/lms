@@ -58,6 +58,7 @@ class ChatController extends Controller
                 })
                 ->select('id', 'name')
                 ->get();
+                dd($students);
 
             \Log::info('Teacher ID: ' . $currentUser->id . ', Students: ' . json_encode($students));
 
