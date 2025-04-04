@@ -110,7 +110,7 @@
             e.preventDefault();
             let message = document.getElementById('message').value;
             fetch('/message/send', {
-                method: 'POST',
+                method: 'get',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
