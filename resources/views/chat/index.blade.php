@@ -57,18 +57,14 @@
         <h1>Chat System</h1>
         <div class="row">
             <div class="col-md-4 user-list">
-                <h3>Teachers</h3>
-                <ul>
-                    @foreach($teachers as $teacher)
-                        <li><a href="#" onclick="loadChat({{ $teacher->id }})">{{ $teacher->name }}</a></li>
-                    @endforeach
-                </ul>
-                <h3>Students</h3>
-                <ul>
-                    @foreach($students as $student)
-                        <li><a href="#" onclick="loadChat({{ $student->id }})">{{ $student->name }}</a></li>
-                    @endforeach
-                </ul>
+                @if(auth()->user()->role === 'teacher')
+                    <h3>Students</h3>
+                    <ul>
+                        @foreach($students as $student)
+                            <li><a href="#" onclick="loadChat({{ $student->id }})">{{ $student->name }}</a></li>
+                        @endforeach
+                    </ul>
+                @endif
             </div>
             <div class="col-md-8">
                 <div id="chat-box" class="chat-box"></div>
@@ -83,7 +79,15 @@
     </div>
 
     <script>
+        const appUrl = '{{ env('APP_URL') }}';
         let receiverId = null;
+
+        // Agar student hai aur selectedReceiverId set hai, toh automatically load karo
+        @if(auth()->user()->role === 'student' && $selectedReceiverId)
+            receiverId = {{ $selectedReceiverId }};
+            document.getElementById('receiver_id').value = receiverId;
+            fetchMessages();
+        @endif
 
         function loadChat(id) {
             receiverId = id;
@@ -93,7 +97,7 @@
 
         function fetchMessages() {
             if (!receiverId) return;
-            fetch(`/messages/${receiverId}`)
+            fetch(`${appUrl}/messages/${receiverId}`)
                 .then(response => response.json())
                 .then(messages => {
                     let chatBox = document.getElementById('chat-box');
@@ -106,43 +110,23 @@
                 });
         }
 
-        // document.getElementById('message-form').addEventListener('submit', function(e) {
-        //     e.preventDefault();
-        //     let message = document.getElementById('message').value;
-        //     fetch('/message/send', {
-        //         method: 'get',
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //             'X-CSRF-TOKEN': '{{ csrf_token() }}'
-        //         },
-        //         body: JSON.stringify({
-        //             receiver_id: receiverId,
-        //             message: message
-        //         })
-        //     }).then(() => {
-        //         document.getElementById('message').value = '';
-        //         fetchMessages();
-        //     });
-        // });
         document.getElementById('message-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    let message = document.getElementById('message').value;
+            e.preventDefault();
+            let message = document.getElementById('message').value;
 
-    // GET request ke liye data ko query string mein convert karo
-    const url = `http://3.110.55.14:8000/message/send?receiver_id=${receiverId}&message=${encodeURIComponent(message)}`;
+            const url = `${appUrl}/message/send?receiver_id=${receiverId}&message=${encodeURIComponent(message)}`;
 
-    fetch(url, {
-        method: 'GET',
-        headers: {
-            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-        }
-    }).then(() => {
-        document.getElementById('message').value = '';
-        fetchMessages();
-    });
-});
+            fetch(url, {
+                method: 'GET',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            }).then(() => {
+                document.getElementById('message').value = '';
+                fetchMessages();
+            });
+        });
 
-        // Real-time message listening
         Echo.channel(`chat.{{ auth()->id() }}`)
             .listen('MessageSent', (e) => {
                 if (e.message.sender_id === receiverId || e.message.receiver_id === receiverId) {
