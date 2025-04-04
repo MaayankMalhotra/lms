@@ -160,7 +160,7 @@
     function loadChat(id) {
         receiverId = id;
         document.getElementById('receiver_id').value = id;
-
+        console.log(auth()->user()->role)
         // Update chat header with selected student's name (for teacher)
         @if(auth()->user()->role == '2')
             const student = @json($students->keyBy('id'));
@@ -212,7 +212,7 @@
     .then(data => {
         document.getElementById('message').value = '';
         fetchMessages();
-
+console.log(auth()->user()->role)
         // Agar teacher hai, toh reply ke baad student ko list se remove karo
         @if(auth()->user()->role == '2')
             if (data.status === 'Message Sent!' && data.receiver_id) {
