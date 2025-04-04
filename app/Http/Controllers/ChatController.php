@@ -16,7 +16,7 @@ class ChatController extends Controller
         $students = collect();
         $selectedReceiverId = null;
 
-        if ($currentUser->role === '3') {
+        if ($currentUser->role == '3') {
             // Student hai, toh uska assigned teacher fetch karo
             $teacher = DB::table('enrollments')
                 ->join('batches', 'enrollments.batch_id', '=', 'batches.id')
@@ -33,7 +33,7 @@ class ChatController extends Controller
             }
         } elseif ($currentUser->role == '2') {
             // Teacher hai, toh saare students fetch karo
-            $students = User::where('role', '3')->get();
+            $students = User::where('role', 'student')->get();
         }
 
         return view('chat.index', compact('teachers', 'students', 'selectedReceiverId'));
