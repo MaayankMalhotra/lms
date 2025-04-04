@@ -32,28 +32,8 @@ class ChatController extends Controller
                 $selectedReceiverId = $teacher->id; // Automatically select karo
             }
         } elseif ($currentUser->role == '2') { // Teacher
-            // Teacher hai, toh un students ko fetch karo jinhone teacher ko message bheja hai
-            $students = User::where('role', '3')
-                ->whereIn('id', function ($query) use ($currentUser) {
-                    // Students jinhone teacher ko message bheja hai
-                    $query->select('sender_id')
-                        ->from('messages')
-                        ->where('receiver_id', $currentUser->id)
-                        ->whereNotIn('sender_id', function ($subQuery) use ($currentUser) {
-                            // Exclude students jinhone teacher se reply receive kiya hai
-                            $subQuery->select('receiver_id')
-                                ->from('messages')
-                                ->where('sender_id', $currentUser->id);
-                        })
-                        ->orderBy('id'); // messages.id ke basis pe sort karo
-                })
-                ->select('id', 'name')
-                ->get();
-
-            // Default student select karo (pehla student jo message bheja hai)
-            if ($students->isNotEmpty()) {
-                $selectedReceiverId = $students->first()->id;
-            }
+            // Teacher hai, toh saare students fetch karo
+            $students = User::where('role', '3')->get();
         }
 
         return view('chat.index', compact('teachers', 'students', 'selectedReceiverId'));
@@ -82,6 +62,6 @@ class ChatController extends Controller
 
         event(new MessageSent($message));
 
-        return response()->json(['status' => 'Message Sent!', 'receiver_id' => $request->receiver_id]);
+        return response()->json(['status' => 'Message Sent!']);
     }
 }

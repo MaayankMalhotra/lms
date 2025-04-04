@@ -8,9 +8,9 @@
             <div class="col-md-4 user-list">
                 @if(auth()->user()->role == '2') <!-- Teacher -->
                     <h3 class="text-lg font-bold text-gray-700 mb-3">Students</h3>
-                    <div class="list-group" id="student-list">
+                    <div class="list-group">
                         @foreach($students as $student)
-                            <div class="list-group-item bg-gray-100 rounded-lg p-3 mb-2 shadow-sm" data-student-id="{{ $student->id }}">
+                            <div class="list-group-item bg-gray-100 rounded-lg p-3 mb-2 shadow-sm">
                                 <a href="#" onclick="loadChat({{ $student->id }})" class="text-orange-500 font-semibold hover:underline">{{ $student->name }}</a>
                             </div>
                         @endforeach
@@ -24,9 +24,7 @@
                         @if(auth()->user()->role == '3' && $selectedReceiverId && $teachers->isNotEmpty())
                             Chatting with: {{ $teachers->first()->name }}
                         @elseif(auth()->user()->role == '2' && $students->isNotEmpty())
-                            <span id="chat-receiver-name">
-                                Chatting with: {{ $students->first()->name }}
-                            </span>
+                            <span id="chat-receiver-name">Select a student to start chatting</span>
                         @else
                             No one to chat with
                         @endif
@@ -116,8 +114,8 @@
         height: 40px;
         font-size: 0.9rem;
         color: #6c757d;
-        flex: 1;
-        min-width: 0;
+        flex: 1; /* Text area ko zyada space do */
+        min-width: 0; /* Ensure flex works properly */
     }
     .chat-form textarea::placeholder {
         color: #6c757d;
@@ -127,11 +125,11 @@
         padding: 8px 20px;
         font-size: 0.9rem;
         margin-left: 10px;
-        background-color: #007bff;
+        background-color: #007bff; /* Blue color for button */
         border-color: #007bff;
     }
     .chat-form button:hover {
-        background-color: #0056b3;
+        background-color: #0056b3; /* Darker blue on hover */
         border-color: #0056b3;
     }
     .user-list .list-group-item {
@@ -150,8 +148,8 @@
     let receiverId = null;
     let receiverName = '';
 
-    // Agar user student ya teacher hai aur selectedReceiverId set hai, toh automatically load karo
-    @if($selectedReceiverId)
+    // Agar student hai aur selectedReceiverId set hai, toh automatically load karo
+    @if(auth()->user()->role == '3' && $selectedReceiverId)
         receiverId = {{ $selectedReceiverId }};
         document.getElementById('receiver_id').value = receiverId;
         fetchMessages();
@@ -210,28 +208,9 @@
                 receiver_id: receiverId,
                 message: message
             })
-        }).then(response => response.json())
-        .then(data => {
+        }).then(() => {
             document.getElementById('message').value = '';
             fetchMessages();
-
-            // Agar teacher hai, toh reply ke baad student ko list se remove karo
-            @if(auth()->user()->role == '2')
-                if (data.status === 'Message Sent!' && data.receiver_id) {
-                    const studentElement = document.querySelector(`.list-group-item[data-student-id="${data.receiver_id}"]`);
-                    if (studentElement) {
-                        studentElement.remove();
-                    }
-
-                    // Agar koi student nahi bacha, toh chat window hide karo
-                    const studentList = document.getElementById('student-list');
-                    if (studentList.children.length === 0) {
-                        receiverId = null;
-                        document.getElementById('chat-receiver-name').innerText = 'No one to chat with';
-                        document.getElementById('chat-box').innerHTML = '';
-                    }
-                }
-            @endif
         }).catch(error => {
             console.error('Error sending message:', error);
         });
