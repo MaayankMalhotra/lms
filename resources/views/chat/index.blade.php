@@ -3,14 +3,14 @@
 @section('content')
 <div class="px-3">
     <section class="bg-white p-6 rounded-lg shadow-md">
-        <h1 class="text-2xl font-bold text-gray-700 mb-4">Chat System test</h1>
+        <h1 class="text-2xl font-bold text-gray-700 mb-4">Chat System</h1>
         <div class="row">
             <div class="col-md-4 user-list">
                 @if(auth()->user()->role == '2') <!-- Teacher -->
                     <h3 class="text-lg font-bold text-gray-700 mb-3">Students</h3>
-                    <div class="list-group">
+                    <div class="list-group" id="student-list">
                         @foreach($students as $student)
-                            <div class="list-group-item bg-gray-100 rounded-lg p-3 mb-2 shadow-sm">
+                            <div class="list-group-item bg-gray-100 rounded-lg p-3 mb-2 shadow-sm" data-student-id="{{ $student->id }}">
                                 <a href="#" onclick="loadChat({{ $student->id }})" class="text-orange-500 font-semibold hover:underline">{{ $student->name }}</a>
                             </div>
                         @endforeach
@@ -21,15 +21,20 @@
                 <div class="chat-container">
                     <!-- Chat Header with Teacher/Student Name -->
                     <div class="chat-header">
-                        @if(auth()->user()->role == '3' && $selectedReceiverId && $teachers->isNotEmpty())
+                        @if($errorMessage)
+                            {{ $errorMessage }}
+                        @elseif(auth()->user()->role == '3' && $selectedReceiverId && $teachers->isNotEmpty())
                             Chatting with: {{ $teachers->first()->name }}
                         @elseif(auth()->user()->role == '2' && $students->isNotEmpty())
-                            <span id="chat-receiver-name">Select a student to start chatting</span>
+                            <span id="chat-receiver-name">
+                                Chatting with: {{ $students->first()->name }}
+                            </span>
                         @else
                             No one to chat with
                         @endif
                     </div>
                     <div id="chat-box" class="chat-box"></div>
+                    <div id="error-message" class="text-red-500 text-center mb-2" style="display: none;"></div>
                     <form id="message-form" class="chat-form">
                         @csrf
                         <input type="hidden" id="receiver_id">
@@ -114,8 +119,8 @@
         height: 40px;
         font-size: 0.9rem;
         color: #6c757d;
-        flex: 1; /* Text area ko zyada space do */
-        min-width: 0; /* Ensure flex works properly */
+        flex: 1;
+        min-width: 0;
     }
     .chat-form textarea::placeholder {
         color: #6c757d;
@@ -125,11 +130,11 @@
         padding: 8px 20px;
         font-size: 0.9rem;
         margin-left: 10px;
-        background-color: #007bff; /* Blue color for button */
+        background-color: #007bff;
         border-color: #007bff;
     }
     .chat-form button:hover {
-        background-color: #0056b3; /* Darker blue on hover */
+        background-color: #0056b3;
         border-color: #0056b3;
     }
     .user-list .list-group-item {
@@ -147,10 +152,9 @@
 <script>
     let receiverId = null;
     let receiverName = '';
-    console.log($selectedReceiverId)
-console.log(auth()->user()->role);
-    // Agar student hai aur selectedReceiverId set hai, toh automatically load karo
-    @if(auth()->user()->role == '3' && $selectedReceiverId)
+
+    // Agar user student ya teacher hai aur selectedReceiverId set hai, toh automatically load karo
+    @if($selectedReceiverId)
         receiverId = {{ $selectedReceiverId }};
         document.getElementById('receiver_id').value = receiverId;
         fetchMessages();
@@ -198,23 +202,54 @@ console.log(auth()->user()->role);
     document.getElementById('message-form').addEventListener('submit', function(e) {
         e.preventDefault();
         let message = document.getElementById('message').value;
-        console.log(message); 
-console.log(receiverId);
-        fetch('/message/send', {
-            method: 'POST',
+        let errorMessage = document.getElementById('error-message');
+
+        // Check if receiverId is null
+        if (!receiverId) {
+            errorMessage.innerText = 'Please select a user to chat with.';
+            errorMessage.style.display = 'block';
+            return;
+        }
+
+        errorMessage.style.display = 'none'; // Hide error message if receiverId is valid
+
+        const url = `/message/send?receiver_id=${receiverId}&message=${encodeURIComponent(message)}`;
+
+        fetch(url, {
+            method: 'GET',
             headers: {
-                'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-            body: JSON.stringify({
-                receiver_id: receiverId,
-                message: message
-            })
-        }).then(() => {
+            }
+        }).then(response => response.json())
+        .then(data => {
+            if (data.status === 'Error') {
+                errorMessage.innerText = data.message;
+                errorMessage.style.display = 'block';
+                return;
+            }
+
             document.getElementById('message').value = '';
             fetchMessages();
+
+            // Agar teacher hai, toh reply ke baad student ko list se remove karo
+            @if(auth()->user()->role == '2')
+                if (data.status === 'Message Sent!' && data.receiver_id) {
+                    const studentElement = document.querySelector(`.list-group-item[data-student-id="${data.receiver_id}"]`);
+                    if (studentElement) {
+                        studentElement.remove();
+                    }
+
+                    const studentList = document.getElementById('student-list');
+                    if (studentList.children.length === 0) {
+                        document.getElementById('chat-receiver-name').innerText = 'No one to chat with';
+                        document.getElementById('chat-box').innerHTML = '';
+                    }
+                }
+            @endif
         }).catch(error => {
             console.error('Error sending message:', error);
+            errorMessage.innerText = 'Failed to send message. Please try again.';
+            errorMessage.style.display = 'block';
         });
     });
 
