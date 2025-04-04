@@ -23,11 +23,10 @@ class ChatController extends Controller
                 ->join('batches', 'enrollments.batch_id', '=', 'batches.id')
                 ->join('users', 'batches.teacher_id', '=', 'users.id')
                 ->where('enrollments.user_id', $currentUser->id)
-                //->where('enrollments.status', 'active')
-               // ->where('users.role', '2')
+                ->where('enrollments.status', 'active')
+                ->where('users.role', '2')
                 ->select('users.id', 'users.name')
                 ->first();
-                
 
             \Log::info('Student ID: ' . $currentUser->id . ', Teacher: ' . json_encode($teacher));
 
@@ -65,13 +64,7 @@ class ChatController extends Controller
             if ($students->isNotEmpty()) {
                 $selectedReceiverId = $students->first()->id;
             } else {
-                // Fallback: Agar koi student ne message nahi bheja, toh saare students fetch karo
-                $students = User::where('role', '3')->get();
-                if ($students->isNotEmpty()) {
-                    $selectedReceiverId = $students->first()->id;
-                } else {
-                    $errorMessage = "No students available to chat with.";
-                }
+                $errorMessage = "No students have messaged you yet.";
             }
         }
 
@@ -100,6 +93,17 @@ class ChatController extends Controller
 
         if (!$receiverId || !$messageContent) {
             return response()->json(['status' => 'Error', 'message' => 'Receiver ID or message cannot be empty'], 400);
+        }
+
+        // Additional validation for trainer: Ensure receiver_id is a student who messaged the trainer
+        if (auth()->user()->role == '2') {
+            $hasMessaged = Message::where('sender_id', $receiverId)
+                ->where('receiver_id', auth()->id())
+                ->exists();
+
+            if (!$hasMessaged) {
+                return response()->json(['status' => 'Error', 'message' => 'You can only reply to students who have messaged you.'], 403);
+            }
         }
 
         $message = Message::create([
