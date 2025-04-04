@@ -8,9 +8,9 @@
             <div class="col-md-4 user-list">
                 @if(auth()->user()->role == '2') <!-- Teacher -->
                     <h3 class="text-lg font-bold text-gray-700 mb-3">Students</h3>
-                    <div class="list-group">
+                    <div class="list-group" id="student-list">
                         @foreach($students as $student)
-                            <div class="list-group-item bg-gray-100 rounded-lg p-3 mb-2 shadow-sm">
+                            <div class="list-group-item bg-gray-100 rounded-lg p-3 mb-2 shadow-sm" data-student-id="{{ $student->id }}">
                                 <a href="#" onclick="loadChat({{ $student->id }})" class="text-orange-500 font-semibold hover:underline">{{ $student->name }}</a>
                             </div>
                         @endforeach
@@ -210,9 +210,28 @@
                 receiver_id: receiverId,
                 message: message
             })
-        }).then(() => {
+        }).then(response => response.json())
+        .then(data => {
             document.getElementById('message').value = '';
             fetchMessages();
+
+            // Agar teacher hai, toh reply ke baad student ko list se remove karo
+            @if(auth()->user()->role == '2')
+                if (data.status === 'Message Sent!' && data.receiver_id) {
+                    const studentElement = document.querySelector(`.list-group-item[data-student-id="${data.receiver_id}"]`);
+                    if (studentElement) {
+                        studentElement.remove();
+                    }
+
+                    // Agar koi student nahi bacha, toh chat window hide karo
+                    const studentList = document.getElementById('student-list');
+                    if (studentList.children.length === 0) {
+                        receiverId = null;
+                        document.getElementById('chat-receiver-name').innerText = 'No one to chat with';
+                        document.getElementById('chat-box').innerHTML = '';
+                    }
+                }
+            @endif
         }).catch(error => {
             console.error('Error sending message:', error);
         });
