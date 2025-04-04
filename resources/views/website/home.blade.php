@@ -53,7 +53,7 @@
                     </span>
                   </div>
                   <p class="text-black text-sm"><strong>🏢 Placed At:</strong> Google</p>
-                  <p class="text-black text-sm"><strong>💰 Package:</strong> ₹32 LPA</p>
+                  <p class="text-black text-sm"><strong>💰 Package:</strong> ₹12 LPA</p>
                   <p class="text-red-500 text-sm font-semibold">🔥 Limited Seats Available</p>
                 </div>
                 <a href="#" class="mt-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white text-center py-2 rounded-lg text-sm font-medium hover:opacity-90 transition-opacity">
