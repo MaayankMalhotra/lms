@@ -34,6 +34,11 @@ class ChatController extends Controller
         } elseif ($currentUser->role == '2') { // Teacher
             // Teacher hai, toh saare students fetch karo
             $students = User::where('role', '3')->get();
+
+            // Default student select karo (pehla student)
+            if ($students->isNotEmpty()) {
+                $selectedReceiverId = $students->first()->id;
+            }
         }
 
         return view('chat.index', compact('teachers', 'students', 'selectedReceiverId'));
