@@ -3,7 +3,7 @@
 @section('content')
 <div class="px-3">
     <section class="bg-white p-6 rounded-lg shadow-md">
-        <h1 class="text-2xl font-bold text-gray-700 mb-4">Chat System</h1>
+        <h1 class="text-2xl font-bold text-gray-700 mb-4">Chat System test</h1>
         <div class="row">
             <div class="col-md-4 user-list">
                 @if(auth()->user()->role == '2') <!-- Teacher -->
@@ -147,7 +147,7 @@
 <script>
     let receiverId = null;
     let receiverName = '';
-    console.log('role')
+    console.log($selectedReceiverId)
 console.log(auth()->user()->role);
     // Agar student hai aur selectedReceiverId set hai, toh automatically load karo
     @if(auth()->user()->role == '3' && $selectedReceiverId)
