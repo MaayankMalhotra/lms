@@ -282,3 +282,10 @@ Route::prefix('student')->middleware('auth')->group(function () {
 // Add this to your existing admin routes
 Route::get('/admin/coding-questions/{id}/submissions', [CodingQuestionController::class, 'showSubmissions'])->name('admin.coding_questions.show_submissions');
 Route::get('{slug?}', [CourseController::class, 'courseDetails'])->name('website.course_details');
+use App\Http\Controllers\ChatController;
+
+Route::middleware('auth')->group(function () {
+    Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
+    Route::get('/messages/{receiverId}', [ChatController::class, 'fetchMessages']);
+    Route::post('/message/send', [ChatController::class, 'sendMessage']);
+});
