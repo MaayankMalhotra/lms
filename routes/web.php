@@ -158,10 +158,10 @@ Route::get('/internship_details', function () {
 
 
 // Route::get('/course_details', [CourseController::class, 'courseDetails'])->name('website.course_details');
-Route::get('{slug?}', [CourseController::class, 'courseDetails'])->name('website.course_details');
+
 
 Route::get('/login', function () {
-    dd('hi');
+    
     if (Auth::user() && Auth::user()->role == 1) {
         return to_route('admin.dash');
     } elseif (Auth::user() && Auth::user()->role == 2) {
@@ -281,3 +281,4 @@ Route::prefix('student')->middleware('auth')->group(function () {
 
 // Add this to your existing admin routes
 Route::get('/admin/coding-questions/{id}/submissions', [CodingQuestionController::class, 'showSubmissions'])->name('admin.coding_questions.show_submissions');
+Route::get('{slug?}', [CourseController::class, 'courseDetails'])->name('website.course_details');
