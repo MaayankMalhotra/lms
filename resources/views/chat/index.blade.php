@@ -198,6 +198,7 @@ console.log(auth()->user()->role);
     document.getElementById('message-form').addEventListener('submit', function(e) {
         e.preventDefault();
         let message = document.getElementById('message').value;
+        console.log(message); 
 console.log(receiverId);
         fetch('/message/send', {
             method: 'POST',
