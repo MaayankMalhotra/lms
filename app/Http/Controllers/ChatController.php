@@ -14,11 +14,10 @@ class ChatController extends Controller
         $currentUser = auth()->user();
         $teachers = collect();
         $students = collect();
-        $selectedReceiverId = null;
 
         if ($currentUser->role == '3') {
             // Student hai, toh uska assigned teacher fetch karo
-            $teacher = DB::table('enrollments')
+            $teachers = DB::table('enrollments')
                 ->join('batches', 'enrollments.batch_id', '=', 'batches.id')
                 ->join('users', 'batches.teacher_id', '=', 'users.id')
                 ->where('enrollments.user_id', $currentUser->id)
@@ -27,16 +26,17 @@ class ChatController extends Controller
                 ->select('users.id', 'users.name')
                 ->first(); // Sirf ek teacher chahiye
 
-            if ($teacher) {
-                $teachers = collect([$teacher]); // Blade ke liye teachers list mein daal do
-                $selectedReceiverId = $teacher->id; // Automatically select karo
-            }
+                if ($teacher) {
+                    $teachers = collect([$teacher]); // Blade ke liye teachers list mein daal do
+                    $selectedReceiverId = $teacher->id; // Automatically select karo
+                }
         } elseif ($currentUser->role == '2') {
             // Teacher hai, toh saare students fetch karo
-            $students = User::where('role', 'student')->get();
+            $students = User::where('role', '3')->get();
         }
+       
 
-        return view('chat.index', compact('teachers', 'students', 'selectedReceiverId'));
+        return view('chat.index', compact('teachers', 'students'));
     }
 
     public function fetchMessages($receiverId)
