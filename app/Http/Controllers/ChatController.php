@@ -21,12 +21,12 @@ class ChatController extends Controller
                 ->join('users', 'batches.teacher_id', '=', 'users.id')
                 ->where('enrollments.user_id', $currentUser->id)
                 ->where('enrollments.status', 'active')
-                ->where('users.role', 'teacher')
+                ->where('users.role', '2')
                 ->select('users.id', 'users.name')
                 ->get();
         } elseif ($currentUser->role === '2') {
             // Teacher hai, toh saare students fetch karo
-            $students = User::where('role', 'student')->get();
+            $students = User::where('role', '3')->get();
         }
 
         return view('chat.index', compact('teachers', 'students'));
