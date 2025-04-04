@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Enrollment extends Model
 {
-    protected $fillable = ['user_id', 'batch_id', 'status'];
+    protected $fillable = ['email', 'batch_id', 'user_id', 'status', 'created_at', 'updated_at'];
 
     public function user()
     {

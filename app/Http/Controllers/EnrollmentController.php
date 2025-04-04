@@ -2,57 +2,46 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use App\Models\Enrollment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class EnrollmentController extends Controller
 {
     public function index()
     {
-        $enrollments = Enrollment::with('user', 'batch.course', 'batch.teacher', 'payment')->paginate(10);
-        
-        return view('admin.enrollments', compact('enrollments'));
-    }
+        // Fetch enrollments with related student, payment, batch, course, and instructor data
+        $enrollments = Enrollment::select(
+            'enrollments.id as enrollment_id',
+            'enrollments.email as enrollment_email',
+            'enrollments.status as enrollment_status',
+            'enrollments.created_at as enrollment_created_at',
+            'users.name as student_name',
+            'users.email as student_email',
+            'students.phone',
+            'payments.payment_id',
+            'payments.amount',
+            'payments.status as payment_status',
+            'batches.start_date',
+            'batches.time_slot',
+            'batches.price as batch_price',
+            'batches.slots_available',
+            'batches.slots_filled',
+            'courses.name as course_name',
+            'courses.price as course_price',
+            'teachers.name as instructor_name'
+        )
+        ->join('users', 'enrollments.user_id', '=', 'users.id')
+        ->join('students', 'enrollments.user_id', '=', 'students.user_id')
+        ->join('payments', 'enrollments.id', '=', 'payments.enrollment_id')
+        ->join('batches', 'enrollments.batch_id', '=', 'batches.id')
+        ->join('courses', 'batches.course_id', '=', 'courses.id')
+        ->leftJoin('users as teachers', 'batches.teacher_id', '=', 'teachers.id') // Assuming trainers are stored in users table with role 2
+        ->where('users.role', 3) // Only students (role = 3)
+        ->orderBy('enrollments.created_at', 'desc')
+        ->get();
 
-    public function edit($id)
-    {
-        $enrollment = Enrollment::with('user', 'batch.course', 'batch.teacher', 'payment')->findOrFail($id);
-        return response()->json([
-            'id' => $enrollment->id,
-            'student_name' => $enrollment->user->name ?? 'N/A',
-            'course_name' => $enrollment->batch->course->name ?? 'N/A',
-            'batch_name' => $enrollment->batch->name ?? 'N/A',
-            'teacher_name' => $enrollment->batch->teacher->name ?? 'N/A',
-            'start_date' => $enrollment->batch->start_date 
-                ? \Carbon\Carbon::parse($enrollment->batch->start_date)->format('F d, Y') 
-                : 'N/A',
-            'amount' => $enrollment->payment ? number_format($enrollment->payment->amount, 2) : 'N/A', // Add amount
-            'status' => $enrollment->status,
-        ]);
-    }
-
-    public function update(Request $request, $id)
-    {
-        $enrollment = Enrollment::findOrFail($id);
-        $enrollment->update([
-            'status' => $request->status,
-        ]);
-        return redirect()->route('admin.enrollment.index')->with('success', 'Enrollment updated successfully!');
-    }
-
-    public function destroy($id)
-    {
-        $enrollment = Enrollment::findOrFail($id);
-        $enrollment->delete();
-        return redirect()->route('admin.enrollment.index')->with('success', 'Enrollment deleted successfully!');
-    }
-    public function approve($id)
-    {
-        $enrollment = Enrollment::findOrFail($id);
-        if ($enrollment->canBeApproved()) {
-            $enrollment->update(['status' => 'approved']);
-            return redirect()->route('admin.enrollment.index')->with('success', 'Enrollment approved successfully!');
-        }
-        return redirect()->route('admin.enrollment.index')->with('error', 'Enrollment cannot be approved.');
+        return view('admin.enrollments.index', compact('enrollments'));
     }
 }

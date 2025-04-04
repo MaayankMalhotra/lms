@@ -11,6 +11,8 @@ use App\Models\Student;
 use App\Models\Registration;
 use App\Models\Enrollment;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Razorpay\Api\Api;
 
 class BatchController extends Controller
 {
@@ -224,31 +226,67 @@ class BatchController extends Controller
     //     return redirect()->back()->with('success', 'Registration successful! Welcome to the journey.');
     // }
     
-     public function submitr(Request $request)
+    public function submitr(Request $request)
     {
-        // Form data validate karo, jaise dil se dil tak baat check karna
-        $validated = $request->validate([
-            'batch_id' => 'required|exists:batches,id', // Batch ID validate karo
-            'batch_date' => 'required|string',
-            'batch_status' => 'required|string',
-            'mode' => 'required|string',
-            'price' => 'required|numeric',
-            'slots_available' => 'required|integer',
-            'slots_filled' => 'required|integer',
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email|max:255',
-            'phone' => 'required|string|max:15',
-        ]);
+        Log::info('Incoming registration request:', $request->all());
     
-        // User banayo with role 3, jaise ek nayi kahani shuru karna
+        // Validate form data
+        try {
+            $validated = $request->validate([
+                'batch_id' => 'required|exists:batches,id',
+                'batch_date' => 'required|string',
+                'batch_status' => 'required|string',
+                'mode' => 'required|string',
+                'price' => 'required|numeric',
+                'slots_available' => 'required|integer',
+                'slots_filled' => 'required|integer',
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|unique:users,email|max:255',
+                'phone' => 'required|string|max:15',
+                'payment_id' => 'required|string|max:255',
+            ]);
+            Log::info('Validated data:', $validated);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            Log::error('Validation failed:', $e->errors());
+            return response()->json(['error' => 'Validation failed: ' . json_encode($e->errors())], 422);
+        }
+    
+        // Initialize Razorpay API
+        $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
+    
+        // Verify payment
+        try {
+            $razorpayPayment = $api->payment->fetch($validated['payment_id']);
+            Log::info('Payment details:', (array) $razorpayPayment);
+    
+            // if ($razorpayPayment->status !== 'captured') {
+            //     Log::error('Payment not captured:', ['status' => $razorpayPayment->status]);
+            //     return response()->json(['error' => 'Payment not captured'], 400);
+            // }
+    
+            $expectedAmount = (int) ($validated['price'] * 100); // Convert to paise
+            if ($razorpayPayment->amount !== $expectedAmount) {
+                Log::error('Amount mismatch:', [
+                    'expected' => $expectedAmount,
+                    'actual' => $razorpayPayment->amount
+                ]);
+                return response()->json(['error' => 'Amount mismatch'], 400);
+            }
+        } catch (\Exception $e) {
+            Log::error('Payment verification failed:', ['error' => $e->getMessage()]);
+            return response()->json(['error' => 'Payment verification failed: ' . $e->getMessage()], 400);
+        }
+    
+        // Create user with role 3 (student)
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
-            'password' => Hash::make('123456'), // Default password, badal sakta hai
-            'role' => 3, // Student role
+            'password' => Hash::make('123456'),
+            'role' => 3,
         ]);
+        Log::info('User created:', ['user_id' => $user->id]);
     
-        // Registration table mein entry, jaise batch ke saath rishta jodna
+        // Create registration
         $registration = Registration::create([
             'user_id' => $user->id,
             'batch_date' => $validated['batch_date'],
@@ -258,29 +296,43 @@ class BatchController extends Controller
             'slots_available' => $validated['slots_available'],
             'slots_filled' => $validated['slots_filled'],
         ]);
+        Log::info('Registration created:', ['registration_id' => $registration->id]);
     
-        // Student table mein entry, jaise student ka safar shuru karna
+        // Create student
         $student = Student::create([
             'user_id' => $user->id,
             'phone' => $validated['phone'],
-            // Aur jo bhi fields chahiye, yahan add karo
         ]);
+        Log::info('Student created:', ['student_id' => $student->id]);
     
-        // Enrollment table mein entry, jaise batch aur student ka pyar ka bandhan
+        // Create enrollment
         $enrollment = Enrollment::create([
             'user_id' => $user->id,
+            'email' => $user->email,
             'batch_id' => $validated['batch_id'],
+            'status' => 'active',
         ]);
-        // Payments table mein entry
-    $payment = Payment::create([
-        'amount' => $validated['price'], // Price ko amount ke roop mein use karo
-        'batch_id' => $validated['batch_id'], // Batch ID
-        'student_id' => $student->id, // Student ID
-        'enrollment_id' => $enrollment->id, // Student ID
-    ]);
+        Log::info('Enrollment created:', ['enrollment_id' => $enrollment->id]);
     
-        // Success message ke saath redirect, jaise pyar bhara jawab
-        return redirect()->back()->with('success', 'Registration successful! Welcome to the journey.');
+        // Create payment
+        $payment = Payment::create([
+            'enrollment_id' => $enrollment->id,
+            'user_id' => $user->id,
+            'batch_id' => $validated['batch_id'],
+            'payment_id' => $validated['payment_id'],
+            'amount' => $validated['price'],
+            'status' => 'completed',
+        ]);
+        Log::info('Payment created:', ['payment_id' => $payment->id]);
+    
+        // Update batch slots
+        $batch = Batch::findOrFail($validated['batch_id']);
+        $batch->slots_filled += 1;
+        $batch->slots_available -= 1;
+        $batch->save();
+        Log::info('Batch slots updated:', ['batch_id' => $batch->id]);
+    
+        return redirect()->route('login')->with('success', 'Registration successful! Please log in with your email and password: 123456');
     }
 }
 

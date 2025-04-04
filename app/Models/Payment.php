@@ -8,13 +8,7 @@ class Payment extends Model
 {
     protected $table = 'payments'; // Table name
 
-    protected $fillable = [
-        'amount',
-        'batch_id',
-        'student_id',
-        'enrollment_id'
-    ];
-
+    protected $fillable = ['enrollment_id', 'user_id', 'batch_id', 'payment_id', 'amount', 'status', 'created_at', 'updated_at'];
     public function student()
     {
         return $this->belongsTo(User::class, 'student_id');

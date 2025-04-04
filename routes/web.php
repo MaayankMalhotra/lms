@@ -254,15 +254,18 @@ Route::get('/register', [BatchController::class, 'showr'])->name('register');
 // Route::post('/register/submit', [BatchController::class, 'submit'])->name('register.submit');
 Route::post('/register/submit', [BatchController::class, 'submitr'])->name('register.submit');
 
-// Enrollment Management Routes
-Route::get('/admin/enrollments', [EnrollmentController::class, 'index'])->name('admin.enrollment.index');
-Route::get('/admin/enrollment/add', [EnrollmentController::class, 'create'])->name('admin.enrollment.add');
-Route::get('/admin/enrollment/edit/{id}', [EnrollmentController::class, 'edit'])->name('admin.enrollment.edit');
-Route::put('/admin/enrollment/update/{id}', [EnrollmentController::class, 'update'])->name('admin.enrollment.update');
-Route::delete('/admin/enrollment/destroy/{id}', [EnrollmentController::class, 'destroy'])->name('admin.enrollment.destroy');
+// // Enrollment Management Routes
+// Route::get('/admin/enrollments', [EnrollmentController::class, 'index'])->name('admin.enrollment.index');
+// Route::get('/admin/enrollment/add', [EnrollmentController::class, 'create'])->name('admin.enrollment.add');
+// Route::get('/admin/enrollment/edit/{id}', [EnrollmentController::class, 'edit'])->name('admin.enrollment.edit');
+// Route::put('/admin/enrollment/update/{id}', [EnrollmentController::class, 'update'])->name('admin.enrollment.update');
+// Route::delete('/admin/enrollment/destroy/{id}', [EnrollmentController::class, 'destroy'])->name('admin.enrollment.destroy');
 
 // Add this to your existing enrollment routes
-Route::post('/admin/enrollment/approve/{id}', [EnrollmentController::class, 'approve'])->name('admin.enrollment.approve');
+// Route::post('/admin/enrollment/approve/{id}', [EnrollmentController::class, 'approve'])->name('admin.enrollment.approve');
+
+Route::get('/enrollments', [EnrollmentController::class, 'index'])->name('admin.enrollment.index');
+
 // Admin routes for coding questions
 Route::prefix('admin')->group(function () {
     Route::get('/coding-questions', [CodingQuestionController::class, 'index'])->name('admin.coding_questions.index');
