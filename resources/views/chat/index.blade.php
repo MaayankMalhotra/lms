@@ -21,9 +21,7 @@
                 <div class="chat-container">
                     <!-- Chat Header with Teacher/Student Name -->
                     <div class="chat-header">
-                        @if($errorMessage)
-                            {{ $errorMessage }}
-                        @elseif(auth()->user()->role == '3' && $selectedReceiverId && $teachers->isNotEmpty())
+                        @if(auth()->user()->role == '3' && $selectedReceiverId && $teachers->isNotEmpty())
                             Chatting with: {{ $teachers->first()->name }}
                         @elseif(auth()->user()->role == '2' && $students->isNotEmpty())
                             <span id="chat-receiver-name">
