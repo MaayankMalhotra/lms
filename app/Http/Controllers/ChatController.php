@@ -24,17 +24,12 @@ class ChatController extends Controller
                 ->where('enrollments.status', 'active')
                 ->where('users.role', '2')
                 ->select('users.id', 'users.name')
-                ->first(); // Sirf ek teacher chahiye
-
-                if ($teacher) {
-                    $teachers = collect([$teacher]); // Blade ke liye teachers list mein daal do
-                    $selectedReceiverId = $teacher->id; // Automatically select karo
-                }
+                ->get();
         } elseif ($currentUser->role == '2') {
             // Teacher hai, toh saare students fetch karo
             $students = User::where('role', '3')->get();
         }
-       
+      
 
         return view('chat.index', compact('teachers', 'students'));
     }
