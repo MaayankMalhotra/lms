@@ -161,6 +161,7 @@ Route::get('/internship_details', function () {
 Route::get('{slug?}', [CourseController::class, 'courseDetails'])->name('website.course_details');
 
 Route::get('/login', function () {
+    dd('hi');
     if (Auth::user() && Auth::user()->role == 1) {
         return to_route('admin.dash');
     } elseif (Auth::user() && Auth::user()->role == 2) {
