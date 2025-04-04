@@ -49,16 +49,12 @@ class ChatController extends Controller
                     $query->select('sender_id')
                         ->from('messages')
                         ->where('receiver_id', $currentUser->id)
-                        ->whereNotIn('sender_id', function ($subQuery) use ($currentUser) {
-                            $subQuery->select('receiver_id')
-                                ->from('messages')
-                                ->where('sender_id', $currentUser->id);
-                        })
+
                         ->orderBy('id');
                 })
                 ->select('id', 'name')
                 ->get();
-                dd($students);
+               // dd($students);
 
             \Log::info('Teacher ID: ' . $currentUser->id . ', Students: ' . json_encode($students));
 
