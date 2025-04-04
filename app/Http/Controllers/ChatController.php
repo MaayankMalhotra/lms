@@ -5,14 +5,38 @@ use App\Events\MessageSent;
 use App\Models\Message;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ChatController extends Controller
 {
     public function index()
     {
-        $teachers = User::where('role', '2')->get();
-        $students = User::where('role', '3')->get();
-        return view('chat.index', compact('teachers', 'students'));
+        $currentUser = auth()->user();
+        $teachers = collect();
+        $students = collect();
+        $selectedReceiverId = null;
+
+        if ($currentUser->role == '3') { // Student
+            // Student hai, toh uska assigned teacher fetch karo
+            $teacher = DB::table('enrollments')
+                ->join('batches', 'enrollments.batch_id', '=', 'batches.id')
+                ->join('users', 'batches.teacher_id', '=', 'users.id')
+                ->where('enrollments.user_id', $currentUser->id)
+                ->where('enrollments.status', 'active')
+                ->where('users.role', '2')
+                ->select('users.id', 'users.name')
+                ->first();
+
+            if ($teacher) {
+                $teachers = collect([$teacher]);
+                $selectedReceiverId = $teacher->id; // Automatically select karo
+            }
+        } elseif ($currentUser->role == '2') { // Teacher
+            // Teacher hai, toh saare students fetch karo
+            $students = User::where('role', '3')->get();
+        }
+
+        return view('chat.index', compact('teachers', 'students', 'selectedReceiverId'));
     }
 
     public function fetchMessages($receiverId)

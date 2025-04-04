@@ -1,136 +1,228 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>LMS Chat</title>
-    @vite(['resources/js/app.js', 'resources/js/bootstrap.js'])
-    <style>
-        body {
-            background-color: #f4f4f4;
-            font-family: Arial, sans-serif;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        .chat-box {
-            height: 400px;
-            overflow-y: scroll;
-            border: 1px solid #ccc;
-            padding: 10px;
-            background-color: #fff;
-            margin-bottom: 20px;
-        }
-        .chat-box p {
-            margin: 5px 0;
-        }
-        .chat-box .sent {
-            text-align: right;
-            color: #007bff;
-        }
-        .chat-box .received {
-            text-align: left;
-            color: #333;
-        }
-        .user-list {
-            border-right: 1px solid #ccc;
-            padding-right: 20px;
-        }
-        .user-list ul {
-            list-style: none;
-            padding: 0;
-        }
-        .user-list ul li {
-            margin: 10px 0;
-        }
-        .user-list ul li a {
-            text-decoration: none;
-            color: #007bff;
-        }
-        .user-list ul li a:hover {
-            text-decoration: underline;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Chat System</h1>
+@extends('admin.layouts.app')
+
+@section('content')
+<div class="px-3">
+    <section class="bg-white p-6 rounded-lg shadow-md">
+        <h1 class="text-2xl font-bold text-gray-700 mb-4">Chat System test</h1>
         <div class="row">
             <div class="col-md-4 user-list">
-                <h3>Teachers</h3>
-                <ul>
-                    @foreach($teachers as $teacher)
-                        <li><a href="#" onclick="loadChat({{ $teacher->id }})">{{ $teacher->name }}</a></li>
-                    @endforeach
-                </ul>
-                <h3>Students</h3>
-                <ul>
-                    @foreach($students as $student)
-                        <li><a href="#" onclick="loadChat({{ $student->id }})">{{ $student->name }}</a></li>
-                    @endforeach
-                </ul>
+                @if(auth()->user()->role == '2') <!-- Teacher -->
+                    <h3 class="text-lg font-bold text-gray-700 mb-3">Students</h3>
+                    <div class="list-group">
+                        @foreach($students as $student)
+                            <div class="list-group-item bg-gray-100 rounded-lg p-3 mb-2 shadow-sm">
+                                <a href="#" onclick="loadChat({{ $student->id }})" class="text-orange-500 font-semibold hover:underline">{{ $student->name }}</a>
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
             </div>
             <div class="col-md-8">
-                <div id="chat-box" class="chat-box"></div>
-                <form id="message-form">
-                    @csrf
-                    <input type="hidden" id="receiver_id">
-                    <textarea id="message" class="form-control" placeholder="Type your message..." required></textarea>
-                    <button type="submit" class="btn btn-primary mt-2">Send</button>
-                </form>
+                <div class="chat-container">
+                    <!-- Chat Header with Teacher/Student Name -->
+                    <div class="chat-header">
+                        @if(auth()->user()->role == '3' && $selectedReceiverId && $teachers->isNotEmpty())
+                            Chatting with: {{ $teachers->first()->name }}
+                        @elseif(auth()->user()->role == '2' && $students->isNotEmpty())
+                            <span id="chat-receiver-name">Select a student to start chatting</span>
+                        @else
+                            No one to chat with
+                        @endif
+                    </div>
+                    <div id="chat-box" class="chat-box"></div>
+                    <form id="message-form" class="chat-form">
+                        @csrf
+                        <input type="hidden" id="receiver_id">
+                        <div class="input-group">
+                            <textarea id="message" class="form-control" placeholder="Type your message...." required></textarea>
+                            <button type="submit" class="btn btn-primary">Send</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
+</div>
 
-    <script>
-        let receiverId = null;
+<style>
+    .chat-container {
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+    .chat-header {
+        background-color: #007bff;
+        color: #fff;
+        padding: 15px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        font-size: 1.2rem;
+        font-weight: 500;
+    }
+    .chat-box {
+        height: 400px;
+        overflow-y: auto;
+        padding: 20px;
+        background-color: #f1f3f5;
+    }
+    .chat-message {
+        margin-bottom: 15px;
+        display: flex;
+        align-items: flex-start;
+    }
+    .chat-message.sent {
+        justify-content: flex-end;
+    }
+    .chat-message.received {
+        justify-content: flex-start;
+    }
+    .chat-message .message-bubble {
+        max-width: 70%;
+        padding: 10px 15px;
+        border-radius: 15px;
+        position: relative;
+    }
+    .chat-message.sent .message-bubble {
+        background-color: #007bff;
+        color: #fff;
+        border-bottom-right-radius: 5px;
+    }
+    .chat-message.received .message-bubble {
+        background-color: #e9ecef;
+        color: #333;
+        border-bottom-left-radius: 5px;
+    }
+    .chat-message .message-sender {
+        font-size: 0.85rem;
+        font-weight: 500;
+        margin-bottom: 5px;
+    }
+    .chat-form {
+        padding: 15px;
+        background-color: #fff;
+    }
+    .chat-form .input-group {
+        display: flex;
+        align-items: center;
+    }
+    .chat-form textarea {
+        resize: none;
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+        padding: 10px;
+        height: 40px;
+        font-size: 0.9rem;
+        color: #6c757d;
+        flex: 1; /* Text area ko zyada space do */
+        min-width: 0; /* Ensure flex works properly */
+    }
+    .chat-form textarea::placeholder {
+        color: #6c757d;
+    }
+    .chat-form button {
+        border-radius: 5px;
+        padding: 8px 20px;
+        font-size: 0.9rem;
+        margin-left: 10px;
+        background-color: #007bff; /* Blue color for button */
+        border-color: #007bff;
+    }
+    .chat-form button:hover {
+        background-color: #0056b3; /* Darker blue on hover */
+        border-color: #0056b3;
+    }
+    .user-list .list-group-item {
+        border: none;
+        border-radius: 8px;
+        margin-bottom: 5px;
+        background-color: #fff;
+        transition: background-color 0.2s;
+    }
+    .user-list .list-group-item:hover {
+        background-color: #f1f3f5;
+    }
+</style>
 
-        function loadChat(id) {
-            receiverId = id;
-            document.getElementById('receiver_id').value = id;
-            fetchMessages();
-        }
+<script>
+    let receiverId = null;
+    let receiverName = '';
+    console.log($selectedReceiverId)
+console.log(auth()->user()->role);
+    // Agar student hai aur selectedReceiverId set hai, toh automatically load karo
+    @if(auth()->user()->role == '3' && $selectedReceiverId)
+        receiverId = {{ $selectedReceiverId }};
+        document.getElementById('receiver_id').value = receiverId;
+        fetchMessages();
+    @endif
 
-        function fetchMessages() {
-            if (!receiverId) return;
-            fetch(`/messages/${receiverId}`)
-                .then(response => response.json())
-                .then(messages => {
-                    let chatBox = document.getElementById('chat-box');
-                    chatBox.innerHTML = '';
-                    messages.forEach(msg => {
-                        const isSent = msg.sender_id === {{ auth()->id() }};
-                        chatBox.innerHTML += `<p class="${isSent ? 'sent' : 'received'}"><strong>${isSent ? 'You' : 'Them'}:</strong> ${msg.message}</p>`;
-                    });
-                    chatBox.scrollTop = chatBox.scrollHeight;
+    function loadChat(id) {
+        receiverId = id;
+        document.getElementById('receiver_id').value = id;
+
+        // Update chat header with selected student's name (for teacher)
+        @if(auth()->user()->role == '2')
+            const student = @json($students->keyBy('id'));
+            receiverName = student[id] ? student[id].name : 'Unknown';
+            document.getElementById('chat-receiver-name').innerText = `Chatting with: ${receiverName}`;
+        @endif
+
+        fetchMessages();
+    }
+
+    function fetchMessages() {
+        if (!receiverId) return;
+        fetch(`/messages/${receiverId}`)
+            .then(response => response.json())
+            .then(messages => {
+                let chatBox = document.getElementById('chat-box');
+                chatBox.innerHTML = '';
+                messages.forEach(msg => {
+                    const isSent = msg.sender_id === {{ auth()->id() }};
+                    chatBox.innerHTML += `
+                        <div class="chat-message ${isSent ? 'sent' : 'received'}">
+                            <div class="message-bubble">
+                                <div class="message-sender">${isSent ? 'You' : 'Them'}</div>
+                                ${msg.message}
+                            </div>
+                        </div>
+                    `;
                 });
-        }
-
-        document.getElementById('message-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            let message = document.getElementById('message').value;
-            fetch('/message/send', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({
-                    receiver_id: receiverId,
-                    message: message
-                })
-            }).then(() => {
-                document.getElementById('message').value = '';
-                fetchMessages();
+                chatBox.scrollTop = chatBox.scrollHeight;
+            })
+            .catch(error => {
+                console.error('Error fetching messages:', error);
             });
+    }
+
+    document.getElementById('message-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        let message = document.getElementById('message').value;
+        console.log(message); 
+console.log(receiverId);
+        fetch('/message/send', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({
+                receiver_id: receiverId,
+                message: message
+            })
+        }).then(() => {
+            document.getElementById('message').value = '';
+            fetchMessages();
+        }).catch(error => {
+            console.error('Error sending message:', error);
         });
+    });
 
-        Echo.channel(`chat.{{ auth()->id() }}`)
-            .listen('MessageSent', (e) => {
-                if (e.message.sender_id === receiverId || e.message.receiver_id === receiverId) {
-                    fetchMessages();
-                }
-            });
-    </script>
-</body>
-</html>
+    Echo.channel(`chat.{{ auth()->id() }}`)
+        .listen('MessageSent', (e) => {
+            if (e.message.sender_id === receiverId || e.message.receiver_id === receiverId) {
+                fetchMessages();
+            }
+        });
+</script>
+@endsection
