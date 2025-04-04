@@ -27,7 +27,7 @@ class ChatController extends Controller
                // ->where('users.role', '2')
                 ->select('users.id', 'users.name')
                 ->first();
-                dd($currentUser);
+                dd($teacher);
 
             \Log::info('Student ID: ' . $currentUser->id . ', Teacher: ' . json_encode($teacher));
 
