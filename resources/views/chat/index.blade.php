@@ -57,7 +57,7 @@
         <h1>Chat System</h1>
         <div class="row">
             <div class="col-md-4 user-list">
-                @if(auth()->user()->role === 'teacher')
+                @if(auth()->user()->role == '2')
                     <h3>Students</h3>
                     <ul>
                         @foreach($students as $student)
@@ -83,7 +83,7 @@
         let receiverId = null;
 
         // Agar student hai aur selectedReceiverId set hai, toh automatically load karo
-        @if(auth()->user()->role === 'student' && $selectedReceiverId)
+        @if(auth()->user()->role == '3' && $selectedReceiverId)
             receiverId = {{ $selectedReceiverId }};
             document.getElementById('receiver_id').value = receiverId;
             fetchMessages();
