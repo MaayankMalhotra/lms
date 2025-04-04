@@ -114,6 +114,8 @@
         height: 40px;
         font-size: 0.9rem;
         color: #6c757d;
+        flex: 1; /* Text area ko zyada space do */
+        min-width: 0; /* Ensure flex works properly */
     }
     .chat-form textarea::placeholder {
         color: #6c757d;
@@ -123,6 +125,12 @@
         padding: 8px 20px;
         font-size: 0.9rem;
         margin-left: 10px;
+        background-color: #007bff; /* Blue color for button */
+        border-color: #007bff;
+    }
+    .chat-form button:hover {
+        background-color: #0056b3; /* Darker blue on hover */
+        border-color: #0056b3;
     }
     .user-list .list-group-item {
         border: none;
