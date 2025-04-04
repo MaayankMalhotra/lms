@@ -147,7 +147,8 @@
 <script>
     let receiverId = null;
     let receiverName = '';
-
+    console.log('role')
+console.log(auth()->user()->role);
     // Agar student hai aur selectedReceiverId set hai, toh automatically load karo
     @if(auth()->user()->role == '3' && $selectedReceiverId)
         receiverId = {{ $selectedReceiverId }};
