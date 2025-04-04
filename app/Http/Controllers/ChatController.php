@@ -10,8 +10,8 @@ class ChatController extends Controller
 {
     public function index()
     {
-        $teachers = User::where('role', 'teacher')->get();
-        $students = User::where('role', 'student')->get();
+        $teachers = User::where('role', '2')->get();
+        $students = User::where('role', '3')->get();
         return view('chat.index', compact('teachers', 'students'));
     }
 
