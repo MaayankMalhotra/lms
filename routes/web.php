@@ -189,7 +189,7 @@ Route::get('/upload', [ImageUploadController::class, 'showUploadForm'])->name('u
 Route::post('/upload', [ImageUploadController::class, 'uploadImage'])->name('upload.image');
 
 Route::get('/student-dashboard', function () {
-    return view('student.studentdashboard');
+    return view('student.dashboard');
 })->name('student.dashboard');
 
 Route::get('/trainer-dashboard', function () {
