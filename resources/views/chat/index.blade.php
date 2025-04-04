@@ -33,8 +33,8 @@
                     <form id="message-form" class="chat-form">
                         @csrf
                         <input type="hidden" id="receiver_id">
-                        <div class="d-flex align-items-center">
-                            <textarea id="message" class="form-control me-2" placeholder="Type your message..." required></textarea>
+                        <div class="input-group">
+                            <textarea id="message" class="form-control" placeholder="Type your message...." required></textarea>
                             <button type="submit" class="btn btn-primary">Send</button>
                         </div>
                     </form>
@@ -100,17 +100,29 @@
     }
     .chat-form {
         padding: 15px;
-        border-top: 1px solid #dee2e6;
         background-color: #fff;
+    }
+    .chat-form .input-group {
+        display: flex;
+        align-items: center;
     }
     .chat-form textarea {
         resize: none;
-        border-radius: 20px;
-        padding: 10px 15px;
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+        padding: 10px;
+        height: 40px;
+        font-size: 0.9rem;
+        color: #6c757d;
+    }
+    .chat-form textarea::placeholder {
+        color: #6c757d;
     }
     .chat-form button {
-        border-radius: 20px;
-        padding: 10px 20px;
+        border-radius: 5px;
+        padding: 8px 20px;
+        font-size: 0.9rem;
+        margin-left: 10px;
     }
     .user-list .list-group-item {
         border: none;
