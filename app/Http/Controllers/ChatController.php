@@ -14,15 +14,67 @@ class ChatController extends Controller
         $currentUser = auth()->user();
         $teachers = collect();
         $students = collect();
-    
-        if ($currentUser->role == '3') {
-            $teachers = User::where('role', '2')->get();
-            $students = User::where('role', '3')->get();
-        } elseif ($currentUser->role == '2') {
-            $students = User::where('role', '3')->get();
+        $selectedReceiverId = null;
+        $errorMessage = null;
+
+        if ($currentUser->role == '3') { // Student
+            // Student hai, toh uska assigned teacher fetch karo
+            $teacher = DB::table('enrollments')
+                ->join('batches', 'enrollments.batch_id', '=', 'batches.id')
+                ->join('users', 'batches.teacher_id', '=', 'users.id')
+                ->where('enrollments.user_id', $currentUser->id)
+                ->where('enrollments.status', 'active')
+                ->where('users.role', '2')
+                ->select('users.id', 'users.name')
+                ->first();
+
+            \Log::info('Student ID: ' . $currentUser->id . ', Teacher: ' . json_encode($teacher));
+
+            if ($teacher) {
+                $teachers = collect([$teacher]);
+                $selectedReceiverId = $teacher->id;
+            } else {
+                // Fallback: Agar assigned teacher nahi hai, toh saare teachers fetch karo
+                $teachers = User::where('role', '2')->get();
+                if ($teachers->isNotEmpty()) {
+                    $selectedReceiverId = $teachers->first()->id;
+                } else {
+                    $errorMessage = "No teachers available to chat with.";
+                }
+            }
+        } elseif ($currentUser->role == '2') { // Teacher
+            // Teacher hai, toh un students ko fetch karo jinhone teacher ko message bheja hai
+            $students = User::where('role', '3')
+                ->whereIn('id', function ($query) use ($currentUser) {
+                    $query->select('sender_id')
+                        ->from('messages')
+                        ->where('receiver_id', $currentUser->id)
+                        ->whereNotIn('sender_id', function ($subQuery) use ($currentUser) {
+                            $subQuery->select('receiver_id')
+                                ->from('messages')
+                                ->where('sender_id', $currentUser->id);
+                        })
+                        ->orderBy('id');
+                })
+                ->select('id', 'name')
+                ->get();
+
+            \Log::info('Teacher ID: ' . $currentUser->id . ', Students: ' . json_encode($students));
+
+            if ($students->isNotEmpty()) {
+                $selectedReceiverId = $students->first()->id;
+            } else {
+                // Fallback: Agar koi student ne message nahi bheja, toh saare students fetch karo
+                $students = User::where('role', '3')->get();
+                if ($students->isNotEmpty()) {
+                    $selectedReceiverId = $students->first()->id;
+                } else {
+                    $errorMessage = "No students available to chat with.";
+                }
+            }
         }
-    
-        return view('chat.index', compact('teachers', 'students'));
+
+        return view('chat.index', compact('teachers', 'students', 'selectedReceiverId', 'errorMessage'));
     }
 
     public function fetchMessages($receiverId)
@@ -33,21 +85,30 @@ class ChatController extends Controller
         })->orWhere(function ($query) use ($receiverId) {
             $query->where('sender_id', $receiverId)
                   ->where('receiver_id', auth()->id());
-        })->get();
+        })
+        ->orderBy('id')
+        ->get();
 
         return response()->json($messages);
     }
 
     public function sendMessage(Request $request)
     {
+        $receiverId = $request->query('receiver_id');
+        $messageContent = $request->query('message');
+
+        if (!$receiverId || !$messageContent) {
+            return response()->json(['status' => 'Error', 'message' => 'Receiver ID or message cannot be empty'], 400);
+        }
+
         $message = Message::create([
             'sender_id' => auth()->id(),
-            'receiver_id' => $request->receiver_id,
-            'message' => $request->message,
+            'receiver_id' => $receiverId,
+            'message' => $messageContent,
         ]);
 
         event(new MessageSent($message));
 
-        return response()->json(['status' => 'Message Sent!']);
+        return response()->json(['status' => 'Message Sent!', 'receiver_id' => $receiverId]);
     }
 }
