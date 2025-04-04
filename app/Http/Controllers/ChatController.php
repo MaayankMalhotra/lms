@@ -29,7 +29,7 @@ class ChatController extends Controller
             // Teacher hai, toh saare students fetch karo
             $students = User::where('role', '3')->get();
         }
-        dd();
+       
 
         return view('chat.index', compact('teachers', 'students'));
     }
