@@ -23,8 +23,8 @@ class ChatController extends Controller
                 ->join('batches', 'enrollments.batch_id', '=', 'batches.id')
                 ->join('users', 'batches.teacher_id', '=', 'users.id')
                 ->where('enrollments.user_id', $currentUser->id)
-                ->where('enrollments.status', 'active')
-                ->where('users.role', '2')
+                //->where('enrollments.status', 'active')
+               // ->where('users.role', '2')
                 ->select('users.id', 'users.name')
                 ->first();
                 dd($teacher);
