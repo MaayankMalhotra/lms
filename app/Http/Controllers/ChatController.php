@@ -44,7 +44,8 @@ class ChatController extends Controller
                             $subQuery->select('receiver_id')
                                 ->from('messages')
                                 ->where('sender_id', $currentUser->id);
-                        });
+                        })
+                        ->orderBy('id'); // messages.id ke basis pe sort karo
                 })
                 ->select('id', 'name')
                 ->get();
