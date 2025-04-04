@@ -197,45 +197,43 @@
     }
 
     document.getElementById('message-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        let message = document.getElementById('message').value;
+    e.preventDefault();
+    let message = document.getElementById('message').value;
 
-        fetch('/message/send', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-            body: JSON.stringify({
-                receiver_id: receiverId,
-                message: message
-            })
-        }).then(response => response.json())
-        .then(data => {
-            document.getElementById('message').value = '';
-            fetchMessages();
+    // GET request ke liye data ko query string mein convert karo
+    const url = `/message/send?receiver_id=${receiverId}&message=${encodeURIComponent(message)}`;
 
-            // Agar teacher hai, toh reply ke baad student ko list se remove karo
-            @if(auth()->user()->role == '2')
-                if (data.status === 'Message Sent!' && data.receiver_id) {
-                    const studentElement = document.querySelector(`.list-group-item[data-student-id="${data.receiver_id}"]`);
-                    if (studentElement) {
-                        studentElement.remove();
-                    }
+    fetch(url, {
+        method: 'GET',
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        }
+    }).then(response => response.json())
+    .then(data => {
+        document.getElementById('message').value = '';
+        fetchMessages();
 
-                    // Agar koi student nahi bacha, toh chat window hide karo
-                    const studentList = document.getElementById('student-list');
-                    if (studentList.children.length === 0) {
-                        receiverId = null;
-                        document.getElementById('chat-receiver-name').innerText = 'No one to chat with';
-                        document.getElementById('chat-box').innerHTML = '';
-                    }
+        // Agar teacher hai, toh reply ke baad student ko list se remove karo
+        @if(auth()->user()->role == '2')
+            if (data.status === 'Message Sent!' && data.receiver_id) {
+                const studentElement = document.querySelector(`.list-group-item[data-student-id="${data.receiver_id}"]`);
+                if (studentElement) {
+                    studentElement.remove();
                 }
-            @endif
-        }).catch(error => {
-            console.error('Error sending message:', error);
-        });
+
+                // Agar koi student nahi bacha, toh chat window hide karo
+                const studentList = document.getElementById('student-list');
+                if (studentList.children.length === 0) {
+                    receiverId = null;
+                    document.getElementById('chat-receiver-name').innerText = 'No one to chat with';
+                    document.getElementById('chat-box').innerHTML = '';
+                }
+            }
+        @endif
+    }).catch(error => {
+        console.error('Error sending message:', error);
     });
+});
 
     Echo.channel(`chat.{{ auth()->id() }}`)
         .listen('MessageSent', (e) => {

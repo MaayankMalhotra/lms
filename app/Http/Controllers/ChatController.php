@@ -74,14 +74,17 @@ class ChatController extends Controller
 
     public function sendMessage(Request $request)
     {
+        $receiverId = $request->query('receiver_id'); // Query se data lenge
+        $messageContent = $request->query('message');
+    
         $message = Message::create([
             'sender_id' => auth()->id(),
-            'receiver_id' => $request->receiver_id,
-            'message' => $request->message,
+            'receiver_id' => $receiverId,
+            'message' => $messageContent,
         ]);
-
+    
         event(new MessageSent($message));
-
-        return response()->json(['status' => 'Message Sent!', 'receiver_id' => $request->receiver_id]);
+    
+        return response()->json(['status' => 'Message Sent!', 'receiver_id' => $receiverId]);
     }
 }
