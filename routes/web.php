@@ -47,9 +47,9 @@ Route::get('/', function () {
     if (Auth::user() && Auth::user()->role == 1) {
         return to_route('admin.dash');
     } elseif (Auth::user() && Auth::user()->role == 2) {
-        return to_route('trainer_dashboard');
+        return to_route('trainer.dashboard');
     } elseif (Auth::user() && Auth::user()->role == 3) {
-        return to_route('student_dashboard');
+        return to_route('student.dashboard');
     }
 
     return view('website.home');
