@@ -287,5 +287,5 @@ use App\Http\Controllers\ChatController;
 Route::middleware('auth')->group(function () {
     Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
     Route::get('/messages/{receiverId}', [ChatController::class, 'fetchMessages']);
-    Route::get('/message/send', [ChatController::class, 'sendMessage']);
+    Route::post('/message/send', [ChatController::class, 'sendMessage']);
 });

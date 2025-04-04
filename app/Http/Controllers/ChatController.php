@@ -14,24 +14,29 @@ class ChatController extends Controller
         $currentUser = auth()->user();
         $teachers = collect();
         $students = collect();
+        $selectedReceiverId = null;
 
-        if ($currentUser->role == '3') {
+        if ($currentUser->role == '3') { // Student
             // Student hai, toh uska assigned teacher fetch karo
-            $teachers = DB::table('enrollments')
+            $teacher = DB::table('enrollments')
                 ->join('batches', 'enrollments.batch_id', '=', 'batches.id')
                 ->join('users', 'batches.teacher_id', '=', 'users.id')
                 ->where('enrollments.user_id', $currentUser->id)
                 ->where('enrollments.status', 'active')
                 ->where('users.role', '2')
                 ->select('users.id', 'users.name')
-                ->get();
-        } elseif ($currentUser->role == '2') {
+                ->first();
+
+            if ($teacher) {
+                $teachers = collect([$teacher]);
+                $selectedReceiverId = $teacher->id; // Automatically select karo
+            }
+        } elseif ($currentUser->role == '2') { // Teacher
             // Teacher hai, toh saare students fetch karo
             $students = User::where('role', '3')->get();
         }
-      
 
-        return view('chat.index', compact('teachers', 'students'));
+        return view('chat.index', compact('teachers', 'students', 'selectedReceiverId'));
     }
 
     public function fetchMessages($receiverId)
