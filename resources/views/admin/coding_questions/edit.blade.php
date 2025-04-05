@@ -120,17 +120,18 @@ document.addEventListener('click', function (e) {
                 const solutionField = this.closest('.solution-field');
                 const solutionValue = solutionField.querySelector('input').value;
                 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-                console.log(solutionField,solutionValue)
+                console.log(solutionField, solutionValue);
+                
                 if(confirm('Are you sure you want to delete this solution?')) {
-                    fetch('/coding-questions/delete-solution', {
+                    // URL encode the solution value to handle special characters
+                    const url = `/coding-questions/delete-solution?solution=${encodeURIComponent(solutionValue)}`;
+                    
+                    fetch(url, {
                         method: 'DELETE',
                         headers: {
                             'X-CSRF-TOKEN': csrfToken,
                             'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            solution: solutionValue
-                        })
+                        }
                     })
                     .then(response => {
                         if (!response.ok) {

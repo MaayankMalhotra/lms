@@ -82,20 +82,16 @@ class CodingQuestionController extends Controller
 
 public function deleteSolution(Request $request)
 {
-    $solutionValue = $request->input('solution');
+    $solutionValue = $request->query('solution'); // Get from query params instead of input
     
-    // Assuming solutions are stored in a JSON column or separate table
-    $codingQuestion = CodingQuestion::findOrFail($someQuestionId); // You'll need to get the right question ID
+    $codingQuestion = CodingQuestion::findOrFail($someQuestionId); // You'll need the right question ID
     $solutions = $codingQuestion->solutions;
     
-    // Filter out the solution to delete
     $updatedSolutions = array_filter($solutions, function($value) use ($solutionValue) {
         return $value !== $solutionValue;
     });
     
-    // Re-index array if needed
     $updatedSolutions = array_values($updatedSolutions);
-    
     $codingQuestion->solutions = $updatedSolutions;
     $codingQuestion->save();
     
