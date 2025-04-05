@@ -1,257 +1,106 @@
 @extends('admin.layouts.app')
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <link rel="stylesheet" href="style.css">
+@section('content')
+ <link href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* General Styles */
-        body {
-            font-family: 'Arial', sans-serif;
-            background: #f5f5f5;
-            margin: 0;
-            padding: 0;
-        }
-
-        /* Dashboard Layout */
-        .dashboard {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        /* Main Content */
-        .content {
-            flex-grow: 1;
-            padding: 20px;
-            background: #f9f9f9;
-        }
-
-        /* Header */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: linear-gradient(135deg, #2c1d56, #4a2a7a);
-            padding: 15px 20px;
-            border-radius: 10px;
-            color: #fff;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .header h2 {
-            margin: 0;
-            font-size: 24px;
-            font-weight: bold;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .user-info img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: 2px solid #fff;
-        }
-
-        .user-info span {
-            font-size: 16px;
-            font-weight: 600;
-        }
-
-        /* Table Styling */
-        .table-responsive {
-            overflow-x: auto;
-            margin-top: 20px;
-        }
-
-        .table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.9em;
-            min-width: 400px;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .table thead tr {
-            background: linear-gradient(135deg, #2c1d56, #4a2a7a);
-            color: #fff;
-        }
-
-        .table th,
-        .table td {
-            padding: 12px 15px;
-            text-align: left;
-        }
-
-        .table tbody tr {
-            border-bottom: 1px solid #ddd;
-        }
-
-        .table tbody tr:nth-of-type(even) {
-            background-color: #f9f9f9;
-        }
-
-        .table tbody tr:last-of-type {
-            border-bottom: 2px solid #2c1d56;
-        }
-
-        .table tbody tr:hover {
-            background-color: #ff9800;
-            color: #fff;
-        }
-
-        .btn {
-            padding: 6px 12px;
-            border-radius: 5px;
-            text-decoration: none;
-            color: white;
-            font-size: 0.9em;
-            border: none;
-            cursor: pointer;
-            transition: opacity 0.3s ease;
-        }
-
-        .btn-edit {
-            background-color: #FFA500;
-        }
-
-        .btn-delete {
-            background-color: #DC3545;
-        }
-
-        .btn:hover {
-            opacity: 0.8;
-        }
-
-        /* Card Styling */
-        .card {
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-        }
-
-        .card-header {
-            background: linear-gradient(135deg, #2c1d56, #4a2a7a);
-            color: #fff;
-            padding: 15px 20px;
-            border-bottom: 2px solid #ff9800;
-        }
-
-        .card-header h4 {
-            margin: 0;
-            font-size: 20px;
-            font-weight: bold;
-        }
-
-        .card-body {
-            padding: 20px;
+        /* Custom Tailwind Overrides */
+        .dataTables_wrapper .dataTables_filter input {
+            @apply border rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-indigo-500;
         }
     </style>
-</head>
-<body>
-    <div class="dashboard">
-        <!-- Main Content -->
-        <main class="content">
-            <header class="header">
-                <h2>Welcome To Admin Dashboard</h2>
-                <div class="user-info">
-                    <span>Joo Muri</span>
-                    <img src="https://i.pravatar.cc/41" alt="User">
+            <!-- Card Section -->
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+                <div class="bg-gradient-to-r from-indigo-900 to-purple-800 text-white px-6 py-4 border-b-2 border-orange-500">
+                    <h4 class="text-xl font-bold">Trainer List</h4>
                 </div>
-            </header>
-
-            <div class="container-fluid p-0">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h4>Trainer List</h4>
-                            </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table" id="studentsTable">
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Name</th>
-                                                <th>Email</th>
-                                                <th>Phone</th>
-                                                <th>Registered At</th>
-                                                <th>Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @forelse ($students as $index => $student)
-                                            <tr>
-                                                <td>{{ $index + 1 }}</td>
-                                                <td>{{ $student->name }}</td>
-                                                <td>{{ $student->email }}</td>
-                                                <td>{{ $student->phone ?? 'N/A' }}</td>
-                                                <td>{{ date('d M Y', strtotime($student->created_at)) }}</td>
-                                                <td>
-                                                    <a href="{{ route('admin.student.edit', $student->id) }}" class="btn btn-edit">
-                                                        <i class="fas fa-edit"></i> Edit
-                                                    </a>
-                                                    <form action="{{ route('admin.student.delete', $student->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure?')">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn btn-delete">
-                                                            <i class="fas fa-trash"></i> Delete
-                                                        </button>
-                                                    </form>
-                                                </td>
-                                            </tr>
-                                            @empty
-                                            <tr>
-                                                <td colspan="6" class="text-center">No students found.</td>
-                                            </tr>
-                                            @endforelse
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+                <div class="p-6">
+                    <!-- Alerts -->
+                    @if(session('success'))
+                        <div class="bg-green-100 text-green-700 p-4 rounded-lg mb-4">{{ session('success') }}</div>
+                    @endif
+                    @if(session('error'))
+                        <div class="bg-red-100 text-red-700 p-4 rounded-lg mb-4">{{ session('error') }}</div>
+                    @endif
+                    @if($errors->any())
+                        <div class="bg-red-100 text-red-700 p-4 rounded-lg mb-4">
+                            <ul class="list-disc pl-5">
+                                @foreach($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
                         </div>
+                    @endif
+
+                    <!-- Table -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse" id="studentsTable">
+                            <thead class="bg-gradient-to-r from-indigo-900 to-purple-800 text-white">
+                                <tr>
+                                    <th class="px-4 py-3 font-semibold">#</th>
+                                    <th class="px-4 py-3 font-semibold">Name</th>
+                                    <th class="px-4 py-3 font-semibold">Email</th>
+                                    <th class="px-4 py-3 font-semibold">Phone</th>
+                                    <th class="px-4 py-3 font-semibold">Registered At</th>
+                                    <th class="px-4 py-3 font-semibold">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                @forelse ($students as $index => $student)
+                                    <tr class="hover:bg-orange-500 hover:text-white transition duration-200">
+                                        <td class="px-4 py-3 text-gray-600">{{ $index + 1 }}</td>
+                                        <td class="px-4 py-3 text-gray-800">{{ $student->name }}</td>
+                                        <td class="px-4 py-3 text-gray-800">{{ $student->email }}</td>
+                                        <td class="px-4 py-3 text-gray-600">{{ $student->phone ?? 'N/A' }}</td>
+                                        <td class="px-4 py-3 text-gray-600">{{ date('d M Y', strtotime($student->created_at)) }}</td>
+                                        <td class="px-4 py-3 flex space-x-2">
+                                            <a href="{{ route('admin.student.edit', $student->id) }}"
+                                               class="bg-orange-500 text-white px-3 py-1 rounded-md hover:bg-orange-600 transition duration-300 flex items-center">
+                                                <i class="fas fa-edit mr-1"></i> Edit
+                                            </a>
+                                            <form action="{{ route('admin.student.delete', $student->id) }}"
+                                                  method="POST" 
+                                                  class="inline"
+                                                  onsubmit="return confirm('Are you sure you want to delete this student?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit"
+                                                        class="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition duration-300 flex items-center">
+                                                    <i class="fas fa-trash mr-1"></i> Delete
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="6" class="px-4 py-3 text-center text-gray-500">No students found.</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
-        </main>
-    </div>
-
+    <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             $('#studentsTable').DataTable({
-                "paging": false,
-                "searching": true,
-                "ordering": true,
-                "info": false,
-                "responsive": true,
-                "autoWidth": false,
-                "dom": '<"top"f>rt<"bottom"lip><"clear">'
-            });
-
-            // Row hover effect
-            $('tbody tr').hover(function() {
-                $(this).css('background', '#ff9800').css('color', '#fff');
-            }, function() {
-                $(this).css('background', '').css('color', '');
+                paging: false,
+                searching: true,
+                ordering: true,
+                info: false,
+                responsive: true,
+                autoWidth: false,
+                dom: '<"flex justify-between items-center mb-4"<"search"f>>rt<"bottom"lip><"clear">',
+                language: {
+                    search: "",
+                    searchPlaceholder: "Search students..."
+                }
             });
         });
     </script>
-</body>
-</html>
+@endsection
