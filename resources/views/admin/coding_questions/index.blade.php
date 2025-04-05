@@ -48,6 +48,11 @@
                         </td>
                         <td class="px-6 py-4">
                             <div class="flex space-x-4">
+                                  <!-- View Submissions -->
+                                  <a href="{{ route('admin.coding_questions.show_submissions', $question->id) }}"
+                                    class="text-green-500 hover:text-green-600">
+                                     <i class="fas fa-eye"></i>
+                                 </a>
                                 <a href="{{ route('admin.coding_questions.edit', $question->id) }}"
                                    class="text-blue-500 hover:text-blue-600">
                                     <i class="fas fa-edit"></i>
