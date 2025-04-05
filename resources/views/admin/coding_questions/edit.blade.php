@@ -120,14 +120,15 @@ document.addEventListener('click', function (e) {
                 const solutionField = this.closest('.solution-field');
                 const solutionValue = solutionField.querySelector('input').value;
                 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-                console.log(solutionField, solutionValue);
+                const questionId = '{{ $codingQuestion->id }}'; // Getting question ID from Blade
+                
+                console.log(solutionField, solutionValue, questionId);
                 
                 if(confirm('Are you sure you want to delete this solution?')) {
-                    // URL encode the solution value to handle special characters
-                    const url = `/coding-questions/delete-solution?solution=${encodeURIComponent(solutionValue)}`;
+                    const url = `/coding-questions/delete-solution?question_id=${encodeURIComponent(questionId)}&solution=${encodeURIComponent(solutionValue)}`;
                     
                     fetch(url, {
-                        method: 'get',
+                        method: 'DELETE',
                         headers: {
                             'X-CSRF-TOKEN': csrfToken,
                             'Content-Type': 'application/json'
