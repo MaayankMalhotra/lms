@@ -111,4 +111,29 @@ document.addEventListener('click', function (e) {
     }
 });
 </script>
+<script>
+    $(document).ready(function() {
+        $('.remove-solution').on('click', function() {
+            let solutionField = $(this).closest('.solution-field');
+            let solutionId = solutionField.data('solution-id');
+            
+            if(confirm('Are you sure you want to delete this solution?')) {
+                $.ajax({
+                    url: '/coding-questions/' + solutionId,
+                    type: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        solutionField.remove();
+                        alert('Solution deleted successfully');
+                    },
+                    error: function(xhr) {
+                        alert('Error deleting solution: ' + xhr.responseJSON.message);
+                    }
+                });
+            }
+        });
+    });
+    </script>
 @endsection
