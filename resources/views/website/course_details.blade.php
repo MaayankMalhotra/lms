@@ -3091,8 +3091,8 @@ async function fetchBatches() {
     console.log(courseId);
 
     try {
-        // const response = await fetch(`/api/batches?id=${courseId}`);
-        const response = await fetch(`http://localhost:8000/api/batches?id=${courseId}`);
+         const response = await fetch(`/api/batches?id=${courseId}`);
+        //const response = await fetch(`http://localhost:8000/api/batches?id=${courseId}`);
         batches = await response.json();
 console.log(batches)
         if (response.ok) {
