@@ -48,6 +48,11 @@
                         </td>
                         <td class="px-6 py-4">
                             <div class="flex space-x-4">
+                                <!-- Solve Button -->
+                                <a href="{{ url('coding-tests/' . $question->id) }}"
+                                   class="text-purple-500 hover:text-purple-600">
+                                    <i class="fas fa-play mr-1"></i>Solve
+                                </a>
                                 <!-- View Submissions -->
                                 <a href="{{ route('admin.coding_questions.show_submissions', $question->id) }}"
                                    class="text-green-500 hover:text-green-600">
@@ -83,11 +88,11 @@
         </div>
 
         <!-- Pagination -->
-        {{-- @if($codingQuestions->hasPages())
+        @if($codingQuestions->hasPages())
         <div class="mt-8">
             {{ $codingQuestions->links() }}
         </div>
-        @endif --}}
+        @endif
     </div>
 </div>
 @endsection
