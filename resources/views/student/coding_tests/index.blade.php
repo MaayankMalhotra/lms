@@ -49,7 +49,7 @@
                         <td class="px-6 py-4">
                             <div class="flex space-x-4">
                                 <!-- Solve Button -->
-                                <a href="{{ url('coding-tests/' . $question->id) }}"
+                                <a href="{{ url('student/coding-tests/' . $question->id) }}"
                                    class="text-purple-500 hover:text-purple-600">
                                     <i class="fas fa-play mr-1"></i>Solve
                                 </a>
