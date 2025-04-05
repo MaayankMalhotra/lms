@@ -75,12 +75,7 @@
             @endif
         </div>
 
-        <!-- Pagination -->
-        @if($codingQuestions->hasPages())
-        <div class="mt-8">
-            {{ $codingQuestions->links() }}
-        </div>
-        @endif
+      
     </div>
 </div>
 @endsection
