@@ -7,7 +7,7 @@
 
 <!-- Logo -->
 <div class="text-center mb-4 mt-4 flex-shrink-0">
-    <img src="https://think-champ.com/thinkchampion/public/images/THINK%20CHAMP%20logo2.png" 
+    <img src="https://think-champ.com/wp-content/uploads/2024/05/THINK-CHAMP-logo-1024x502.png" 
          alt="Logo" 
          class="h-12 w-auto mx-auto">
 </div>
