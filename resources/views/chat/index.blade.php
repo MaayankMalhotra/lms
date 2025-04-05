@@ -8,24 +8,27 @@
             <div class="col-md-4 user-list">
                 @if(auth()->user()->role == '2') <!-- Teacher -->
                     <h3 class="text-lg font-bold text-gray-700 mb-3">Students Chats</h3>
-                    <div class="list-group" id="student-list">
-                        @foreach($students as $student)
-                            <div class="list-group-item d-flex align-items-center p-2 mb-2 rounded-lg shadow-sm border border-gray-200 hover:bg-blue-50 transition-colors" data-student-id="{{ $student->id }}">
-                                <!-- Avatar -->
-                                <div class="flex-shrink-0">
-                                    <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
-                                        <span class="text-blue-600 font-semibold text-sm">{{ substr($student->name, 0, 1) }}</span>
+                    <div class="col-md-4 user-list">
+                        @if(auth()->user()->role == '2') <!-- Teacher -->
+                            <h3 class="text-lg font-bold text-gray-700 mb-3">Students Chats</h3>
+                            <div class="list-group" id="student-list">
+                                @foreach($students as $student)
+                                    <div class="list-group-item d-flex align-items-center p-2 mb-2 rounded-lg shadow-sm border border-gray-200 hover:bg-blue-50 transition-colors" data-student-id="{{ $student->id }}" style="height: 40px;">
+                                        <!-- Avatar -->
+                                        <div class="flex-shrink-0">
+                                            <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
+                                                <span class="text-blue-600 font-semibold text-sm">{{ substr($student->name, 0, 1) }}</span>
+                                            </div>
+                                        </div>
+                                        <!-- Student Name -->
+                                        <div class="flex-grow ml-2">
+                                            <a href="#" onclick="loadChat({{ $student->id }})" class="text-gray-800 font-medium text-sm hover:text-blue-600 transition-colors" style="line-height: 32px;">{{ $student->name }}</a>
+                                        </div>
                                     </div>
-                                </div>
-                                <!-- Student Name -->
-                                <div class="flex-grow ml-2">
-                                    <a href="#" onclick="loadChat({{ $student->id }})" class="text-gray-800 font-medium text-sm hover:text-blue-600 transition-colors leading-tight">{{ $student->name }}</a>
-                                </div>
+                                @endforeach
                             </div>
-                        @endforeach
+                        @endif
                     </div>
-                @endif
-            </div>
             <div class="col-md-8">
                 <div class="chat-container">
                     <!-- Chat Header with Teacher/Student Name -->
