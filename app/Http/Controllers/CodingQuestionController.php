@@ -84,7 +84,7 @@ public function deleteSolution(Request $request)
 {
     $solutionValue = $request->query('solution'); // Get from query params instead of input
     
-    $codingQuestion = CodingQuestion::findOrFail($someQuestionId); // You'll need the right question ID
+    $codingQuestion = CodingQuestion::findOrFail($solutionValue); // You'll need the right question ID
     $solutions = $codingQuestion->solutions;
     
     $updatedSolutions = array_filter($solutions, function($value) use ($solutionValue) {
