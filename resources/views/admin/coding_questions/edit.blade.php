@@ -102,33 +102,63 @@ document.getElementById('add-solution').addEventListener('click', function () {
     container.appendChild(solutionField);
 });
 
-document.addEventListener('click', function (e) {
-    if (e.target.classList.contains('remove-solution')) {
-        const solutionFields = document.querySelectorAll('.solution-field');
-        if (solutionFields.length > 1) { // Ensure at least one solution field remains
-            e.target.closest('.solution-field').remove();
-        }
-    }
-});
+// document.addEventListener('click', function (e) {
+//     if (e.target.classList.contains('remove-solution')) {
+//         const solutionFields = document.querySelectorAll('.solution-field');
+//         if (solutionFields.length > 1) { // Ensure at least one solution field remains
+//             e.target.closest('.solution-field').remove();
+//         }
+//     }
+// });
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const removeButtons = document.querySelectorAll('.remove-solution');
-        
-        removeButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const solutionField = this.closest('.solution-field');
+        // Add new solution field
+        document.getElementById('add-solution').addEventListener('click', function () {
+            const container = document.getElementById('solutions-container');
+            const solutionField = document.createElement('div');
+            solutionField.className = 'solution-field flex items-center space-x-2 mb-2';
+            solutionField.innerHTML = `
+                <input type="text" name="solutions[]" required
+                       class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
+                       placeholder="Enter solution">
+                <button type="button" class="remove-solution text-red-500 hover:text-red-600">
+                    <i class="fas fa-trash"></i>
+                </button>
+            `;
+            container.appendChild(solutionField);
+        });
+    
+        // Event delegation for remove buttons (works for both existing and dynamically added buttons)
+        document.getElementById('solutions-container').addEventListener('click', function(e) {
+            if (e.target.closest('.remove-solution')) {
+                const solutionField = e.target.closest('.solution-field');
+                const solutionFields = document.querySelectorAll('.solution-field');
+                
+                // Ensure at least one solution field remains
+                if (solutionFields.length <= 1) {
+                    alert('At least one solution is required!');
+                    return;
+                }
+    
                 const solutionValue = solutionField.querySelector('input').value;
                 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-                const questionId = '{{ $codingQuestion->id }}'; // Getting question ID from Blade
-                
+                const questionId = '{{ $codingQuestion->id }}';
+    
                 console.log(solutionField, solutionValue, questionId);
-                
-                if(confirm('Are you sure you want to delete this solution?')) {
+    
+                // If the input is empty, just remove it client-side (for dynamically added empty fields)
+                if (!solutionValue.trim()) {
+                    solutionField.remove();
+                    return;
+                }
+    
+                // Otherwise, make DELETE request to server
+                if (confirm('Are you sure you want to delete this solution?')) {
                     const url = `/coding-questions/delete-solution?question_id=${encodeURIComponent(questionId)}&solution=${encodeURIComponent(solutionValue)}`;
                     
                     fetch(url, {
-                        method: 'get',
+                        method: 'DELETE', // Changed back to DELETE as per your route
                         headers: {
                             'X-CSRF-TOKEN': csrfToken,
                             'Content-Type': 'application/json'
@@ -148,7 +178,7 @@ document.addEventListener('click', function (e) {
                         alert('Error deleting solution: ' + error.message);
                     });
                 }
-            });
+            }
         });
     });
     </script>
