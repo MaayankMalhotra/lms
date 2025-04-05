@@ -43,11 +43,11 @@
                     </td>
                     <td class="p-4">{{ \Carbon\Carbon::parse($recording->uploaded_at)->format('Y-m-d H:i') }}</td>
                     <td class="p-4">
-                        <button onclick="openModal('edit-modal-{{ $recording->id }}')" class="text-blue-500 hover:underline">Edit</button>
+                        <button onclick="openModal('edit-modal-{{ $recording->id }}')" class="text-blue-500 hover:underline"><i class="fas fa-edit"></i></button>
                         <form action="{{ route('admin.recordings.destroy', $recording->id) }}" method="POST" class="inline">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="text-red-500 hover:underline ml-2" onclick="return confirm('Are you sure you want to delete this recording?')">Delete</button>
+                            <button type="submit" class="text-red-500 hover:underline ml-2" onclick="return confirm('Are you sure you want to delete this recording?')"> <i class="fas fa-trash"></i></button>
                         </form>
 
                         <!-- Edit Modal -->
