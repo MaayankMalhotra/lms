@@ -21,7 +21,7 @@
                 <i class="fas fa-home mr-3 text-lg"></i> Dashboard Panel
             </a>
         </li>
-        @if(auth()->user()->role == 3)
+        @if(auth()->user()->role == 3 || auth()->user()->role == 2)
         <!-- Quiz Management Students -->
         <li>
             <a href="{{ route('student.quiz_sets') }}" class="flex items-center p-3 {{ request()->routeIs('student.quiz_sets') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
@@ -29,6 +29,15 @@
             </a>
             <a href="{{ route('student.coding_tests.index') }}" class="flex items-center p-3 {{ request()->routeIs('student.coding_tests.index') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
                 <i class="fas fa-question-circle mr-3 text-lg"></i> Coding Module
+            </a>
+        </li>
+         <!-- Quiz Management Students -->
+         <li>
+            <a href="{{ route('chat.index') }}" class="flex items-center p-3 {{ request()->routeIs('chat.index') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
+                <i class="fas fa-question-circle mr-3 text-lg"></i> Chat Management
+            </a>
+            <a href="{{ route('chat.index') }}" class="flex items-center p-3 {{ request()->routeIs('chat.index') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
+                <i class="fas fa-question-circle mr-3 text-lg"></i> Chats
             </a>
         </li>
         @endif
