@@ -57,7 +57,7 @@
                                         <td class="px-4 py-3 flex space-x-2">
                                             <a href="{{ route('admin.student.edit', $student->id) }}"
                                                class="bg-orange-500 text-white px-3 py-1 rounded-md hover:bg-orange-600 transition duration-300 flex items-center">
-                                                <i class="fas fa-edit mr-1"></i> Edit
+                                                <i class="fas fa-edit mr-1"></i> 
                                             </a>
                                             <form action="{{ route('admin.student.delete', $student->id) }}"
                                                   method="POST" 
@@ -67,7 +67,7 @@
                                                 @method('DELETE')
                                                 <button type="submit"
                                                         class="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition duration-300 flex items-center">
-                                                    <i class="fas fa-trash mr-1"></i> Delete
+                                                    <i class="fas fa-trash mr-1"></i>
                                                 </button>
                                             </form>
                                         </td>
