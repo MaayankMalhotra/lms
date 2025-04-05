@@ -441,7 +441,7 @@ class BatchController extends Controller
         $batch->save();
         Log::info('Batch slots updated:', ['batch_id' => $batch->id]);
     
-        return redirect()->route('login')->with('success', 'Registration successful! Please log in with your email and password: 123456');
+       // return redirect()->route('login')->with('success', 'Registration successful! Please log in with your email and password: 123456');
     }
 }
 
