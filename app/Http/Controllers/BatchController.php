@@ -350,7 +350,7 @@ class BatchController extends Controller
                 'slots_available' => 'required|integer',
                 'slots_filled' => 'required|integer',
                 'name' => 'required|string|max:255',
-                'email' => 'required|email|unique:users,email|max:255',
+                'email' => 'required|email:users,email|max:255',
                 'phone' => 'required|string|max:15',
                 'payment_id' => 'required|string|max:255',
             ]);
