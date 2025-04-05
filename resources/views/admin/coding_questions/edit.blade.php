@@ -127,7 +127,7 @@ document.addEventListener('click', function (e) {
                     const url = `/coding-questions/delete-solution?solution=${encodeURIComponent(solutionValue)}`;
                     
                     fetch(url, {
-                        method: 'DELETE',
+                        method: 'get',
                         headers: {
                             'X-CSRF-TOKEN': csrfToken,
                             'Content-Type': 'application/json'
