@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Batch;
 use App\Models\Payment;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use App\Models\Course;
 use App\Models\Student;
 use App\Models\Registration;
