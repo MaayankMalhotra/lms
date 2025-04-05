@@ -117,7 +117,7 @@
                 currency: 'INR',
                 name: 'Think Champ',
                 description: 'Batch Registration Payment',
-                handler: function (response) {
+                handler: async function (response) {
                     console.log('Razorpay Response:', response);
 
                     const payload = {
@@ -135,29 +135,37 @@
                     };
                     console.log('Payload Sent to Backend:', payload);
 
-                    fetch('/batch/submitr', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': data._token,
-                        },
-                        body: JSON.stringify(payload),
-                    })
-                    .then(response => {
-                        console.log('Response Status:', response.status);
-                        if (response.redirected) {
-                            // Follow the redirect manually
-                            window.location.href = response.url;
-                        } else {
-                            return response.json().then(data => {
-                                throw new Error('Unexpected response: ' + JSON.stringify(data));
-                            });
+                    try {
+                        const fetchResponse = await fetch('/batch/submitr', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json',
+                                'X-CSRF-TOKEN': data._token,
+                            },
+                            body: JSON.stringify(payload),
+                        });
+
+                        console.log('Response Status:', fetchResponse.status);
+
+                        if (!fetchResponse.ok) {
+                            const errorText = await fetchResponse.text();
+                            throw new Error(`Server returned ${fetchResponse.status}: ${errorText}`);
                         }
-                    })
-                    .catch(error => {
+
+                        const result = await fetchResponse.json();
+                        console.log('Server Response:', result);
+
+                        if (result.success) {
+                            alert('Registration successful! Please check your email.');
+                            window.location.href = '/login'; // Adjust redirect as needed
+                        } else {
+                            throw new Error(result.message || 'Registration failed');
+                        }
+                    } catch (error) {
                         console.error('Fetch Error:', error);
                         alert('Something went wrong: ' + error.message);
-                    });
+                    }
                 },
                 prefill: {
                     name: data.name,
