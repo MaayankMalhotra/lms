@@ -87,20 +87,20 @@
 </div>
 
 <script>
-document.getElementById('add-solution').addEventListener('click', function () {
-    const container = document.getElementById('solutions-container');
-    const solutionField = document.createElement('div');
-    solutionField.className = 'solution-field flex items-center space-x-2 mb-2';
-    solutionField.innerHTML = `
-        <input type="text" name="solutions[]" required
-               class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
-               placeholder="Enter solution">
-        <button type="button" class="remove-solution text-red-500 hover:text-red-600">
-            <i class="fas fa-trash"></i>
-        </button>
-    `;
-    container.appendChild(solutionField);
-});
+// document.getElementById('add-solution').addEventListener('click', function () {
+//     const container = document.getElementById('solutions-container');
+//     const solutionField = document.createElement('div');
+//     solutionField.className = 'solution-field flex items-center space-x-2 mb-2';
+//     solutionField.innerHTML = `
+//         <input type="text" name="solutions[]" required
+//                class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
+//                placeholder="Enter solution">
+//         <button type="button" class="remove-solution text-red-500 hover:text-red-600">
+//             <i class="fas fa-trash"></i>
+//         </button>
+//     `;
+//     container.appendChild(solutionField);
+// });
 
 // document.addEventListener('click', function (e) {
 //     if (e.target.classList.contains('remove-solution')) {
