@@ -136,7 +136,7 @@
                     console.log('Payload Sent to Backend:', payload);
 
                     try {
-                        const fetchResponse = await fetch('/batch/submitr', {
+                        const fetchResponse = await fetch('api/batch/submitr', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
