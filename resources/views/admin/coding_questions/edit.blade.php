@@ -120,7 +120,7 @@ document.addEventListener('click', function (e) {
                 const solutionField = this.closest('.solution-field');
                 const solutionValue = solutionField.querySelector('input').value;
                 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-                
+                console.log(solutionField,solutionValue)
                 if(confirm('Are you sure you want to delete this solution?')) {
                     fetch('/coding-questions/delete-solution', {
                         method: 'DELETE',
