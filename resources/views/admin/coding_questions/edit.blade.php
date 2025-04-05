@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-
+<meta name="csrf-token" content="{{ csrf_token() }}">
 @section('content')
 <div class="min-h-screen bg-gradient-to-r from-gray-50 to-gray-100 p-8">
     <div class="max-w-7xl mx-auto">
@@ -112,27 +112,38 @@ document.addEventListener('click', function (e) {
 });
 </script>
 <script>
-    $(document).ready(function() {
-        $('.remove-solution').on('click', function() {
-            let solutionField = $(this).closest('.solution-field');
-            let solutionId = solutionField.data('solution-id');
-            
-            if(confirm('Are you sure you want to delete this solution?')) {
-                $.ajax({
-                    url: '/coding-questions/' + solutionId,
-                    type: 'DELETE',
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function(response) {
+    document.addEventListener('DOMContentLoaded', function() {
+        const removeButtons = document.querySelectorAll('.remove-solution');
+        
+        removeButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const solutionField = this.closest('.solution-field');
+                const solutionId = solutionField.dataset.solutionId;
+                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                
+                if(confirm('Are you sure you want to delete this solution?')) {
+                    fetch('/coding-questions/' + solutionId, {
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken,
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
                         solutionField.remove();
                         alert('Solution deleted successfully');
-                    },
-                    error: function(xhr) {
-                        alert('Error deleting solution: ' + xhr.responseJSON.message);
-                    }
-                });
-            }
+                    })
+                    .catch(error => {
+                        alert('Error deleting solution: ' + error.message);
+                    });
+                }
+            });
         });
     });
     </script>
