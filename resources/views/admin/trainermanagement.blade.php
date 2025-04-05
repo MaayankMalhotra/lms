@@ -1,3 +1,5 @@
+@extends('admin.layouts.app')
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,49 +23,6 @@
         .dashboard {
             display: flex;
             min-height: 100vh;
-        }
-
-        /* Sidebar */
-        .sidebar {
-            width: 250px;
-            background: linear-gradient(135deg, #2c1d56, #4a2a7a);
-            color: #fff;
-            padding: 20px;
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .logo {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .logo img {
-            height: 40px;
-            width: auto;
-            max-width: 150px;
-        }
-
-        .sidebar ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .sidebar ul li {
-            padding: 12px;
-            margin: 5px 0;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-
-        .sidebar ul li:hover, .sidebar ul li.active {
-            background: #ff9800;
-        }
-
-        .sidebar ul li a {
-            text-decoration: none;
-            color: inherit;
-            display: block;
         }
 
         /* Main Content */
@@ -204,22 +163,6 @@
 </head>
 <body>
     <div class="dashboard">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="logo">
-                <img src="https://think-champ.com/thinkchampion/public/images/THINK%20CHAMP%20logo2.png" 
-                     alt="Logo">
-            </div>
-            <nav>
-                <ul>
-                    <li><a href="https://think-champ.com/thinkchampion/public/dashboard">Dashboard</a></li>
-                    <li><a href="https://think-champ.com/thinkchampion/public/student-management">Student Management</a></li>
-                    <li><a href="https://think-champ.com/thinkchampion/public/trainer-management">Trainer Management</a></li>
-                    <li><a href="#">Settings</a></li>
-                </ul>
-            </nav>
-        </aside>
-
         <!-- Main Content -->
         <main class="content">
             <header class="header">
