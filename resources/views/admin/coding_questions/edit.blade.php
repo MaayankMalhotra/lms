@@ -158,7 +158,7 @@
                     const url = `/coding-questions/delete-solution?question_id=${encodeURIComponent(questionId)}&solution=${encodeURIComponent(solutionValue)}`;
                     
                     fetch(url, {
-                        method: 'DELETE', // Changed back to DELETE as per your route
+                        method: 'get', // Changed back to DELETE as per your route
                         headers: {
                             'X-CSRF-TOKEN': csrfToken,
                             'Content-Type': 'application/json'
