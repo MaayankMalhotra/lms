@@ -39,7 +39,7 @@
                         </td>
                         <td class="px-6 py-4">
                             <div class="text-sm text-gray-700">
-                                <ul class="list-disc pl-5">
+                                <ul class="list-disc pl-5 blur-sm hover:blur-none transition-all duration-300">
                                     @foreach($question->solutions as $solution)
                                         <li>{{ $solution }}</li>
                                     @endforeach
@@ -49,7 +49,7 @@
                         <td class="px-6 py-4">
                             <div class="flex space-x-4">
                                 <!-- Solve Button -->
-                                <a href="{{ url('student/coding-tests/' . $question->id) }}"
+                                <a href="{{ url('coding-tests/' . $question->id) }}"
                                    class="text-purple-500 hover:text-purple-600">
                                     <i class="fas fa-play mr-1"></i>Solve
                                 </a>
@@ -58,7 +58,8 @@
                                    class="text-green-500 hover:text-green-600">
                                     <i class="fas fa-eye"></i>
                                 </a>
-                               
+                                
+                                
                             </div>
                         </td>
                     </tr>
@@ -74,7 +75,12 @@
             @endif
         </div>
 
-      
+        <!-- Pagination -->
+        @if($codingQuestions->hasPages())
+        <div class="mt-8">
+            {{ $codingQuestions->links() }}
+        </div>
+        @endif
     </div>
 </div>
 @endsection
