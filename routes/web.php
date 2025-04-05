@@ -274,7 +274,7 @@ Route::prefix('admin')->group(function () {
     Route::get('/coding-questions/{id}/edit', [CodingQuestionController::class, 'edit'])->name('admin.coding_questions.edit');
     Route::put('/coding-questions/{id}', [CodingQuestionController::class, 'update'])->name('admin.coding_questions.update');
     Route::delete('/coding-questions/{id}', [CodingQuestionController::class, 'destroy'])->name('admin.coding_questions.destroy');
-});
+});Route::delete('/coding-questions/delete-solution', [CodingQuestionController::class, 'deleteSolution'])->name('admin.coding_questions.delete_solution');
 // Student routes for coding tests
 Route::prefix('student')->middleware('auth')->group(function () {
     Route::get('/coding-tests', [CodingTestController::class, 'index'])->name('student.coding_tests.index');

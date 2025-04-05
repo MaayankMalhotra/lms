@@ -118,16 +118,19 @@ document.addEventListener('click', function (e) {
         removeButtons.forEach(button => {
             button.addEventListener('click', function() {
                 const solutionField = this.closest('.solution-field');
-                const solutionId = solutionField.dataset.solutionId;
+                const solutionValue = solutionField.querySelector('input').value;
                 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
                 
                 if(confirm('Are you sure you want to delete this solution?')) {
-                    fetch('/coding-questions/' + solutionId, {
+                    fetch('/coding-questions/delete-solution', {
                         method: 'DELETE',
                         headers: {
                             'X-CSRF-TOKEN': csrfToken,
                             'Content-Type': 'application/json'
-                        }
+                        },
+                        body: JSON.stringify({
+                            solution: solutionValue
+                        })
                     })
                     .then(response => {
                         if (!response.ok) {

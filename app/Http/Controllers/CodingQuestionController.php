@@ -79,4 +79,26 @@ class CodingQuestionController extends Controller
     $codingQuestion = CodingQuestion::with('submissions.user')->findOrFail($id);
     return view('admin.coding_questions.show_submissions', compact('codingQuestion'));
 }
+
+public function deleteSolution(Request $request)
+{
+    $solutionValue = $request->input('solution');
+    
+    // Assuming solutions are stored in a JSON column or separate table
+    $codingQuestion = CodingQuestion::findOrFail($someQuestionId); // You'll need to get the right question ID
+    $solutions = $codingQuestion->solutions;
+    
+    // Filter out the solution to delete
+    $updatedSolutions = array_filter($solutions, function($value) use ($solutionValue) {
+        return $value !== $solutionValue;
+    });
+    
+    // Re-index array if needed
+    $updatedSolutions = array_values($updatedSolutions);
+    
+    $codingQuestion->solutions = $updatedSolutions;
+    $codingQuestion->save();
+    
+    return response()->json(['message' => 'Solution deleted successfully']);
+}
 }
