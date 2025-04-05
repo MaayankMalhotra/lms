@@ -58,20 +58,7 @@
                                    class="text-green-500 hover:text-green-600">
                                     <i class="fas fa-eye"></i>
                                 </a>
-                                <!-- Edit -->
-                                <a href="{{ route('admin.coding_questions.edit', $question->id) }}"
-                                   class="text-blue-500 hover:text-blue-600">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <!-- Delete -->
-                                <form action="{{ route('admin.coding_questions.destroy', $question->id) }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="text-red-500 hover:text-red-600"
-                                            onclick="return confirm('Are you sure you want to delete this question?')">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </form>
+                               
                             </div>
                         </td>
                     </tr>
