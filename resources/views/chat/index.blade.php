@@ -7,11 +7,20 @@
         <div class="row">
             <div class="col-md-4 user-list">
                 @if(auth()->user()->role == '2') <!-- Teacher -->
-                    <h3 class="text-lg font-bold text-gray-700 mb-3">Students</h3>
+                    <h3 class="text-lg font-bold text-gray-700 mb-3">Students Chats</h3>
                     <div class="list-group" id="student-list">
                         @foreach($students as $student)
-                            <div class="list-group-item bg-gray-100 rounded-lg p-3 mb-2 shadow-sm" data-student-id="{{ $student->id }}">
-                                <a href="#" onclick="loadChat({{ $student->id }})" class="text-orange-500 font-semibold hover:underline">{{ $student->name }}</a>
+                            <div class="list-group-item d-flex align-items-center p-3 mb-2 rounded-lg shadow-sm border border-gray-200 hover:bg-blue-50 transition-colors" data-student-id="{{ $student->id }}">
+                                <!-- Avatar -->
+                                <div class="flex-shrink-0">
+                                    <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+                                        <span class="text-blue-600 font-semibold">{{ substr($student->name, 0, 1) }}</span>
+                                    </div>
+                                </div>
+                                <!-- Student Name -->
+                                <div class="flex-grow ml-3">
+                                    <a href="#" onclick="loadChat({{ $student->id }})" class="text-gray-800 font-semibold hover:text-blue-600 transition-colors">{{ $student->name }}</a>
+                                </div>
                             </div>
                         @endforeach
                     </div>
@@ -169,6 +178,15 @@
             const student = @json($students->keyBy('id'));
             receiverName = student[id] ? student[id].name : 'Unknown';
             document.getElementById('chat-receiver-name').innerText = `Chatting with: ${receiverName}`;
+
+            // Highlight the active student
+            document.querySelectorAll('.list-group-item').forEach(item => {
+                item.classList.remove('bg-blue-100', 'border-blue-300');
+            });
+            const activeStudent = document.querySelector(`.list-group-item[data-student-id="${id}"]`);
+            if (activeStudent) {
+                activeStudent.classList.add('bg-blue-100', 'border-blue-300');
+            }
         @endif
 
         fetchMessages();
@@ -204,14 +222,13 @@
         let message = document.getElementById('message').value;
         let errorMessage = document.getElementById('error-message');
 
-        // Check if receiverId is null
         if (!receiverId) {
             errorMessage.innerText = 'Please select a user to chat with.';
             errorMessage.style.display = 'block';
             return;
         }
 
-        errorMessage.style.display = 'none'; // Hide error message if receiverId is valid
+        errorMessage.style.display = 'none';
 
         const url = `/message/send?receiver_id=${receiverId}&message=${encodeURIComponent(message)}`;
 
@@ -231,7 +248,6 @@
             document.getElementById('message').value = '';
             fetchMessages();
 
-            // Agar teacher hai, toh reply ke baad student ko list se remove karo
             @if(auth()->user()->role == '2')
                 if (data.status === 'Message Sent!' && data.receiver_id) {
                     const studentElement = document.querySelector(`.list-group-item[data-student-id="${data.receiver_id}"]`);
