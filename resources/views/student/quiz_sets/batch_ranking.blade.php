@@ -4,7 +4,7 @@
 <div class="container">
     <h1>Quiz Rankings for {{ $batch->course->name }} - {{ $batch->name }} (Started: {{ $batch->start_date }})</h1>
     
-    @if($attempts->isEmpty())
+    @if(empty($studentResults))
         <div class="alert alert-info">
             No quiz attempts found for this batch yet.
         </div>
@@ -20,13 +20,13 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($attempts as $index => $attempt)
+                @foreach($studentResults as $index => $result)
                     <tr>
                         <td>{{ $index + 1 }}</td>
-                        <td>{{ $attempt['student_name'] }}</td>
-                        <td>{{ $attempt['quiz_set_title'] }}</td>
-                        <td>{{ $attempt['score'] }} / {{ $attempt['total_quizzes'] }}</td>
-                        <td>{{ number_format($attempt['percentage'], 2) }}%</td>
+                        <td>{{ $result->student_name }}</td>
+                        <td>{{ $result->quiz_set_title }}</td>
+                        <td>{{ $result->score }} / {{ $result->total_quizzes }}</td>
+                        <td>{{ number_format($result->percentage, 2) }}%</td>
                     </tr>
                 @endforeach
             </tbody>
