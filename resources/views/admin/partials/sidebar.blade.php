@@ -38,6 +38,13 @@
             </a>
 
         </li>
+
+        <li>
+            <a href="" class="flex items-center p-3 rounded transition">
+                <i class="fas fa-question-circle mr-3 text-lg"></i> My Classes
+            </a>
+
+        </li>
         @endif
         <!-- Admin ke liye baaki sections (Sirf role == 1 ko dikhega) -->
         @if(auth()->user()->role == 1)
