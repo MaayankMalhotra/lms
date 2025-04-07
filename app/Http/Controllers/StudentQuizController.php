@@ -132,18 +132,29 @@ class StudentQuizController extends Controller
 
     public function batchQuizRanking(Request $request)
     {
-        $batchId = $request->input('batch_id') ?? $request->route('batchId');
+        // Get the selected batch ID and quiz set ID from the request
+        $batchId = $request->input('batch_id');
+        $selectedQuizSetId = $request->input('quiz_set_id');
+    
+        // Get all batches for the dropdown
         $batches = \App\Models\Batch::with('course')->get();
     
+        // If no batch is selected, set defaults
         if (!$batchId) {
-            $quizSets = collect();
+            $quizSets = collect(); // Empty collection
             $studentResults = [];
             $batch = null;
             $selectedQuizSetId = null;
         } else {
+            // Get all quiz sets for the selected batch
             $quizSets = QuizSet::where('batch_id', $batchId)->get();
-            $selectedQuizSetId = $request->input('quiz_set_id');
     
+            // If the selected quiz set ID doesn't belong to the current batch, reset it
+            if ($selectedQuizSetId && !$quizSets->contains('id', $selectedQuizSetId)) {
+                $selectedQuizSetId = null;
+            }
+    
+            // Build the query for rankings
             $query = "
                 SELECT 
                     users.name AS student_name,
@@ -169,8 +180,10 @@ class StudentQuizController extends Controller
     
             $query .= " ORDER BY percentage DESC";
     
+            // Execute the query
             $studentResults = DB::select($query, $params);
     
+            // Convert array of arrays to array of objects
             $studentResults = array_map(function ($result) {
                 return (object) $result;
             }, $studentResults);

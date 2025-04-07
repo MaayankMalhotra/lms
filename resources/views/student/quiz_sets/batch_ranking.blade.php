@@ -48,6 +48,7 @@
         background-color: #fff;
         outline: none;
         width: 200px;
+        margin-right: 20px;
     }
     .table {
         width: 100%;
@@ -83,18 +84,36 @@
         Hope you have a great day ahead!
     </div>
 
-    <!-- Batch Filter -->
+    <!-- Batch and Quiz Set Filters -->
     <div class="mt-3 mb-3">
-        <form method="GET" action="{{ route('student.batch_quiz_ranking') }}" style="display: flex; align-items: center;">
-            <label for="batch_id" class="filter-label">Select Batch:</label>
-            <select name="batch_id" id="batch_id" class="filter-select" onchange="this.form.submit()">
-                <option value="">Select a Batch</option>
-                @foreach($batches as $batchOption)
-                    <option value="{{ $batchOption->id }}" {{ $batchId == $batchOption->id ? 'selected' : '' }}>
-                        {{ $batchOption->course->name }} - {{ $batchOption->name }} (Started: {{ $batchOption->start_date }})
-                    </option>
-                @endforeach
-            </select>
+        <form method="GET" action="{{ route('student.batch_quiz_ranking') }}" style="display: flex; align-items: center; flex-wrap: wrap; gap: 15px;">
+            <!-- Batch Filter -->
+            <div style="display: flex; align-items: center;">
+                <label for="batch_id" class="filter-label">Select Batch:</label>
+                <select name="batch_id" id="batch_id" class="filter-select" onchange="this.form.submit()">
+                    <option value="">Select a Batch</option>
+                    @foreach($batches as $batchOption)
+                        <option value="{{ $batchOption->id }}" {{ $batchId == $batchOption->id ? 'selected' : '' }}>
+                            {{ $batchOption->course->name }} - {{ $batchOption->name }} (Started: {{ $batchOption->start_date }})
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <!-- Quiz Set Filter (only show if a batch is selected) -->
+            @if($batchId && !$quizSets->isEmpty())
+                <div style="display: flex; align-items: center;">
+                    <label for="quiz_set_id" class="filter-label">Filter by Quiz Set:</label>
+                    <select name="quiz_set_id" id="quiz_set_id" class="filter-select" onchange="this.form.submit()">
+                        <option value="">All Quiz Sets</option>
+                        @foreach($quizSets as $quizSet)
+                            <option value="{{ $quizSet->id }}" {{ $selectedQuizSetId == $quizSet->id ? 'selected' : '' }}>
+                                {{ $quizSet->title }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+            @endif
         </form>
     </div>
 
@@ -115,24 +134,10 @@
             <i class="fas fa-arrow-left"></i> Back to Quiz Sets
         </a>
 
-        <!-- Quiz Set Filter -->
+        <!-- Quiz Set Filter Message -->
         @if($quizSets->isEmpty())
             <div class="mt-3" style="color: #dc3545;">
                 No quiz sets found for this batch.
-            </div>
-        @else
-            <div class="mt-3 mb-3">
-                <form method="GET" action="{{ route('student.batch_quiz_ranking', $batch->id) }}" style="display: flex; align-items: center;">
-                    <label for="quiz_set_id" class="filter-label">Filter by Quiz Set:</label>
-                    <select name="quiz_set_id" id="quiz_set_id" class="filter-select" onchange="this.form.submit()">
-                        <option value="">All Quiz Sets</option>
-                        @foreach($quizSets as $quizSet)
-                            <option value="{{ $quizSet->id }}" {{ $selectedQuizSetId == $quizSet->id ? 'selected' : '' }}>
-                                {{ $quizSet->title }}
-                            </option>
-                        @endforeach
-                    </select>
-                </form>
             </div>
         @endif
 
