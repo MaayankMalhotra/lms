@@ -296,3 +296,4 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('my-classes',[StudentClassController::class,'index'])->name('student.classes.index');
+Route::get('/student/join-class/{liveClassId}', [StudentClassController::class, 'joinClass'])->name('student.join-class');

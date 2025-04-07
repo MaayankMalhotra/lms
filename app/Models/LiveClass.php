@@ -11,7 +11,7 @@ class LiveClass extends Model
     use HasFactory;
     protected $table = 'live_classes';
     protected $fillable = ['batch_id', 'topic', 'google_meet_link', 'class_datetime', 'duration_minutes', 'status'];
-
+    protected $dates = ['class_datetime'];
     public function batch()
     {
         return $this->belongsTo(Batch::class);
@@ -43,14 +43,31 @@ class LiveClass extends Model
         return $this->belongsTo(Enrollment::class, 'batch_id', 'batch_id');
     }
 
-    // Helper method to check if class is upcoming or ended
+    public function attendance()
+    {
+        return $this->hasMany(Attendance::class, 'live_class_id', 'id');
+    }
+
+    public function hasAttended($userId)
+    {
+        return $this->attendance()->where('user_id', $userId)->whereDate('date', now()->toDateString())->exists();
+    }
+
     public function isUpcoming()
     {
-        return now()->lessThan($this->class_datetime);
+        return now()->lt(Carbon::parse($this->class_datetime)); // Before class start time
     }
 
     public function isEnded()
     {
-        return now()->greaterThanOrEqualTo($this->class_datetime);
+        $endTime = Carbon::parse($this->class_datetime)->addMinutes($this->duration_minutes);
+        return now()->gte($endTime); // After class end time
+    }
+
+    public function isOngoing()
+    {
+        $startTime = Carbon::parse($this->class_datetime);
+        $endTime = $startTime->copy()->addMinutes($this->duration_minutes);
+        return now()->gte($startTime) && now()->lte($endTime); // During class time
     }
 }
