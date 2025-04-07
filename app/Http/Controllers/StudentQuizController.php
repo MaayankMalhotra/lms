@@ -88,43 +88,70 @@ class StudentQuizController extends Controller
         return redirect()->route('student.quiz_sets')
             ->with('success', "Your score is $correctCount/{$quizSet->total_quizzes}");
     }
-    // public function batchQuizRanking($batchId)
+    
+    // public function batchQuizRanking(Request $request, $batchId)
     // {
-    //     $quizSets = QuizSet::where('batch_id', $batchId)->pluck('id');
-    //     $quizIds = Quiz::whereIn('quiz_set_id', $quizSets)->pluck('id');
+    //     $quizSets = QuizSet::where('batch_id', $batchId)->get();
+    //     $selectedQuizSetId = $request->input('quiz_set_id');
     
-    //     $studentResults = StudentQuizAnswer::whereIn('quiz_id', $quizIds)
-    //         ->with(['quiz.quizSet', 'user'])
-    //         ->get()
-    //         ->groupBy('user_id')
-    //         ->map(function ($answers) {
-    //             $score = $answers->sum(function ($answer) {
-    //                 return $answer->student_answer == $answer->quiz->correct_option ? 1 : 0;
-    //             });
-    //             $totalQuizzes = $answers->first()->quiz->quizSet->total_quizzes;
+    //     $query = "
+    //         SELECT 
+    //             users.name AS student_name,
+    //             quiz_sets.title AS quiz_set_title,
+    //             student_quiz_set_attempts.score,
+    //             quiz_sets.total_quizzes,
+    //             (student_quiz_set_attempts.score / quiz_sets.total_quizzes * 100) AS percentage
+    //         FROM 
+    //             student_quiz_set_attempts
+    //         JOIN 
+    //             users ON student_quiz_set_attempts.user_id = users.id
+    //         JOIN 
+    //             quiz_sets ON student_quiz_set_attempts.quiz_set_id = quiz_sets.id
+    //         WHERE 
+    //             quiz_sets.batch_id = ?
+    //     ";
     
-    //             return [
-    //                 'student_name' => $answers->first()->user->name,
-    //                 'quiz_set_title' => $answers->first()->quiz->quizSet->title,
-    //                 'score' => $score,
-    //                 'total_quizzes' => $totalQuizzes,
-    //                 'percentage' => ($score / $totalQuizzes) * 100
-    //             ];
-    //         })
-    //         ->sortByDesc('percentage')
-    //         ->values();
-    //         //dd($studentResults);
+    //     $params = [$batchId];
+    //     if ($selectedQuizSetId) {
+    //         $query .= " AND student_quiz_set_attempts.quiz_set_id = ?";
+    //         $params[] = $selectedQuizSetId;
+    //     }
+    
+    //     $query .= " ORDER BY percentage DESC";
+    
+    //     $studentResults = DB::select($query, $params);
+    
+    //     $studentResults = array_map(function ($result) {
+    //         return (object) $result;
+    //     }, $studentResults);
     
     //     $batch = \App\Models\Batch::with('course')->findOrFail($batchId);
     
-    //     return view('student.quiz_sets.batch_ranking', compact('studentResults', 'batch'));
+    //     return view('student.quiz_sets.batch_ranking', compact('studentResults', 'quizSets', 'batch', 'selectedQuizSetId'));
     // }
 
-    public function batchQuizRanking(Request $request, $batchId)
-    {
+    public function batchQuizRanking(Request $request)
+{
+    // Get the selected batch ID from the request (if any), fallback to URL parameter if provided
+    $batchId = $request->input('batch_id') ?? $request->route('batchId');
+
+    // Get all batches for the dropdown
+    $batches = \App\Models\Batch::with('course')->get();
+
+    // If no batch is selected, set batchId to null and show a message
+    if (!$batchId) {
+        $quizSets = collect(); // Empty collection
+        $studentResults = [];
+        $batch = null;
+        $selectedQuizSetId = null;
+    } else {
+        // Get all quiz sets for the selected batch
         $quizSets = QuizSet::where('batch_id', $batchId)->get();
+
+        // Get the selected quiz set ID from the request (if any)
         $selectedQuizSetId = $request->input('quiz_set_id');
-    
+
+        // Build the query
         $query = "
             SELECT 
                 users.name AS student_name,
@@ -141,25 +168,28 @@ class StudentQuizController extends Controller
             WHERE 
                 quiz_sets.batch_id = ?
         ";
-    
+
         $params = [$batchId];
         if ($selectedQuizSetId) {
             $query .= " AND student_quiz_set_attempts.quiz_set_id = ?";
             $params[] = $selectedQuizSetId;
         }
-    
+
         $query .= " ORDER BY percentage DESC";
-    
+
+        // Execute the query
         $studentResults = DB::select($query, $params);
-    
+
+        // Convert array of arrays to array of objects
         $studentResults = array_map(function ($result) {
             return (object) $result;
         }, $studentResults);
-    
+
         $batch = \App\Models\Batch::with('course')->findOrFail($batchId);
-    
-        return view('student.quiz_sets.batch_ranking', compact('studentResults', 'quizSets', 'batch', 'selectedQuizSetId'));
     }
+
+    return view('student.quiz_sets.batch_ranking', compact('studentResults', 'quizSets', 'batch', 'selectedQuizSetId', 'batches', 'batchId'));
+}
     public function batchQuizRanking_old($batchId)
 {
     $quizSets = QuizSet::where('batch_id', $batchId)->pluck('id');
