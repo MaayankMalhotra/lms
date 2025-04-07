@@ -1,23 +1,29 @@
-@extends('admin.layouts.app') <!-- Assuming you have a layout -->
+@extends('admin.layouts.app')
 
 @section('content')
 <div class="container">
     <h1>Quiz Rankings for {{ $batch->course->name }} - {{ $batch->name }} (Started: {{ $batch->start_date }})</h1>
 
-    <!-- Quiz Set Filter Dropdown -->
-    <form method="GET" action="{{ route('student.batch_quiz_ranking', $batch->id) }}" class="mb-4">
-        <div class="form-group">
-            <label for="quiz_set_id">Filter by Quiz Set:</label>
-            <select name="quiz_set_id" id="quiz_set_id" class="form-control" onchange="this.form.submit()">
-                <option value="">All Quiz Sets</option>
-                @foreach($quizSets as $quizSet)
-                    <option value="{{ $quizSet->id }}" {{ $selectedQuizSetId == $quizSet->id ? 'selected' : '' }}>
-                        {{ $quizSet->title }}
-                    </option>
-                @endforeach
-            </select>
+    @if($quizSets->isEmpty())
+        <div class="alert alert-warning">
+            No quiz sets found for this batch.
         </div>
-    </form>
+    @else
+        <!-- Quiz Set Filter Dropdown -->
+        <form method="GET" action="{{ route('student.batch_quiz_ranking', $batch->id) }}" class="mb-4">
+            <div class="form-group">
+                <label for="quiz_set_id">Filter by Quiz Set:</label>
+                <select name="quiz_set_id" id="quiz_set_id" class="form-control" onchange="this.form.submit()">
+                    <option value="">All Quiz Sets</option>
+                    @foreach($quizSets as $quizSet)
+                        <option value="{{ $quizSet->id }}" {{ $selectedQuizSetId == $quizSet->id ? 'selected' : '' }}>
+                            {{ $quizSet->title }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+        </form>
+    @endif
 
     @if(empty($studentResults))
         <div class="alert alert-info">
