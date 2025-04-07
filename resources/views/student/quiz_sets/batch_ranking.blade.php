@@ -1,120 +1,150 @@
 @extends('admin.layouts.app')
 
 @section('content')
-<div class="container py-4">
-    <!-- Page Header -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="h3 text-dark font-weight-bold">
-            Quiz Rankings for {{ $batch->course->name }} - {{ $batch->name }}
-            <small class="text-muted">(Started: {{ $batch->start_date }})</small>
-        </h1>
-        <a href="{{ route('student.quiz_sets') }}" class="btn btn-outline-secondary btn-sm shadow-sm">
-            <i class="fas fa-arrow-left mr-1"></i> Back to Quiz Sets
-        </a>
+<!-- Include Font Awesome for Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+    /* Custom Styles */
+    .container {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 10px;
+    }
+    .welcome-message {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #1a3c34;
+    }
+    .welcome-subtext {
+        font-size: 0.9rem;
+        color: #6c757d;
+    }
+    .back-link {
+        color: #007bff;
+        font-weight: bold;
+        text-decoration: none;
+        margin-bottom: 15px;
+        display: inline-flex;
+        align-items: center;
+    }
+    .back-link:hover {
+        text-decoration: underline;
+    }
+    .back-link i {
+        margin-right: 5px;
+    }
+    .filter-label {
+        font-weight: bold;
+        color: #333;
+        margin-right: 10px;
+    }
+    .filter-select {
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+        padding: 5px 10px;
+        font-size: 1rem;
+        color: #333;
+        background-color: #fff;
+        outline: none;
+        width: 200px;
+    }
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+    }
+    .table th {
+        font-weight: bold;
+        color: #333;
+        padding: 10px;
+        text-align: left;
+    }
+    .table td {
+        padding: 10px;
+        color: #333;
+    }
+    .percentage-high {
+        color: #28a745;
+        font-weight: bold;
+    }
+    .percentage-low {
+        color: #dc3545;
+        font-weight: bold;
+    }
+</style>
+
+<div class="container">
+    <!-- Welcome Message -->
+    <div class="welcome-message">
+        Welcome, {{ Auth::user()->name }} <span>👋</span>
+    </div>
+    <div class="welcome-subtext">
+        Hope you have a great day ahead!
     </div>
 
-    <!-- Quiz Set Filter Section -->
+    <!-- Header -->
+    <h1 class="mt-4 mb-3" style="font-size: 1.25rem; font-weight: bold; color: #333;">
+        Quiz Rankings for {{ $batch->course->name }} - {{ $batch->name }}
+        <span style="font-size: 0.9rem; color: #6c757d;">(Started: {{ $batch->start_date }})</span>
+    </h1>
+
+    <!-- Back Link -->
+    <a href="{{ route('student.quiz_sets') }}" class="back-link">
+        <i class="fas fa-arrow-left"></i> Back to Quiz Sets
+    </a>
+
+    <!-- Filter Section -->
     @if($quizSets->isEmpty())
-        <div class="alert alert-warning shadow-sm" role="alert">
-            <i class="fas fa-exclamation-triangle mr-2"></i> No quiz sets found for this batch.
+        <div class="mt-3" style="color: #dc3545;">
+            No quiz sets found for this batch.
         </div>
     @else
-        <div class="card shadow-sm mb-4">
-            <div class="card-body">
-                <form method="GET" action="{{ route('student.batch_quiz_ranking', $batch->id) }}">
-                    <div class="row align-items-center">
-                        <div class="col-md-3">
-                            <label for="quiz_set_id" class="font-weight-bold text-dark">Filter by Quiz Set:</label>
-                        </div>
-                        <div class="col-md-6">
-                            <select name="quiz_set_id" id="quiz_set_id" class="form-control custom-select shadow-sm" onchange="this.form.submit()">
-                                <option value="">All Quiz Sets</option>
-                                @foreach($quizSets as $quizSet)
-                                    <option value="{{ $quizSet->id }}" {{ $selectedQuizSetId == $quizSet->id ? 'selected' : '' }}>
-                                        {{ $quizSet->title }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                </form>
-            </div>
+        <div class="mt-3 mb-3">
+            <form method="GET" action="{{ route('student.batch_quiz_ranking', $batch->id) }}" style="display: flex; align-items: center;">
+                <label for="quiz_set_id" class="filter-label">Filter by Quiz Set:</label>
+                <select name="quiz_set_id" id="quiz_set_id" class="filter-select" onchange="this.form.submit()">
+                    <option value="">All Quiz Sets</option>
+                    @foreach($quizSets as $quizSet)
+                        <option value="{{ $quizSet->id }}" {{ $selectedQuizSetId == $quizSet->id ? 'selected' : '' }}>
+                            {{ $quizSet->title }}
+                        </option>
+                    @endforeach
+                </select>
+            </form>
         </div>
     @endif
 
     <!-- Results Table -->
     @if(empty($studentResults))
-        <div class="alert alert-info shadow-sm" role="alert">
-            <i class="fas fa-info-circle mr-2"></i> No quiz attempts found for this batch yet.
+        <div class="mt-3" style="color: #dc3545;">
+            No quiz attempts found for this batch yet.
         </div>
     @else
-        <div class="card shadow-sm">
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-striped table-hover mb-0">
-                        <thead class="bg-primary text-white">
-                            <tr>
-                                <th class="py-3 px-4">Rank</th>
-                                <th class="py-3 px-4">Student Name</th>
-                                <th class="py-3 px-4">Quiz Set</th>
-                                <th class="py-3 px-4">Score</th>
-                                <th class="py-3 px-4">Percentage</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($studentResults as $index => $result)
-                                <tr class="align-middle">
-                                    <td class="py-3 px-4">
-                                        <span class="badge badge-pill badge-primary">{{ $index + 1 }}</span>
-                                    </td>
-                                    <td class="py-3 px-4">{{ $result->student_name }}</td>
-                                    <td class="py-3 px-4">{{ $result->quiz_set_title }}</td>
-                                    <td class="py-3 px-4">{{ $result->score }} / {{ $result->total_quizzes }}</td>
-                                    <td class="py-3 px-4">
-                                        <span class="font-weight-bold {{ $result->percentage >= 70 ? 'text-success' : ($result->percentage >= 40 ? 'text-warning' : 'text-danger') }}">
-                                            {{ number_format($result->percentage, 2) }}%
-                                        </span>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+        <table class="table mt-3">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Student Name</th>
+                    <th>Quiz Set</th>
+                    <th>Score</th>
+                    <th>Percentage</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($studentResults as $index => $result)
+                    <tr>
+                        <td>{{ $index + 1 }}</td>
+                        <td>{{ $result->student_name }}</td>
+                        <td>{{ $result->quiz_set_title }}</td>
+                        <td>{{ $result->score }} / {{ $result->total_quizzes }}</td>
+                        <td class="{{ $result->percentage >= 70 ? 'percentage-high' : 'percentage-low' }}">
+                            {{ number_format($result->percentage, 2) }}%
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
     @endif
 </div>
-
-<!-- Custom CSS -->
-<style>
-    .table th, .table td {
-        vertical-align: middle;
-    }
-    .table-hover tbody tr:hover {
-        background-color: #f1f5f9;
-        transition: background-color 0.3s ease;
-    }
-    .badge-primary {
-        font-size: 1rem;
-        padding: 0.5em 0.8em;
-    }
-    .custom-select {
-        border-radius: 0.5rem;
-        border: 1px solid #ced4da;
-    }
-    .card {
-        border-radius: 0.75rem;
-        border: none;
-    }
-    .alert {
-        border-radius: 0.5rem;
-    }
-    .btn-outline-secondary {
-        border-radius: 0.5rem;
-        transition: all 0.3s ease;
-    }
-    .btn-outline-secondary:hover {
-        background-color: #f8f9fa;
-    }
-</style>
 @endsection
