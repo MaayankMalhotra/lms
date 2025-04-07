@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\QuizSet;
 use App\Models\StudentQuizSetAttempt;
 use App\Models\StudentQuizAnswer;
+use App\Models\Quiz;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
