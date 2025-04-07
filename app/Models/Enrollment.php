@@ -25,4 +25,14 @@ class Enrollment extends Model
     {
         return $this->status === 'pending';
     }
+
+    public function student()
+    {
+        return $this->belongsTo(Student::class, 'user_id', 'user_id');
+    }
+
+    public function liveClasses()
+    {
+        return $this->hasMany(LiveClass::class, 'batch_id', 'batch_id');
+    }
 }

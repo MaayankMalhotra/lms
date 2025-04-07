@@ -38,4 +38,19 @@ class LiveClass extends Model
     //     $endTime = Carbon::parse($this->class_datetime)->addMinutes($this->duration_minutes);
     //     return $this->recording && now()->greaterThanOrEqualTo($endTime->addMinutes(30));
     // }
+    public function enrollment()
+    {
+        return $this->belongsTo(Enrollment::class, 'batch_id', 'batch_id');
+    }
+
+    // Helper method to check if class is upcoming or ended
+    public function isUpcoming()
+    {
+        return now()->lessThan($this->class_datetime);
+    }
+
+    public function isEnded()
+    {
+        return now()->greaterThanOrEqualTo($this->class_datetime);
+    }
 }
