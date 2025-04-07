@@ -112,7 +112,7 @@ class StudentQuizController extends Controller
             })
             ->sortByDesc('percentage')
             ->values();
-            dd($studentResults);
+            //dd($studentResults);
     
         $batch = \App\Models\Batch::with('course')->findOrFail($batchId);
     
