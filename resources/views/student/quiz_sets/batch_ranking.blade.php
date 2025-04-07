@@ -23,10 +23,10 @@
                 @foreach($studentResults as $index => $result)
                     <tr>
                         <td>{{ $index + 1 }}</td>
-                        <td>{{ $result->student_name }}</td>
-                        <td>{{ $result->quiz_set_title }}</td>
-                        <td>{{ $result->score }} / {{ $result->total_quizzes }}</td>
-                        <td>{{ number_format($result->percentage, 2) }}%</td>
+                        <td>{{ $result['student_name'] }}</td>
+                        <td>{{ $result['quiz_set_title'] }}</td>
+                        <td>{{ $result['score'] }} / {{ $result['total_quizzes'] }}</td>
+                        <td>{{ number_format($result['percentage'], 2) }}%</td>
                     </tr>
                 @endforeach
             </tbody>
