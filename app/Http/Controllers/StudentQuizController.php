@@ -86,4 +86,32 @@ class StudentQuizController extends Controller
         return redirect()->route('student.quiz_sets')
             ->with('success', "Your score is $correctCount/{$quizSet->total_quizzes}");
     }
+    // In StudentQuizController.php
+
+public function batchQuizRanking($batchId)
+{
+    // Get all quiz sets for this batch
+    $quizSets = QuizSet::where('batch_id', $batchId)->pluck('id');
+
+    // Get all attempts for these quiz sets with student info
+    $attempts = StudentQuizSetAttempt::with(['user', 'quizSet'])
+        ->whereIn('quiz_set_id', $quizSets)
+        ->get()
+        ->map(function ($attempt) {
+            return [
+                'student_name' => $attempt->user->name,
+                'quiz_set_title' => $attempt->quizSet->title,
+                'score' => $attempt->score,
+                'total_quizzes' => $attempt->quizSet->total_quizzes,
+                'percentage' => ($attempt->score / $attempt->quizSet->total_quizzes) * 100
+            ];
+        })
+        ->sortByDesc('percentage') // Sort by percentage descending
+        ->values(); // Reset keys after sorting
+
+    // Get batch details for display
+    $batch = \App\Models\Batch::with('course')->findOrFail($batchId);
+
+    return view('student.quiz_sets.batch_ranking', compact('attempts', 'batch'));
+}
 }

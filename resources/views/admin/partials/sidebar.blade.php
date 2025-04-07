@@ -198,6 +198,9 @@
                 <a href="{{ route('admin.quiz_sets') }}" class="flex items-center p-3 {{ request()->routeIs('admin.quiz_sets') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
                     <i class="fas fa-question-circle mr-3 text-lg"></i> Quiz Management
                 </a>
+                <a href="{{ route('student.batch_quiz_ranking', 1) }}" class="flex items-center p-3 {{ request()->routeIs('student.coding_tests.index') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
+                    <i class="fas fa-question-circle mr-3 text-lg"></i> Rankings
+                </a>
             </li>
             <!-- Student Management -->
             <li>

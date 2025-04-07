@@ -26,7 +26,8 @@ use App\Http\Controllers\QuizController;
 Route::get('/student/quiz-sets', [StudentQuizController::class, 'index'])->name('student.quiz_sets');
     Route::get('/student/quiz-sets/{id}/take', [StudentQuizController::class, 'takeQuiz'])->name('student.quiz_sets.take');
     Route::post('/student/quiz-sets/{id}/submit', [StudentQuizController::class, 'submitQuiz'])->name('student.quiz_sets.submit');
-    
+    Route::get('/student/batch/{batchId}/quiz-ranking', [StudentQuizController::class, 'batchQuizRanking'])
+    ->name('student.batch_quiz_ranking');
 Route::get('/admin/quiz-sets', [QuizController::class, 'index'])->name('admin.quiz_sets');
     Route::get('/admin/quiz-sets/create', [QuizController::class, 'createSet'])->name('admin.quiz_sets.create');
     Route::post('/admin/quiz-sets/store', [QuizController::class, 'storeSet'])->name('admin.quiz_sets.store');
