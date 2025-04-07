@@ -1,5 +1,5 @@
-@extends('layouts.app') <!-- Assuming you have a layout -->
-
+@extends('admin.layouts.app') <!-- Assuming you have a layout -->
+@section('title', 'Quiz Rankings')
 @section('content')
 <div class="container">
     <h1>Quiz Rankings for {{ $batch->course->name }} - {{ $batch->name }} (Started: {{ $batch->start_date }})</h1>
