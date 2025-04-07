@@ -38,9 +38,8 @@
             </a>
 
         </li>
-
         <li>
-            <a href="" class="flex items-center p-3 rounded transition">
+            <a href="{{ route('student.classes.index') }}" class="flex items-center p-3 {{ request()->routeIs('student.classes.index') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
                 <i class="fas fa-question-circle mr-3 text-lg"></i> My Classes
             </a>
 
