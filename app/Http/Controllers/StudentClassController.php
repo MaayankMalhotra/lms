@@ -23,7 +23,7 @@ class StudentClassController extends Controller
 
         foreach ($enrollments as $enrollment) {
             $liveClasses = $enrollment->liveClasses()->where('status', 'Scheduled')->get();
-            dd( $liveClasses);
+           
             foreach ($liveClasses as $class) {
                 if ($class->isUpcoming()) {
                     $upcomingClasses->push($class);
