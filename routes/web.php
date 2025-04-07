@@ -287,9 +287,12 @@ Route::prefix('student')->middleware('auth')->group(function () {
 Route::get('/admin/coding-questions/{id}/submissions', [CodingQuestionController::class, 'showSubmissions'])->name('admin.coding_questions.show_submissions');
 Route::get('course_details/{slug?}', [CourseController::class, 'courseDetails'])->name('website.course_details');
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\StudentClassController;
 
 Route::middleware('auth')->group(function () {
     Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
     Route::get('/messages/{receiverId}', [ChatController::class, 'fetchMessages']);
     Route::get('/message/send', [ChatController::class, 'sendMessage']);
 });
+
+Route::get('my-classes',[StudentClassController::class,'index'])->name('student.classes.index');
