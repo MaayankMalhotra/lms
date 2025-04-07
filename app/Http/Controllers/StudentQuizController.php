@@ -8,6 +8,7 @@ use App\Models\StudentQuizAnswer;
 use App\Models\Quiz;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class StudentQuizController extends Controller
 {
