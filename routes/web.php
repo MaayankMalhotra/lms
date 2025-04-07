@@ -298,5 +298,5 @@ Route::middleware('auth')->group(function () {
 
 Route::get('my-classes',[StudentClassController::class,'index'])->name('student.classes.index');
 Route::get('/student/join-class/{liveClassId}', [StudentClassController::class, 'joinClass'])->name('student.join-class');
-Route::get('/student/batch/{batchId?}/quiz-ranking', [StudentQuizController::class, 'batchQuizRanking'])
+Route::get('/student/batch/quiz-ranking', [StudentQuizController::class, 'batchQuizRanking'])
     ->name('student.batch_quiz_ranking');;
