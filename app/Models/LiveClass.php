@@ -68,7 +68,6 @@ class LiveClass extends Model
     {
         $startTime = Carbon::parse($this->class_datetime);
         $endTime = $startTime->copy()->addMinutes($this->duration_minutes);
-        dd("Class: {$this->id}, Start: {$startTime}, End: {$endTime}, Now: ".now());
         return now()->gte($startTime) && now()->lte($endTime); // During class time
     }
 }
