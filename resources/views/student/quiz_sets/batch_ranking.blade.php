@@ -56,14 +56,12 @@
         margin-top: 15px;
     }
     .table th {
-        font-weight: bold;
-        color: #333;
+        font-weight: 600;
         padding: 10px;
         text-align: left;
     }
     .table td {
         padding: 10px;
-        color: #333;
     }
     .percentage-high {
         color: #28a745;
@@ -150,24 +148,24 @@
                 No quiz attempts found for this batch yet.
             </div>
         @else
-            <table class="table mt-3">
-                <thead>
+            <table class="w-full text-left border-collapse table mt-3" id="rankingsTable">
+                <thead class="bg-gradient-to-r from-indigo-900 to-purple-800 text-white">
                     <tr>
-                        <th>Rank</th>
-                        <th>Student Name</th>
-                        <th>Quiz Set</th>
-                        <th>Score</th>
-                        <th>Percentage</th>
+                        <th class="px-4 py-3 font-semibold">Rank</th>
+                        <th class="px-4 py-3 font-semibold">Student Name</th>
+                        <th class="px-4 py-3 font-semibold">Quiz Set</th>
+                        <th class="px-4 py-3 font-semibold">Score</th>
+                        <th class="px-4 py-3 font-semibold">Percentage</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="divide-y divide-gray-200">
                     @foreach($studentResults as $index => $result)
-                        <tr>
-                            <td>{{ $index + 1 }}</td>
-                            <td>{{ $result->student_name }}</td>
-                            <td>{{ $result->quiz_set_title }}</td>
-                            <td>{{ $result->score }} / {{ $result->total_quizzes }}</td>
-                            <td class="{{ $result->percentage >= 70 ? 'percentage-high' : 'percentage-low' }}">
+                        <tr class="hover:bg-orange-500 hover:text-white transition duration-200">
+                            <td class="px-4 py-3 text-gray-600">{{ $index + 1 }}</td>
+                            <td class="px-4 py-3 text-gray-800">{{ $result->student_name }}</td>
+                            <td class="px-4 py-3 text-gray-800">{{ $result->quiz_set_title }}</td>
+                            <td class="px-4 py-3 text-gray-600">{{ $result->score }} / {{ $result->total_quizzes }}</td>
+                            <td class="px-4 py-3 {{ $result->percentage >= 70 ? 'text-green-600' : 'text-red-600' }} font-semibold">
                                 {{ number_format($result->percentage, 2) }}%
                             </td>
                         </tr>
