@@ -76,7 +76,13 @@
 </style>
 
 <div class="container">
-   
+    <!-- Welcome Message -->
+    <div class="welcome-message">
+        Welcome, {{ Auth::user()->name }} <span>👋</span>
+    </div>
+    <div class="welcome-subtext">
+        Hope you have a great day ahead!
+    </div>
 
     <!-- Batch and Quiz Set Filters -->
     <div class="mt-3 mb-3">
@@ -106,6 +112,15 @@
                             </option>
                         @endforeach
                     </select>
+                </div>
+            @endif
+
+            <!-- Show Non-Attempted Students Filter -->
+            @if($batchId)
+                <div style="display: flex; align-items: center;">
+                    <label for="show_non_attempted" class="filter-label">Show only non-attempted students:</label>
+                    <input type="checkbox" name="show_non_attempted" id="show_non_attempted" value="1" 
+                           {{ $showNonAttempted ? 'checked' : '' }} onchange="this.form.submit()">
                 </div>
             @endif
         </form>
