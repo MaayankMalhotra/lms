@@ -51,6 +51,19 @@
             </a>
 
         </li>
+        <li>
+            <a href="{{ route('recordings') }}" class="flex items-center p-3 {{ request()->routeIs('recordings') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
+                <i class="fas fa-question-circle mr-3 text-lg"></i> Recordings
+            </a>
+
+        </li>
+
+        <li>
+            <a href="{{ route('assignment') }}" class="flex items-center p-3 {{ request()->routeIs('assignment') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
+                <i class="fas fa-question-circle mr-3 text-lg"></i> My Assignments
+            </a>
+
+        </li>
         @endif
         <!-- Admin ke liye baaki sections (Sirf role == 1 ko dikhega) -->
         @if(auth()->user()->role == 1)
@@ -226,6 +239,12 @@
              <li>
                 <a href="{{ route('admin.leaves') }}" class="flex items-center p-3 {{ request()->routeIs('admin.leaves') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
                     <i class="fas fa-question-circle mr-3 text-lg"></i> Attendance Management
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ route('admin.assignments.create') }}" class="flex items-center p-3 {{ request()->routeIs('admin.assignments.create') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
+                    <i class="fas fa-question-circle mr-3 text-lg"></i> Assignment Management
                 </a>
             </li>
         @endif

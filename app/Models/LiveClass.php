@@ -70,4 +70,9 @@ class LiveClass extends Model
         $endTime = $startTime->copy()->addMinutes($this->duration_minutes);
         return now()->gte($startTime) && now()->lte($endTime); // During class time
     }
+
+    public function assignments()
+    {
+        return $this->hasMany(Assignment::class, 'live_class_id');
+    }
 }

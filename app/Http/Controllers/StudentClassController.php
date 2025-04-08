@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Attendance;
+use App\Models\Batch;
 use Illuminate\Http\Request;
 use App\Models\Student;
 use App\Models\Enrollment;
 use App\Models\LiveClass;
+use App\Models\Recording;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
@@ -59,5 +61,28 @@ class StudentClassController extends Controller
         }
 
         return redirect($liveClass->google_meet_link);
+    }
+
+    // Fetch recordings for the student's course or batch
+    public function recordings()
+    {
+        // Assuming the authenticated student has a course_id or batch_id
+        $batchId = Auth::user()->id; // Adjust this based on your User model
+        $batchid = Enrollment::where('user_id', $batchId)->first();
+$recordings = Recording::whereHas('liveClass', function ($query) use ($batchid) {
+    $query->where('batch_id', $batchid->batch_id);
+})->orderBy('created_at', 'desc')->get();
+// dd($recordings);
+        return view('student.recordings.recoring', compact('recordings'));
+    }
+
+    public function assignment(){
+        $batchId = Enrollment::where('user_id', Auth::id())->first();
+        $liveClasses = LiveClass::where('batch_id', $batchId->batch_id)
+            ->with('assignments')
+            ->orderBy('class_datetime', 'asc')
+            ->get();
+            // dd($liveClasses);
+           return view('student.assignment.assignment', compact('liveClasses'));
     }
 }

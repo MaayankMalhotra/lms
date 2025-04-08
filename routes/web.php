@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminAssignmentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AdminController;
@@ -315,6 +316,13 @@ Route::get('/student/batch/quiz-ranking', [StudentQuizController::class, 'batchQ
                 ->name('admin.leaves');
             Route::post('/admin/leave/{leave}/approve', [AttendanceController::class, 'approveLeave'])
                 ->name('leave.approve');
+
+                Route::get('/recordings', [StudentClassController::class, 'recordings'])->name('recordings');
+
+         Route::get('/assignments/create', [AdminAssignmentController::class, 'create'])->name('admin.assignments.create');
+    Route::post('/assignments', [AdminAssignmentController::class, 'store'])->name('admin.assignments.store');
+
+    Route::get('/assignment', [StudentClassController::class, 'assignment'])->name('assignment');
     });
 
     Route::post('/admin/quiz-sets/{quizSetId}/bulk-upload', [QuizController::class, 'bulkUpload'])
