@@ -50,9 +50,9 @@ class StudentClassController extends Controller
             return redirect()->route('student.dashboard')->with('error', 'You can only join the class during its scheduled time.');
         }
 
-        if (!$liveClass->hasAttended($student->user_id)) {
+        if (!$liveClass->hasAttended($student->id)) {
             Attendance::create([
-                'user_id' => $student->user_id,
+                'user_id' => $student->id,
                 'live_class_id' => $liveClass->id,
                 'date' => $now->toDateString(),
             ]);

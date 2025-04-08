@@ -44,6 +44,13 @@
             </a>
 
         </li>
+
+        <li>
+            <a href="{{ route('student.attendance') }}" class="flex items-center p-3 {{ request()->routeIs('student.attendance') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
+                <i class="fas fa-question-circle mr-3 text-lg"></i> Attendance
+            </a>
+
+        </li>
         @endif
         <!-- Admin ke liye baaki sections (Sirf role == 1 ko dikhega) -->
         @if(auth()->user()->role == 1)
@@ -212,6 +219,13 @@
             <li>
                 <a href="{{ route('trainer-management') }}" class="flex items-center p-3 {{ request()->routeIs('trainer-management') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
                     <i class="fas fa-question-circle mr-3 text-lg"></i> Trainer Management
+                </a>
+            </li>
+
+             <!-- Trainer Management -->
+             <li>
+                <a href="{{ route('admin.leaves') }}" class="flex items-center p-3 {{ request()->routeIs('admin.leaves') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
+                    <i class="fas fa-question-circle mr-3 text-lg"></i> Attendance Management
                 </a>
             </li>
         @endif

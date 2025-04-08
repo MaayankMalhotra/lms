@@ -20,7 +20,7 @@ use App\Models\Batch;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AdminLiveClassController;
 use App\Http\Controllers\AdminRecordingController;
-
+use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\QuizController;
 
 Route::get('/student/quiz-sets', [StudentQuizController::class, 'index'])->name('student.quiz_sets');
@@ -247,7 +247,9 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/live-classes/{id}', [AdminLiveClassController::class, 'destroy'])->name('live_classes.destroy');
         });
         
-    
+        Route::get('/attendance/monthly', [AttendanceController::class, 'showMonthlyAttendance']);
+Route::post('/leave/apply', [AttendanceController::class, 'applyLeave'])->name('leave.apply');
+Route::post('/leave/{leave}/approve', [AttendanceController::class, 'approveLeave'])->name('leave.approve');
 });
 
 Route::get('/api/batches', [BatchController::class, 'getBatchesByCourse'])->name('api.batches');
@@ -299,4 +301,18 @@ Route::middleware('auth')->group(function () {
 Route::get('my-classes',[StudentClassController::class,'index'])->name('student.classes.index');
 Route::get('/student/join-class/{liveClassId}', [StudentClassController::class, 'joinClass'])->name('student.join-class');
 Route::get('/student/batch/quiz-ranking', [StudentQuizController::class, 'batchQuizRanking'])
-    ->name('student.batch_quiz_ranking');;
+    ->name('student.batch_quiz_ranking');
+
+    Route::middleware(['auth'])->group(function () {
+        // Student Routes
+        Route::get('/student/attendance', [AttendanceController::class, 'studentAttendance'])
+            ->name('student.attendance');
+        Route::post('/student/leave/apply', [AttendanceController::class, 'applyLeave'])
+            ->name('leave.apply');
+    
+        // Admin Routes
+            Route::get('/admin/leaves', [AttendanceController::class, 'adminLeaves'])
+                ->name('admin.leaves');
+            Route::post('/admin/leave/{leave}/approve', [AttendanceController::class, 'approveLeave'])
+                ->name('leave.approve');
+    });

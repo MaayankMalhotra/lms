@@ -7,7 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Attendance extends Model
 {
-    use HasFactory;
     protected $table = 'attendance';
     protected $fillable = ['user_id', 'live_class_id', 'date'];
+    protected $dates = ['date'];
+
+    public function student()
+    {
+        return $this->belongsTo(Student::class, 'user_id', 'user_id');
+    }
 }
