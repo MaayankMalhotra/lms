@@ -316,3 +316,6 @@ Route::get('/student/batch/quiz-ranking', [StudentQuizController::class, 'batchQ
             Route::post('/admin/leave/{leave}/approve', [AttendanceController::class, 'approveLeave'])
                 ->name('leave.approve');
     });
+
+    Route::post('/admin/quiz-sets/{quizSetId}/bulk-upload', [QuizController::class, 'bulkUpload'])
+    ->name('admin.quiz_sets.bulk_upload');

@@ -176,4 +176,88 @@ public function deleteQuiz($id)
     return redirect()->route('admin.quiz_sets.show_quizzes', $quizSetId)
         ->with('success', 'Quiz deleted successfully!');
 }
+public function bulkUpload(Request $request, $quizSetId)
+{
+    // Validate the request
+    $request->validate([
+        'csv_file' => 'required|file|mimes:csv,txt|max:2048', // Max 2MB
+    ]);
+
+    // Find the quiz set
+    $quizSet = QuizSet::findOrFail($quizSetId);
+
+    // Check if the user is authorized (optional)
+    if ($quizSet->teacher_id !== Auth::id()) {
+        return redirect()->route('admin.quiz_sets')->with('error', 'Unauthorized!');
+    }
+
+    // Process the CSV file
+    if ($request->hasFile('csv_file')) {
+        $file = $request->file('csv_file');
+        $path = $file->getRealPath();
+
+        // Open and read the CSV file
+        $csvData = array_map('str_getcsv', file($path));
+
+        // Skip the header row
+        $header = array_shift($csvData);
+
+        // Expected header
+        $expectedHeader = ['question', 'option_1', 'option_2', 'option_3', 'option_4', 'correct_option'];
+
+        // Validate header
+        if ($header !== $expectedHeader) {
+            return redirect()->back()->with('error', 'Invalid CSV format. Expected columns: question, option_1, option_2, option_3, option_4, correct_option');
+        }
+
+        // Process each row
+        $errors = [];
+        foreach ($csvData as $index => $row) {
+            // Ensure the row has the correct number of columns
+            if (count($row) !== 6) {
+                $errors[] = "Row " . ($index + 2) . ": Invalid number of columns.";
+                continue;
+            }
+
+            // Extract data
+            $question = $row[0];
+            $option1 = $row[1];
+            $option2 = $row[2];
+            $option3 = $row[3];
+            $option4 = $row[4];
+            $correctOption = (int) $row[5];
+
+            // Validate data
+            if (empty($question) || empty($option1) || empty($option2) || empty($option3) || empty($option4)) {
+                $errors[] = "Row " . ($index + 2) . ": All fields are required.";
+                continue;
+            }
+
+            if ($correctOption < 1 || $correctOption > 4) {
+                $errors[] = "Row " . ($index + 2) . ": Correct option must be between 1 and 4.";
+                continue;
+            }
+
+            // Create the quiz
+            Quiz::create([
+                'quiz_set_id' => $quizSet->id,
+                'question' => $question,
+                'option_1' => $option1,
+                'option_2' => $option2,
+                'option_3' => $option3,
+                'option_4' => $option4,
+                'correct_option' => $correctOption,
+            ]);
+        }
+
+        // If there are errors, return them
+        if (!empty($errors)) {
+            return redirect()->back()->with('error', implode('<br>', $errors));
+        }
+
+        return redirect()->route('admin.quiz_sets')->with('success', 'Quizzes uploaded successfully!');
+    }
+
+    return redirect()->back()->with('error', 'No file uploaded.');
+}
 }
