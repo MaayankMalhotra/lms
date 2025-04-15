@@ -226,7 +226,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::get('/add', [BatchController::class, 'create'])->name('add');
                 Route::post('/store', [BatchController::class, 'store'])->name('store');
                 Route::get('/index', [BatchController::class, 'index'])->name('index'); // Listing route
-    Route::delete('/batch/{id}', [BatchController::class, 'destroy'])->name('destroy'); // Delete route
+                Route::delete('/batch/{id}', [BatchController::class, 'destroy'])->name('destroy'); // Delete route
                 Route::get('/{id}/edit', [BatchController::class, 'edit'])->name('edit');
                 Route::put('/{id}', [BatchController::class, 'update'])->name('update');
                 
@@ -317,7 +317,7 @@ Route::get('/student/batch/quiz-ranking', [StudentQuizController::class, 'batchQ
             Route::post('/admin/leave/{leave}/approve', [AttendanceController::class, 'approveLeave'])
                 ->name('leave.approve');
 
-                Route::get('/recordings', [StudentClassController::class, 'recordings'])->name('recordings');
+               // Route::get('/recordings', [StudentClassController::class, 'recordings'])->name('recordings');
 
          Route::get('/assignments/create', [AdminAssignmentController::class, 'create'])->name('admin.assignments.create');
     Route::post('/assignments', [AdminAssignmentController::class, 'store'])->name('admin.assignments.store');
