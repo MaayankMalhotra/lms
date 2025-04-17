@@ -292,6 +292,7 @@ Route::get('/admin/coding-questions/{id}/submissions', [CodingQuestionController
 Route::get('course_details/{slug?}', [CourseController::class, 'courseDetails'])->name('website.course_details');
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\StudentClassController;
+use App\Http\Controllers\TrainerController;
 
 Route::middleware('auth')->group(function () {
     Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
@@ -327,3 +328,5 @@ Route::get('/student/batch/quiz-ranking', [StudentQuizController::class, 'batchQ
 
     Route::post('/admin/quiz-sets/{quizSetId}/bulk-upload', [QuizController::class, 'bulkUpload'])
     ->name('admin.quiz_sets.bulk_upload');
+
+    Route::get('/get-trainer-course',[TrainerController::class,'myCourse'])->name('get-trainer-course');

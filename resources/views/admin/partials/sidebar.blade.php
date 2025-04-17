@@ -21,7 +21,7 @@
                 <i class="fas fa-home mr-3 text-lg"></i> Dashboard Panel
             </a>
         </li>
-        @if(auth()->user()->role == 3 || auth()->user()->role == 2)
+        @if(auth()->user()->role == 3 )
         <!-- Quiz Management Students -->
         <li>
             <a href="{{ route('student.quiz_sets') }}" class="flex items-center p-3 {{ request()->routeIs('student.quiz_sets') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
@@ -31,6 +31,8 @@
                 <i class="fas fa-question-circle mr-3 text-lg"></i> Coding Module
             </a>
         </li>
+        @endif
+        @if(auth()->user()->role == 2 || auth()->user()->role == 3 )
          <!-- Quiz Management Students -->
          <li>
             <a href="{{ route('chat.index') }}" class="flex items-center p-3 {{ request()->routeIs('chat.index') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
@@ -38,6 +40,17 @@
             </a>
 
         </li>
+        @endif
+        @if(auth()->user()->role == 2 )
+         <!-- Quiz Management Students -->
+         <li>
+            <a href="{{ route('get-trainer-course') }}" class="flex items-center p-3 {{ request()->routeIs('get-trainer-course') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
+                <i class="fas fa-question-circle mr-3 text-lg"></i> My Batches
+            </a>
+
+        </li>
+        @endif
+        @if(auth()->user()->role == 3 )
         <li>
             <a href="{{ route('student.classes.index') }}" class="flex items-center p-3 {{ request()->routeIs('student.classes.index') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
                 <i class="fas fa-question-circle mr-3 text-lg"></i> My Classes
@@ -66,7 +79,7 @@
         </li>
         @endif
         <!-- Admin ke liye baaki sections (Sirf role == 1 ko dikhega) -->
-        @if(auth()->user()->role == 1)
+        @if(auth()->user()->role == 1  )
             <!-- Course Management -->
             <li x-data="{ isOpen: {{ request()->routeIs('admin.course.*') ? 'true' : 'false' }} }">
                 <a href="javascript:void(0)" @click="isOpen = !isOpen" class="flex items-center justify-between p-3 {{ request()->routeIs('admin.course.*') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
@@ -88,7 +101,8 @@
                     </li>
                 </ul>
             </li>
-
+@endif
+@if(auth()->user()->role == 1 )
             <!-- Internship Management -->
             <li x-data="{ isOpen: {{ request()->routeIs('admin.internship.*') ? 'true' : 'false' }} }">
                 <a href="javascript:void(0)" @click="isOpen = !isOpen" class="flex items-center justify-between p-3 {{ request()->routeIs('admin.internship.*') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
@@ -110,7 +124,8 @@
                     </li>
                 </ul>
             </li>
-
+@endif
+@if(auth()->user()->role == 1 )
                         <!-- enrollment Management -->
                         <li x-data="{ isOpen: {{ request()->routeIs('admin.enrollment.*') ? 'true' : 'false' }} }">
                             <a href="javascript:void(0)" @click="isOpen = !isOpen" class="flex items-center justify-between p-3 {{ request()->routeIs('admin.enrollment.*') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
@@ -128,6 +143,8 @@
                                 </li>
                             </ul>
                         </li>
+                        @endif
+                        @if(auth()->user()->role == 1 || auth()->user()->role == 2 )
                            <!-- Coding Module -->
                            <li x-data="{ isOpen: {{ request()->routeIs('admin.enrollment.*') ? 'true' : 'false' }} }">
                             <a href="javascript:void(0)" @click="isOpen = !isOpen" class="flex items-center justify-between p-3 {{ request()->routeIs('admin.enrollment.*') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
@@ -145,7 +162,9 @@
                                 </li>
                             </ul>
                         </li>
+                        @endif
 
+                        @if(auth()->user()->role == 1 )
             <!-- Batch Management -->
             <li x-data="{ isOpen: {{ request()->routeIs('admin.batches.*') ? 'true' : 'false' }} }">
                 <a href="javascript:void(0)" @click="isOpen = !isOpen" class="flex items-center justify-between p-3 {{ request()->routeIs('admin.batches.*') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
@@ -167,7 +186,8 @@
                     </li>
                 </ul>
             </li>
-            
+            @endif
+            @if(auth()->user()->role == 1 )
             <!-- Recordings Class Management -->
             <li x-data="{ isOpen: {{ request()->routeIs('admin.recordings.*') ? 'true' : 'false' }} }">
                 <a href="javascript:void(0)" @click="isOpen = !isOpen" class="flex items-center justify-between p-3 {{ request()->routeIs('admin.recordings.*') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
@@ -189,6 +209,8 @@
                     </li>
                 </ul>
             </li>
+            @endif
+            @if(auth()->user()->role == 1  )
             <!-- Live Class Management -->
             <li x-data="{ isOpen: {{ request()->routeIs('admin.live_classes.*') ? 'true' : 'false' }} }">
                 <a href="javascript:void(0)" @click="isOpen = !isOpen" class="flex items-center justify-between p-3 {{ request()->routeIs('admin.live_classes.*') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
@@ -210,9 +232,10 @@
                     </li>
                 </ul>
             </li>
+            @endif
             
             
-
+            @if(auth()->user()->role == 1 || auth()->user()->role == 2 )
             <!-- Quiz Management -->
             <li>
                 <a href="{{ route('admin.quiz_sets') }}" class="flex items-center p-3 {{ request()->routeIs('admin.quiz_sets') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
@@ -222,6 +245,8 @@
                     <i class="fas fa-question-circle mr-3 text-lg"></i> Rankings
                 </a>
             </li>
+            @endif
+            @if(auth()->user()->role == 1 )
             <!-- Student Management -->
             <li>
                 <a href="{{ route('student-management') }}" class="flex items-center p-3 {{ request()->routeIs('student-management') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
@@ -234,7 +259,8 @@
                     <i class="fas fa-question-circle mr-3 text-lg"></i> Trainer Management
                 </a>
             </li>
-
+            @endif
+            @if(auth()->user()->role == 1 || auth()->user()->role == 2 )
              <!-- Trainer Management -->
              <li>
                 <a href="{{ route('admin.leaves') }}" class="flex items-center p-3 {{ request()->routeIs('admin.leaves') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
@@ -247,6 +273,6 @@
                     <i class="fas fa-question-circle mr-3 text-lg"></i> Assignment Management
                 </a>
             </li>
-        @endif
+       @endif
     </ul>
 </nav>
