@@ -330,3 +330,7 @@ Route::get('/student/batch/quiz-ranking', [StudentQuizController::class, 'batchQ
     ->name('admin.quiz_sets.bulk_upload');
 
     Route::get('/get-trainer-course',[TrainerController::class,'myCourse'])->name('get-trainer-course');
+    // extra code 
+    Route::get('/student/quiz-attempt/{attemptId}', [StudentQuizController::class, 'viewAttempt'])
+    ->name('student.quiz_attempt')
+    ->middleware('auth');

@@ -25,110 +25,17 @@ class StudentQuizController extends Controller
     {
         $student = Auth::user();
         $quizSet = QuizSet::with('quizzes')->findOrFail($id);
-        
         // Check enrollment
         $enrolledBatches = $student->enrollments()->pluck('batch_id');
         if (!$enrolledBatches->contains($quizSet->batch_id)) {
             return redirect()->route('student.quiz_sets')->with('error', 'You are not enrolled in this batch!');
         }
-
         // Check if already attempted
         if ($student->studentQuizSetAttempts()->where('quiz_set_id', $id)->exists()) {
             return redirect()->route('student.quiz_sets')->with('error', 'You have already taken this quiz set!');
         }
-
         return view('student.quiz_sets.take', compact('quizSet'));
     }
-
-    public function submitQuiz_old(Request $request, $id)
-    {
-        $student = Auth::user();
-        $quizSet = QuizSet::with('quizzes')->findOrFail($id);
-
-        // Validate enrollment and attempt
-        $enrolledBatches = $student->enrollments()->pluck('batch_id');
-        if (!$enrolledBatches->contains($quizSet->batch_id)) {
-            return redirect()->route('student.quiz_sets')->with('error', 'Unauthorized!');
-        }
-        if ($student->studentQuizSetAttempts()->where('quiz_set_id', $id)->exists()) {
-            return redirect()->route('student.quiz_sets')->with('error', 'You have already taken this quiz set!');
-        }
-
-        $request->validate([
-            'answers' => 'required|array',
-            'answers.*' => 'required|integer|between:1,4',
-        ]);
-
-        $answers = $request->input('answers');
-        $correctCount = 0;
-
-        // Create attempt
-        $attempt = StudentQuizSetAttempt::create([
-            'user_id' => $student->id,
-            'quiz_set_id' => $quizSet->id,
-            'score' => 0,
-        ]);
-
-        // Save answers and calculate score
-        foreach ($quizSet->quizzes as $quiz) {
-            $studentAnswer = $answers[$quiz->id] ?? null;
-            if ($studentAnswer) {
-                StudentQuizAnswer::create([
-                    'attempt_id' => $attempt->id,
-                    'quiz_id' => $quiz->id,
-                    'student_answer' => $studentAnswer,
-                ]);
-                if ($studentAnswer == $quiz->correct_option) {
-                    $correctCount++;
-                }
-            }
-        }
-
-        $attempt->update(['score' => $correctCount]);
-        return redirect()->route('student.quiz_sets')
-            ->with('success', "Your score is $correctCount/{$quizSet->total_quizzes}");
-    }
-    
-    // public function batchQuizRanking(Request $request, $batchId)
-    // {
-    //     $quizSets = QuizSet::where('batch_id', $batchId)->get();
-    //     $selectedQuizSetId = $request->input('quiz_set_id');
-    
-    //     $query = "
-    //         SELECT 
-    //             users.name AS student_name,
-    //             quiz_sets.title AS quiz_set_title,
-    //             student_quiz_set_attempts.score,
-    //             quiz_sets.total_quizzes,
-    //             (student_quiz_set_attempts.score / quiz_sets.total_quizzes * 100) AS percentage
-    //         FROM 
-    //             student_quiz_set_attempts
-    //         JOIN 
-    //             users ON student_quiz_set_attempts.user_id = users.id
-    //         JOIN 
-    //             quiz_sets ON student_quiz_set_attempts.quiz_set_id = quiz_sets.id
-    //         WHERE 
-    //             quiz_sets.batch_id = ?
-    //     ";
-    
-    //     $params = [$batchId];
-    //     if ($selectedQuizSetId) {
-    //         $query .= " AND student_quiz_set_attempts.quiz_set_id = ?";
-    //         $params[] = $selectedQuizSetId;
-    //     }
-    
-    //     $query .= " ORDER BY percentage DESC";
-    
-    //     $studentResults = DB::select($query, $params);
-    
-    //     $studentResults = array_map(function ($result) {
-    //         return (object) $result;
-    //     }, $studentResults);
-    
-    //     $batch = \App\Models\Batch::with('course')->findOrFail($batchId);
-    
-    //     return view('student.quiz_sets.batch_ranking', compact('studentResults', 'quizSets', 'batch', 'selectedQuizSetId'));
-    // }
     public function batchQuizRanking(Request $request)
     {
         // Get the selected batch ID and quiz set ID from the request
@@ -358,4 +265,25 @@ public function submitQuiz(Request $request, $id)
     return redirect()->route('student.quiz_sets')
         ->with('success', "Your score is $correctCount/{$quizSet->total_quizzes}");
 }
+
+           // extra code
+            public function viewAttempt($attemptId)
+            {
+                $student = Auth::user();
+                
+                // Attempt fetch karo with quiz set aur answers
+                $attempt = StudentQuizSetAttempt::with([
+                    'quizSet.quizzes',
+                    'answers.quiz'
+                ])->where('user_id', $student->id)
+                ->findOrFail($attemptId);
+
+                // Check karo ki yeh attempt student ka hai
+                if ($attempt->user_id !== $student->id) {
+                    return redirect()->route('student.quiz_sets')->with('error', 'Bhai, tu is attempt ko nahi dekh sakta!');
+                }
+
+                // Data ko Blade page pe bhejo
+                return view('student.quiz_attempt', compact('attempt'));
+            }
    }
