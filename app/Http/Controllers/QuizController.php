@@ -27,7 +27,6 @@ class QuizController extends Controller
             $label = "{$batch->course->name} - {$batch->name} ({$batch->start_date})";
             $batchOptions[$batch->id] = $label;
         }
-        dd($batchOptions);
     
         return view('admin.quiz_sets.create', compact('batchOptions'));
     }
