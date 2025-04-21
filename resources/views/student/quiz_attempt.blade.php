@@ -14,15 +14,16 @@
                         <p class="mb-4"><strong>Your Score:</strong> {{ $attempt->score }} / {{ $attempt->quizSet->total_quizzes }}</p>
 
                         @foreach ($attempt->quizSet->quizzes as $index => $quiz)
-                            <div class="mb-4 border-bottom pb-4">
-                                <h5 class="font-weight-bold">Question {{ $index + 1 }}: {{ $quiz->question }}</h5>
-                                
-                                @php
-                                    $studentAnswer = $attempt->answers->where('quiz_id', $quiz->id)->first();
-                                    $isCorrect = $studentAnswer && $studentAnswer->student_answer == $quiz->correct_option;
-                                @endphp
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <h5 class="font-weight-bold">Question {{ $index + 1 }}: {{ $quiz->question }}</h5>
+                                </div>
+                                <div class="card-body">
+                                    @php
+                                        $studentAnswer = $attempt->answers->where('quiz_id', $quiz->id)->first();
+                                        $isCorrect = $studentAnswer && $studentAnswer->student_answer == $quiz->correct_option;
+                                    @endphp
 
-                                <div class="mt-2">
                                     <p><strong>Your Answer:</strong> 
                                         @if ($studentAnswer)
                                             {{ $quiz->{'option_' . $studentAnswer->student_answer} }}
@@ -34,20 +35,20 @@
                                         @endif
                                     </p>
                                     <p><strong>Correct Answer:</strong> {{ $quiz->{'option_' . $quiz->correct_option} }}</p>
-                                </div>
 
-                                <div class="mt-3">
-                                    <p><strong>Options:</strong></p>
-                                    <ul class="list-group">
-                                        @for ($i = 1; $i <= 4; $i++)
-                                            <li class="list-group-item {{ $quiz->correct_option == $i ? 'bg-success text-white' : '' }}">
-                                                {{ $quiz->{'option_' . $i} }}
-                                                @if ($studentAnswer && $studentAnswer->student_answer == $i)
-                                                    (Your choice)
-                                                @endif
-                                            </li>
-                                        @endfor
-                                    </ul>
+                                    <div class="mt-3">
+                                        <p><strong>Options:</strong></p>
+                                        <ul class="list-group">
+                                            @for ($i = 1; $i <= 4; $i++)
+                                                <li class="list-group-item {{ $quiz->correct_option == $i ? 'bg-success text-white' : '' }}">
+                                                    {{ $quiz->{'option_' . $i} }}
+                                                    @if ($studentAnswer && $studentAnswer->student_answer == $i)
+                                                        (Your choice)
+                                                    @endif
+                                                </li>
+                                            @endfor
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                         @endforeach
