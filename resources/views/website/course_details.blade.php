@@ -109,6 +109,8 @@
         </div>
     </div>
 
+   
+
     <!-- Navigation Tabs -->
     <div class="tabs flex flex-col sm:flex-row justify-center items-center mx-auto w-11/12 sm:w-auto sm:max-w-6xl gap-2 sm:gap-4 md:gap-8 mt-5 sm:mt-10 bg-white p-2 sm:p-3 rounded-lg sm:rounded-full shadow-md">
         <a href="#about" class="w-full sm:w-auto text-center text-orange-500 font-bold text-sm sm:text-base md:text-lg px-3 sm:px-4 py-1 sm:py-2 hover:text-orange-500 transition-colors">About the course</a>
@@ -183,7 +185,77 @@
             </div>
         </div>
     </div>
+     <!-- About Course Overview Section -->
+     <div class="container mx-auto px-5 py-10 max-w-6xl bg-gray-50">
+      <h2 class="text-3xl font-bold mb-6 text-orange-500">About Course Overview</h2>
+      <p class="text-gray-600 mb-6">
+          This course is designed to provide learners with hands-on experience in full-stack development. You will gain proficiency in front-end and back-end technologies and build real-world applications.
+      </p>
 
+      <h3 class="text-2xl font-bold mb-4 text-gray-900">Learning Outcomes:</h3>
+      <ul class="list-disc pl-6 mb-6 text-gray-700 space-y-2">
+          <li>Master front-end technologies like HTML, CSS, and JavaScript</li>
+          <li>Understand back-end frameworks like Node.js and Django</li>
+          <li>Build and deploy full-stack applications</li>
+          <li>Earn a certification of completion</li>
+      </ul>
+
+      <h3 class="text-2xl font-bold mb-4 text-gray-900">Instructor Info:</h3>
+      <p class="text-gray-600 mb-6">
+          The course is taught by experienced professionals who have worked in the industry for over 10 years. Our instructors bring real-world knowledge and industry best practices to the course, ensuring students are well-prepared for the job market.
+      </p>
+
+      <h3 class="text-2xl font-bold mb-4 text-gray-900">Additional Benefits:</h3>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div class="bg-white p-6 rounded-lg shadow-md text-center border border-gray-200">
+              <div class="text-4xl mb-4 text-gray-400">📄</div>
+              <h4 class="text-lg font-semibold text-gray-800 mb-2">Project Icon</h4>
+              <p class="text-gray-600">Real-world Projects<br>Work on live projects that enhance your practical skills and prepare you for the industry.</p>
+          </div>
+          <div class="bg-white p-6 rounded-lg shadow-md text-center border border-gray-200">
+              <div class="text-4xl mb-4 text-gray-400">👨‍💼</div>
+              <h4 class="text-lg font-semibold text-gray-800 mb-2">Internship Icon</h4>
+              <p class="text-gray-600">Free Internship<br>If you choose the internship, you'll get hands-on experience in the field with a free internship placement.</p>
+          </div>
+          <div class="bg-white p-6 rounded-lg shadow-md text-center border border-gray-200">
+              <div class="text-4xl mb-4 text-gray-400">🎙️</div>
+              <h4 class="text-lg font-semibold text-gray-800 mb-2">Interview Icon</h4>
+              <p class="text-gray-600">Mock Interviews<br>Prepare for the real-world job market with mock interviews conducted by industry experts.</p>
+          </div>
+          <div class="bg-white p-6 rounded-lg shadow-md text-center border border-gray-200">
+              <div class="text-4xl mb-4 text-gray-400">🎓</div>
+              <h4 class="text-lg font-semibold text-gray-800 mb-2">Certifica Icon</h4>
+              <p class="text-gray-600">ISO Certified & ACITE Approved<br>Get a certificate that is ISO certified and ACITE approved, recognized globally.</p>
+          </div>
+      </div>
+  </div>
+
+    <!-- Key Features Section -->
+    <div class="container mx-auto px-5 py-10 max-w-6xl bg-white">
+      <h2 class="text-3xl font-bold mb-6 text-gray-900">Key Features</h2>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div class="bg-white p-6 rounded-lg shadow-md text-center border border-gray-200">
+              <div class="text-3xl mb-4 text-gray-400">📅</div>
+              <h4 class="text-lg font-semibold text-gray-800 mb-2">Calender Icon</h4>
+              <p class="text-gray-600">Self-paced learning</p>
+          </div>
+          <div class="bg-white p-6 rounded-lg shadow-md text-center border border-gray-200">
+              <div class="text-3xl mb-4 text-gray-400">🎓</div>
+              <h4 class="text-lg font-semibold text-gray-800 mb-2">Gradue Icon</h4>
+              <p class="text-gray-600">Access to recorded lectures</p>
+          </div>
+          <div class="bg-white p-6 rounded-lg shadow-md text-center border border-gray-200">
+              <div class="text-3xl mb-4 text-gray-400">👩‍🏫</div>
+              <h4 class="text-lg font-semibold text-gray-800 mb-2">Mentor Icon</h4>
+              <p class="text-gray-600">One-to-one mentorship</p>
+          </div>
+          <div class="bg-white p-6 rounded-lg shadow-md text-center border border-gray-200">
+              <div class="text-3xl mb-4 text-gray-400">🏆</div>
+              <h4 class="text-lg font-semibold text-gray-800 mb-2">Certific Icon</h4>
+              <p class="text-gray-600">Earn a certificate</p>
+          </div>
+      </div>
+  </div>
     <!-- Course Curriculum Section -->
     <div class="container mx-auto px-5 py-10 max-w-6xl" id="curriculum">
         <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-5">
