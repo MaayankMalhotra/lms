@@ -349,3 +349,7 @@ Route::post('/admin/internship/content', [InternshipController::class, 'contents
 Route::get('/student-internships', [InternshipController::class, 'showOnStudentDashboard'])->name('student.internships.index');
 Route::get('/student/internship/{enrollmentId}/content', [InternshipController::class, 'studentInternshipContent'])->name('student.internship.content');
 Route::post('/student/internship/content/{contentId}/submit', [InternshipController::class, 'studentInternshipSubmit'])->name('student.internship.submit');
+
+Route::get('get-internship-list', [InternshipController::class, 'getInternshipList'])->name('get-internship-list');
+Route::get('/admin/internships/{internship}/submissions', [InternshipRegistrationController::class, 'submissions'])->name('admin.internship.submissions');
+Route::post('/admin/internship/submissions/{submission}/feedback', [InternshipRegistrationController::class, 'submitFeedback'])->name('admin.internship.submission.feedback');
