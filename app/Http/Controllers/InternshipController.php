@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Internship;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class InternshipController extends Controller
@@ -96,5 +97,33 @@ class InternshipController extends Controller
         $internship->delete();
 
         return redirect()->route('admin.internship.list')->with('success', 'Internship deleted successfully!');
+    }
+
+    public function contentCreate()
+    {
+        $internships = DB::table('internships')->select('id', 'name')->get();
+        return view('admin.content_create', compact('internships'));
+    }
+
+    public function contentstore(Request $request)
+    {
+        $request->validate([
+            'internship_id' => 'required|exists:internships,id',
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'file' => 'nullable|file|mimes:pdf|max:5120',
+            'deadline' => 'nullable|date|after:today',
+        ]);
+
+        $data = $request->only(['internship_id', 'title', 'description', 'deadline']);
+        if ($request->hasFile('file')) {
+            $data['file_path'] = $request->file('file')->store('content', 'public');
+        }
+        $data['created_at'] = now();
+        $data['updated_at'] = now();
+
+        DB::table('internship_contents')->insert($data);
+
+        return redirect()->route('admin.internship.content.create')->with('success', 'Content added.');
     }
 }

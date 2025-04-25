@@ -128,6 +128,11 @@
                             <i class="fas fa-list mr-2"></i> View Internships
                         </a>
                     </li>
+                    <li>
+                        <a href="{{ route('admin.internship.content.create') }}" class="flex items-center p-2 text-sm {{ request()->routeIs('admin.internship.content.create') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
+                            <i class="fas fa-list mr-2"></i> Create Internships Content
+                        </a>
+                    </li>
                 </ul>
             </li>
 @endif
