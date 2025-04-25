@@ -99,6 +99,12 @@
                             <i class="fas fa-list mr-2"></i> View Courses
                         </a>
                     </li>
+
+                    <li>
+                        <a href="{{ route('course-details-index') }}" class="flex items-center p-2 text-sm {{ request()->routeIs('course-details-index') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
+                            <i class="fas fa-plus-circle mr-2"></i> Add Course Details
+                        </a>
+                    </li>
                 </ul>
             </li>
 @endif

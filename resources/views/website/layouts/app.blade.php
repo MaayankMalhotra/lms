@@ -23,7 +23,7 @@
     {{-- Include the header --}}
     @include('website.partials.header')
 
-    <main>
+    <main class="pt-10">
         @yield('content')
     </main>
 

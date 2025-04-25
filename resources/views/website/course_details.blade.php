@@ -1,296 +1,341 @@
+@extends('website.layouts.app')
+@section('title',$course_details->course_name)
+@section('content')
+<style>
+    /* Custom rotate animation for the chevron */
+    .rotate-180 {
+        transform: rotate(180deg);
+    }
+</style>
+<div class="mt-10 container mx-auto px-5 py-10 max-w-7xl bg-white rounded-lg shadow-md ">
+    <div class="content flex flex-wrap justify-between items-center gap-5">
+        <div class="left-section flex-1 min-w-[300px] text-center md:text-left order-2 md:order-1">
+            <p class="audience text-blue-500 text-sm font-bold uppercase mb-2">
+                FOR BEGINNER AND EXPERIENCED LEARNERS
+            </p>
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-800 leading-tight mb-5">
+                {{ $course_details->course_name }}
+            </h1>
+            <p class="description text-base md:text-lg text-gray-600 leading-relaxed mb-5">
+                {{ $course_details->course_description }}
+            </p>
+            <div class="flex flex-col sm:flex-row items-center gap-5 mb-5">
+                <button class="bg-orange-500 text-white font-bold py-3 px-6 rounded-md flex items-center gap-2 hover:bg-orange-600 transition-colors">
+                    Enroll now <span>→</span>
+                </button>
+                <div class="flex items-center gap-1">
+                    <span class="text-orange-500 text-lg font-bold">{{ $course_details->course_rating }}</span>
+                    <div class="flex">
+                        <span class="text-orange-500 text-lg">★</span>
+                        <span class="text-orange-500 text-lg">★</span>
+                        <span class="text-orange-500 text-lg">★</span>
+                        <span class="text-orange-500 text-lg">★</span>
+                        <span class="text-orange-500 text-lg">★</span>
+                    </div>
+                    <span class="text-gray-600 text-sm">({{ $course_details->course_rating_student_number }}K+ student)</span>
+                </div>
+            </div>
+            <div class="stats flex flex-col md:flex-row gap-5 mt-5 bg-blue-100 p-5 rounded-lg justify-between max-w-lg mx-auto md:mx-0">
+                <div class="stat text-center">
+                    <span class="rating text-orange-500 text-2xl font-bold">
+                        4.8 <span class="star text-xl">★</span>
+                    </span>
+                    <p class="text-sm text-gray-600 mt-1">{{ $course_details->course_learner_enrolled }}K+ Learners enrolled</p>
+                </div>
+                <div class="stat text-center">
+                    <span class="text-2xl font-bold text-gray-800">{{ $course_details->course_lecture_hours }}+</span>
+                    <p class="text-sm text-gray-600 mt-1">Hours of lectures</p>
+                </div>
+                <div class="stat text-center">
+                    <span class="text-2xl font-bold text-gray-800">{{ $course_details->course_problem_counts }}+</span>
+                    <p class="text-sm text-gray-600 mt-1">Problems</p>
+                </div>
+            </div>
+        </div>
+        <div class="right-section flex-1 min-w-[300px] text-center order-1 md:order-2">
+            <img src="{{ asset('storage/' . $course_details->course_banner) }}" alt="Person studying with laptop and books" class="max-w-full h-auto">
+        </div>
+    </div>
+</div>
 
 
-    @extends('website.layouts.app')
-    @section('title', 'Course Details')
-    @section('content')
-    <div class="container mx-auto px-5 py-10 max-w-6xl bg-white rounded-lg shadow-md">
-        <div class="content flex flex-wrap justify-between items-center gap-5">
-            <div class="left-section flex-1 min-w-[300px] text-center md:text-left order-2 md:order-1">
-                <p class="audience text-blue-500 text-sm font-bold uppercase mb-2">
-                    FOR BEGINNER AND EXPERIENCED LEARNERS
+
+<!-- Navigation Tabs -->
+<div class="tabs flex flex-col sm:flex-row justify-center items-center mx-auto w-11/12 sm:w-auto sm:max-w-7xl gap-2 sm:gap-4 md:gap-8 mt-5 sm:mt-10 bg-white p-2 sm:p-3 rounded-lg sm:rounded-full shadow-md">
+    <a href="#about" class="w-full sm:w-auto text-center text-orange-500 font-bold text-sm sm:text-base md:text-lg px-3 sm:px-4 py-1 sm:py-2 hover:text-orange-500 transition-colors">About the course</a>
+    <a href="#batches" class="w-full sm:w-auto text-center text-gray-600 text-sm sm:text-base md:text-lg px-3 sm:px-4 py-1 sm:py-2 hover:text-orange-500 transition-colors">Batches</a>
+    <a href="#curriculum" class="w-full sm:w-auto text-center text-gray-600 text-sm sm:text-base md:text-lg px-3 sm:px-4 py-1 sm:py-2 hover:text-orange-500 transition-colors">Curriculum</a>
+    <a href="#instructors" class="w-full sm:w-auto text-center text-gray-600 text-sm sm:text-base md:text-lg px-3 sm:px-4 py-1 sm:py-2 hover:text-orange-500 transition-colors">Instructors</a>
+    <a href="#faqs" class="w-full sm:w-auto text-center text-gray-600 text-sm sm:text-base md:text-lg px-3 sm:px-4 py-1 sm:py-2 hover:text-orange-500 transition-colors">FAQs</a>
+</div>
+
+<!-- Course Batches Section -->
+<div class="container mx-auto px-5 py-10 max-w-7xl" id="batches">
+    <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-5">
+        Course <span class="text-orange-500">Batches</span>
+    </h2>
+    <div class="bg-white p-5 rounded-lg shadow-md">
+        <!-- Online Classroom Header -->
+        <div class="flex items-center gap-3 mb-5">
+            <h3 class="text-xl font-semibold text-gray-800">Online Classroom</h3>
+            <span class="bg-purple-600 text-white text-xs font-bold px-2 py-1 rounded">PREFERRED</span>
+        </div>
+        <!-- Features List -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
+            <div class="flex items-center gap-2">
+                <span class="text-green-500">✔</span>
+                <p class="text-sm text-gray-600">Everything in self-paced Learning</p>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="text-green-500">✔</span>
+                <p class="text-sm text-gray-600">130 Hrs of instructor-led training</p>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="text-green-500">✔</span>
+                <p class="text-sm text-gray-600">One-to-one doubt resolution sessions</p>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="text-green-500">✔</span>
+                <p class="text-sm text-gray-600">Attend as many batches as you want for a lifetime</p>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="text-green-500">✔</span>
+                <p class="text-sm text-gray-600"><span id="available-slots">90</span> Slots available</p>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="text-green-500">✔</span>
+                <p class="text-sm text-gray-600"><span id="filled-slots">80</span> Slots Filled</p>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="text-green-500">✔</span>
+                <p class="text-sm text-gray-600"><span id="mode-of-teaching">Online</span> Mode of teaching</p>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="text-green-500">✔</span>
+                <p class="text-sm text-gray-600">Job assistance</p>
+            </div>
+        </div>
+        <!-- Batch Cards and Pricing -->
+        <div class="flex flex-col  items-right gap-5">
+            <!-- Batch Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 flex-1" id="batch-cards">
+                <!-- Batches will be dynamically inserted here -->
+            </div>
+            <!-- Pricing and Enroll Button -->
+            <div class="text-center lg:text-right">
+                <p class="text-2xl font-bold text-gray-800" id="batch-price">₹40,014</p>
+                <p class="text-sm text-gray-600" id="batch-discount">
+                    10% OFF Expires in <span class="countdown-timer" id="batch-countdown">00d 22h 47m 06s</span>
                 </p>
-                <h1 class="text-4xl md:text-5xl font-bold text-gray-800 leading-tight mb-5">
-                    {{ $course->name ?? 'Basics of C++ with Data Structures and Algorithms [updated in 2023]' }}
-                </h1>
-                <p class="description text-base md:text-lg text-gray-600 leading-relaxed mb-5">
-                    {{ $course->description ?? 'This is the course to pick if you are just getting into coding and want to build a strong foundation. Widely used in competitive programming.' }}
+                <button class="bg-orange-500 text-white font-bold py-3 px-6 rounded-md mt-3 hover:bg-orange-600 transition-colors" id="batch-enroll-button">
+                    Enroll Now
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- About Course Overview Section -->
+<div class="container mx-auto px-5 py-10 max-w-7xl bg-gray-50">
+    <h2 class="text-3xl font-bold mb-6 text-orange-500">About Course Overview</h2>
+    <p class="text-gray-600 mb-6">
+        {{ $course_details->course_overview_description }}
+    </p>
+
+    <h3 class="text-2xl font-bold mb-4 text-gray-900">Learning Outcomes:</h3>
+    <ul class="list-disc pl-6 mb-6 text-gray-700 space-y-2">
+        @foreach($course_details->learning_outcomes as $outcome)
+        <li>{{ $outcome }}</li>
+        @endforeach
+
+    </ul>
+
+    <h3 class="text-2xl font-bold mb-4 text-gray-900">Instructor Info:</h3>
+    <p class="text-gray-600 mb-6">
+        {{ $course_details->instructor_info }}
+    </p>
+
+    <h3 class="text-2xl font-bold mb-4 text-gray-900">Additional Benefits:</h3>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div class="bg-white p-6 rounded-lg shadow-md text-center border border-gray-200">
+            <div class="text-4xl mb-4 text-gray-400">📄</div>
+            <h4 class="text-lg font-semibold text-gray-800 mb-2">Project Icon</h4>
+            <p class="text-gray-600">Real-world Projects<br>Work on live projects that enhance your practical skills and prepare you for the industry.</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-md text-center border border-gray-200">
+            <div class="text-4xl mb-4 text-gray-400">👨‍💼</div>
+            <h4 class="text-lg font-semibold text-gray-800 mb-2">Internship Icon</h4>
+            <p class="text-gray-600">Free Internship<br>If you choose the internship, you'll get hands-on experience in the field with a free internship placement.</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-md text-center border border-gray-200">
+            <div class="text-4xl mb-4 text-gray-400">🎙️</div>
+            <h4 class="text-lg font-semibold text-gray-800 mb-2">Interview Icon</h4>
+            <p class="text-gray-600">Mock Interviews<br>Prepare for the real-world job market with mock interviews conducted by industry experts.</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-md text-center border border-gray-200">
+            <div class="text-4xl mb-4 text-gray-400">🎓</div>
+            <h4 class="text-lg font-semibold text-gray-800 mb-2">Certifica Icon</h4>
+            <p class="text-gray-600">ISO Certified & ACITE Approved<br>Get a certificate that is ISO certified and ACITE approved, recognized globally.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Key Features Section -->
+<div class="container mx-auto px-5 py-10 max-w-7xl bg-white">
+    <h2 class="text-3xl font-bold mb-6 text-gray-900">Key Features</h2>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div class="bg-white p-6 rounded-lg shadow-md text-center border border-gray-200">
+            <div class="text-3xl mb-4 text-gray-400">📅</div>
+            <h4 class="text-lg font-semibold text-gray-800 mb-2">Calender Icon</h4>
+            <p class="text-gray-600">Self-paced learning</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-md text-center border border-gray-200">
+            <div class="text-3xl mb-4 text-gray-400">🎓</div>
+            <h4 class="text-lg font-semibold text-gray-800 mb-2">Gradue Icon</h4>
+            <p class="text-gray-600">Access to recorded lectures</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-md text-center border border-gray-200">
+            <div class="text-3xl mb-4 text-gray-400">👩‍🏫</div>
+            <h4 class="text-lg font-semibold text-gray-800 mb-2">Mentor Icon</h4>
+            <p class="text-gray-600">One-to-one mentorship</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-md text-center border border-gray-200">
+            <div class="text-3xl mb-4 text-gray-400">🏆</div>
+            <h4 class="text-lg font-semibold text-gray-800 mb-2">Certific Icon</h4>
+            <p class="text-gray-600">Earn a certificate</p>
+        </div>
+    </div>
+</div>
+<!-- Course Curriculum Section -->
+<div class="container mx-auto px-4 py-12 max-w-7xl" id="curriculum">
+    <!-- Course Curriculum Container -->
+    <div class="course-container bg-white rounded-xl shadow-lg p-8">
+        <!-- Header: Course Description and Download Button -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-6">
+            <div class="max-w-2xl">
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-3">Course Curriculum</h2>
+                <p class="text-gray-600 text-base leading-relaxed">
+                    This online master’s course is designed to empower working professionals. Explore a multi-domain curriculum that encourages learners to carve their own paths to success.
                 </p>
-                <div class="flex flex-col sm:flex-row items-center gap-5 mb-5">
-                    <button class="bg-orange-500 text-white font-bold py-3 px-6 rounded-md flex items-center gap-2 hover:bg-orange-600 transition-colors">
-                        Enroll now <span>→</span>
-                    </button>
-                    <div class="flex items-center gap-1">
-                        <span class="text-orange-500 text-lg font-bold">4.8</span>
-                        <div class="flex">
-                            <span class="text-orange-500 text-lg">★</span>
-                            <span class="text-orange-500 text-lg">★</span>
-                            <span class="text-orange-500 text-lg">★</span>
-                            <span class="text-orange-500 text-lg">★</span>
-                            <span class="text-orange-500 text-lg">★</span>
-                        </div>
-                        <span class="text-gray-600 text-sm">(17K+ student)</span>
-                    </div>
-                </div>
-                <div class="stats flex flex-col md:flex-row gap-5 mt-5 bg-blue-100 p-5 rounded-lg justify-between max-w-lg mx-auto md:mx-0">
-                    <div class="stat text-center">
-                        <span class="rating text-orange-500 text-2xl font-bold">
-                            4.8 <span class="star text-xl">★</span>
-                        </span>
-                        <p class="text-sm text-gray-600 mt-1">30K+ Learners enrolled</p>
-                    </div>
-                    <div class="stat text-center">
-                        <span class="text-2xl font-bold text-gray-800">60+</span>
-                        <p class="text-sm text-gray-600 mt-1">Hours of lectures</p>
-                    </div>
-                    <div class="stat text-center">
-                        <span class="text-2xl font-bold text-gray-800">350+</span>
-                        <p class="text-sm text-gray-600 mt-1">Problems</p>
-                    </div>
-                </div>
             </div>
-            <div class="right-section flex-1 min-w-[300px] text-center order-1 md:order-2">
-                <img src="{{ asset('images/coursehead.png') }}" alt="Person studying with laptop and books" class="max-w-full h-auto">
+            <a href="#" class="bg-teal-700 text-white text-sm font-semibold px-6 py-3 rounded-lg hover:bg-teal-800 transition duration-300 shadow-sm">
+                Download Curriculum
+            </a>
+        </div>
+
+        <!-- Course Modules Section -->
+        <div class="text-xl font-semibold text-gray-800 mb-6 border-b-2 border-teal-100 pb-3">
+            Course Modules
+        </div>
+
+        @forelse($course_details->course_curriculum as $index => $module)
+        <div class="accordion-item mb-4" x-data="{ open: false }">
+            <!-- Accordion Title -->
+            <div class="accordion-title flex justify-between items-center p-5 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-200" role="button" aria-expanded="false" @click="open = !open">
+                <div class="flex items-center space-x-4">
+                    <span class="bg-teal-100 text-teal-800 text-sm font-medium px-4 py-1.5 rounded-sm">
+                        Module {{ $module['module_number'] }}
+                    </span>
+                    <h3 class="text-lg font-semibold text-gray-800">{{ $module['title'] }}</h3>
+                </div>
+                <svg class="chevron w-6 h-6 text-gray-500 transform transition-transform duration-300" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </div>
+
+            <!-- Accordion Content -->
+            <div class="accordion-content p-6 bg-white rounded-b-lg shadow-sm border border-gray-100" x-show="open" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform scale-y-0" x-transition:enter-end="opacity-100 transform scale-y-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 transform scale-y-100" x-transition:leave-end="opacity-0 transform scale-y-0">
+                <!-- Duration -->
+                <div class="flex items-center space-x-3 text-gray-600 mb-4">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                    <span class="text-sm font-medium">{{ $module['duration'] }}</span>
+                </div>
+
+                <!-- Description -->
+                <p class="text-gray-600 text-base leading-relaxed mb-6">{{ $module['description'] }}</p>
+
+                <!-- Topics and Subtopics -->
+                <ul class="space-y-4">
+    @foreach($module['topics'] as $topic)
+    <li class="text-gray-700">
+        <h4 class="text-lg font-semibold text-gray-800 mb-2">{{ $topic['category'] }}</h4>
+        <ul class="ml-5 mt-2 space-y-2 list-disc">
+            @foreach($topic['subtopics'] as $subtopic)
+                @foreach(explode(',', $subtopic) as $item)
+                    <li class="text-gray-600 text-sm">{{ trim($item) }}</li>
+                @endforeach
+            @endforeach
+        </ul>
+    </li>
+    @endforeach
+</ul>
+
             </div>
         </div>
+        @empty
+        <p class="text-gray-600 text-center py-8">No modules available for this course.</p>
+        @endforelse
     </div>
+</div>
+<!-- Course Curriculum Section End -->
 
-   
-
-    <!-- Navigation Tabs -->
-    <div class="tabs flex flex-col sm:flex-row justify-center items-center mx-auto w-11/12 sm:w-auto sm:max-w-6xl gap-2 sm:gap-4 md:gap-8 mt-5 sm:mt-10 bg-white p-2 sm:p-3 rounded-lg sm:rounded-full shadow-md">
-        <a href="#about" class="w-full sm:w-auto text-center text-orange-500 font-bold text-sm sm:text-base md:text-lg px-3 sm:px-4 py-1 sm:py-2 hover:text-orange-500 transition-colors">About the course</a>
-        <a href="#batches" class="w-full sm:w-auto text-center text-gray-600 text-sm sm:text-base md:text-lg px-3 sm:px-4 py-1 sm:py-2 hover:text-orange-500 transition-colors">Batches</a>
-        <a href="#curriculum" class="w-full sm:w-auto text-center text-gray-600 text-sm sm:text-base md:text-lg px-3 sm:px-4 py-1 sm:py-2 hover:text-orange-500 transition-colors">Curriculum</a>
-        <a href="#instructors" class="w-full sm:w-auto text-center text-gray-600 text-sm sm:text-base md:text-lg px-3 sm:px-4 py-1 sm:py-2 hover:text-orange-500 transition-colors">Instructors</a>
-        <a href="#faqs" class="w-full sm:w-auto text-center text-gray-600 text-sm sm:text-base md:text-lg px-3 sm:px-4 py-1 sm:py-2 hover:text-orange-500 transition-colors">FAQs</a>
-    </div>
-
-    <!-- Course Batches Section -->
-    <div class="container mx-auto px-5 py-10 max-w-6xl" id="batches">
-        <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-5">
-            Course <span class="text-orange-500">Batches</span>
-        </h2>
-        <div class="bg-white p-5 rounded-lg shadow-md">
-            <!-- Online Classroom Header -->
-            <div class="flex items-center gap-3 mb-5">
-                <h3 class="text-xl font-semibold text-gray-800">Online Classroom</h3>
-                <span class="bg-purple-600 text-white text-xs font-bold px-2 py-1 rounded">PREFERRED</span>
-            </div>
-            <!-- Features List -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
-                <div class="flex items-center gap-2">
-                    <span class="text-green-500">✔</span>
-                    <p class="text-sm text-gray-600">Everything in self-paced Learning</p>
-                </div>
-                <div class="flex items-center gap-2">
-                    <span class="text-green-500">✔</span>
-                    <p class="text-sm text-gray-600">130 Hrs of instructor-led training</p>
-                </div>
-                <div class="flex items-center gap-2">
-                    <span class="text-green-500">✔</span>
-                    <p class="text-sm text-gray-600">One-to-one doubt resolution sessions</p>
-                </div>
-                <div class="flex items-center gap-2">
-                    <span class="text-green-500">✔</span>
-                    <p class="text-sm text-gray-600">Attend as many batches as you want for a lifetime</p>
-                </div>
-                <div class="flex items-center gap-2">
-                    <span class="text-green-500">✔</span>
-                    <p class="text-sm text-gray-600"><span id="available-slots">90</span> Slots available</p>
-                </div>
-                <div class="flex items-center gap-2">
-                    <span class="text-green-500">✔</span>
-                    <p class="text-sm text-gray-600"><span id="filled-slots">80</span> Slots Filled</p>
-                </div>
-                <div class="flex items-center gap-2">
-                    <span class="text-green-500">✔</span>
-                    <p class="text-sm text-gray-600"><span id="mode-of-teaching">Online</span> Mode of teaching</p>
-                </div>
-                <div class="flex items-center gap-2">
-                    <span class="text-green-500">✔</span>
-                    <p class="text-sm text-gray-600">Job assistance</p>
-                </div>
-            </div>
-            <!-- Batch Cards and Pricing -->
-            <div class="flex flex-col lg:flex-row items-center gap-5">
-                <!-- Batch Cards -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 flex-1" id="batch-cards">
-                    <!-- Batches will be dynamically inserted here -->
-                </div>
-                <!-- Pricing and Enroll Button -->
-                <div class="text-center lg:text-right">
-                    <p class="text-2xl font-bold text-gray-800" id="batch-price">₹40,014</p>
-                    <p class="text-sm text-gray-600" id="batch-discount">
-                        10% OFF Expires in <span class="countdown-timer" id="batch-countdown">00d 22h 47m 06s</span>
-                    </p>
-                    <button class="bg-orange-500 text-white font-bold py-3 px-6 rounded-md mt-3 hover:bg-orange-600 transition-colors" id="batch-enroll-button">
-                        Enroll Now
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-     <!-- About Course Overview Section -->
-     <div class="container mx-auto px-5 py-10 max-w-6xl bg-gray-50">
-      <h2 class="text-3xl font-bold mb-6 text-orange-500">About Course Overview</h2>
-      <p class="text-gray-600 mb-6">
-          This course is designed to provide learners with hands-on experience in full-stack development. You will gain proficiency in front-end and back-end technologies and build real-world applications.
-      </p>
-
-      <h3 class="text-2xl font-bold mb-4 text-gray-900">Learning Outcomes:</h3>
-      <ul class="list-disc pl-6 mb-6 text-gray-700 space-y-2">
-          <li>Master front-end technologies like HTML, CSS, and JavaScript</li>
-          <li>Understand back-end frameworks like Node.js and Django</li>
-          <li>Build and deploy full-stack applications</li>
-          <li>Earn a certification of completion</li>
-      </ul>
-
-      <h3 class="text-2xl font-bold mb-4 text-gray-900">Instructor Info:</h3>
-      <p class="text-gray-600 mb-6">
-          The course is taught by experienced professionals who have worked in the industry for over 10 years. Our instructors bring real-world knowledge and industry best practices to the course, ensuring students are well-prepared for the job market.
-      </p>
-
-      <h3 class="text-2xl font-bold mb-4 text-gray-900">Additional Benefits:</h3>
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <div class="bg-white p-6 rounded-lg shadow-md text-center border border-gray-200">
-              <div class="text-4xl mb-4 text-gray-400">📄</div>
-              <h4 class="text-lg font-semibold text-gray-800 mb-2">Project Icon</h4>
-              <p class="text-gray-600">Real-world Projects<br>Work on live projects that enhance your practical skills and prepare you for the industry.</p>
-          </div>
-          <div class="bg-white p-6 rounded-lg shadow-md text-center border border-gray-200">
-              <div class="text-4xl mb-4 text-gray-400">👨‍💼</div>
-              <h4 class="text-lg font-semibold text-gray-800 mb-2">Internship Icon</h4>
-              <p class="text-gray-600">Free Internship<br>If you choose the internship, you'll get hands-on experience in the field with a free internship placement.</p>
-          </div>
-          <div class="bg-white p-6 rounded-lg shadow-md text-center border border-gray-200">
-              <div class="text-4xl mb-4 text-gray-400">🎙️</div>
-              <h4 class="text-lg font-semibold text-gray-800 mb-2">Interview Icon</h4>
-              <p class="text-gray-600">Mock Interviews<br>Prepare for the real-world job market with mock interviews conducted by industry experts.</p>
-          </div>
-          <div class="bg-white p-6 rounded-lg shadow-md text-center border border-gray-200">
-              <div class="text-4xl mb-4 text-gray-400">🎓</div>
-              <h4 class="text-lg font-semibold text-gray-800 mb-2">Certifica Icon</h4>
-              <p class="text-gray-600">ISO Certified & ACITE Approved<br>Get a certificate that is ISO certified and ACITE approved, recognized globally.</p>
-          </div>
-      </div>
-  </div>
-
-    <!-- Key Features Section -->
-    <div class="container mx-auto px-5 py-10 max-w-6xl bg-white">
-      <h2 class="text-3xl font-bold mb-6 text-gray-900">Key Features</h2>
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <div class="bg-white p-6 rounded-lg shadow-md text-center border border-gray-200">
-              <div class="text-3xl mb-4 text-gray-400">📅</div>
-              <h4 class="text-lg font-semibold text-gray-800 mb-2">Calender Icon</h4>
-              <p class="text-gray-600">Self-paced learning</p>
-          </div>
-          <div class="bg-white p-6 rounded-lg shadow-md text-center border border-gray-200">
-              <div class="text-3xl mb-4 text-gray-400">🎓</div>
-              <h4 class="text-lg font-semibold text-gray-800 mb-2">Gradue Icon</h4>
-              <p class="text-gray-600">Access to recorded lectures</p>
-          </div>
-          <div class="bg-white p-6 rounded-lg shadow-md text-center border border-gray-200">
-              <div class="text-3xl mb-4 text-gray-400">👩‍🏫</div>
-              <h4 class="text-lg font-semibold text-gray-800 mb-2">Mentor Icon</h4>
-              <p class="text-gray-600">One-to-one mentorship</p>
-          </div>
-          <div class="bg-white p-6 rounded-lg shadow-md text-center border border-gray-200">
-              <div class="text-3xl mb-4 text-gray-400">🏆</div>
-              <h4 class="text-lg font-semibold text-gray-800 mb-2">Certific Icon</h4>
-              <p class="text-gray-600">Earn a certificate</p>
-          </div>
-      </div>
-  </div>
-    <!-- Course Curriculum Section -->
-    <div class="container mx-auto px-5 py-10 max-w-6xl" id="curriculum">
-        <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-5">
-            Course <span class="text-orange-500">Curriculum</span>
-        </h2>
-        <div class="bg-white p-5 rounded-lg shadow-md grid lg:grid-cols-[1fr,3fr] gap-5">
-            <!-- Filter Button -->
-            <div>
-                <div class="p-6 bg-white shadow-lg flex flex-col gap-3 mb-5">
-                    <button class="bg-orange-500 text-white font-bold py-2 px-4 rounded-md" onclick="showDemoCourse()">
-                        Demo Course
-                    </button>
-                    <button class="bg-orange-500 text-white font-bold py-2 px-4 rounded-md" onclick="showSyllabus()">
-                        Course Syllabus
-                    </button>
-                </div>
-            </div>
-            <!-- Accordion -->
-            <div class="p-5 rounded-lg shadow-md bg-white">
-                <div class="accordion" id="courseCurriculum">
-                    <!-- Dynamic Content Will Be Injected Here -->
-                </div>
-            </div>
-        </div>
-    </div>
+<!-- Include Alpine.js for Accordion Functionality -->
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 
     <!-- Course Instructor Section -->
-    <div class="container mx-auto px-5 py-10 max-w-6xl" id="instructors">
+    <div class="container mx-auto px-5 py-10 max-w-7xl" id="instructors">
         <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-5">
             Course <span class="text-orange-500">Instructor</span>
         </h2>
         <div class="swiper mySwiper">
             <div class="swiper-wrapper">
-                @for ($i = 1; $i <= 5; $i++)
-                    <div class="swiper-slide">
-                        <div class="bg-white p-5 rounded-lg shadow-md text-center">
-                            <img src="https://via.placeholder.com/150" alt="Instructor" class="w-24 h-24 rounded-full mx-auto mb-3">
-                            <h3 class="text-lg font-semibold text-gray-800">Joo Muri</h3>
-                            <p class="text-sm text-gray-600 flex items-center justify-center gap-1 mt-1">
-                                <i class="fas fa-clock text-orange-500"></i>
-                                1600+ hours taught
-                            </p>
-                            <p class="text-sm text-gray-600 mt-1">Courses | teach</p>
-                            <p class="text-sm text-gray-600">Web Development</p>
-                        </div>
+                @foreach($course_details->instructor_ids as $instructor)
+                @php
+                $teacher = \App\Models\User::find($instructor);
+                @endphp
+                <div class="swiper-slide">
+                    <div class="bg-white p-5 rounded-lg shadow-md text-center">
+                        <img src="https://via.placeholder.com/150" alt="Instructor" class="w-24 h-24 rounded-full mx-auto mb-3">
+                        <h3 class="text-lg font-semibold text-gray-800">{{ $teacher->name }}</h3>
+                        <p class="text-sm text-gray-600 flex items-center justify-center gap-1 mt-1">
+                            <i class="fas fa-clock text-orange-500"></i>
+                            1600+ hours taught
+                        </p>
+                        <p class="text-sm text-gray-600 mt-1">Courses | teach</p>
+                        <p class="text-sm text-gray-600">Web Development</p>
                     </div>
-                @endfor
+                </div>
+                @endforeach
             </div>
             <div class="swiper-pagination mt-5"></div>
         </div>
     </div>
 
     <!-- FAQs Section -->
-    <div class="container mx-auto px-5 py-10 max-w-6xl" id="faqs">
+    <div class="container mx-auto px-5 py-10 max-w-7xl" id="faqs">
         <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-5">
             Wait! I Have Some <span class="text-orange-500">Questions</span>
         </h2>
         <div x-data="{ openAccordion: null }" class="space-y-2">
+            @foreach($course_details->faqs as $index => $faq)
             <div class="border border-blue-500 rounded-lg">
-                <button @click="openAccordion = openAccordion === 1 ? null : 1" class="w-full flex justify-between items-center p-4 text-left text-gray-800 font-semibold">
-                    <span>What is training?</span>
-                    <i :class="openAccordion === 1 ? 'fa-minus' : 'fa-plus'" class="fas text-blue-500"></i>
+                <button @click="openAccordion = openAccordion === {{ $index + 1 }} ? null : {{ $index + 1 }}" class="w-full flex justify-between items-center p-4 text-left text-gray-800 font-semibold">
+                    <span>{{ $faq['question'] }}</span>
+                    <i :class="openAccordion === {{ $index + 1 }} ? 'fa-minus' : 'fa-plus'" class="fas text-blue-500"></i>
                 </button>
-                <div x-show="openAccordion === 1" x-transition class="p-4 bg-white">
+                <div x-show="openAccordion === {{ $index + 1 }}" x-transition class="p-4 bg-white">
                     <p class="text-gray-600">
-                        Corporate training, also known as Workplace Learning or Corporate Education, refers to the process of training employees using a systematic set of learning programs designed to nurture employee job skills and knowledge to improve performance in the workplace.
+                        {{ $faq['answer'] }}
                     </p>
                 </div>
             </div>
-            <div class="border border-red-500 rounded-lg">
-                <button @click="openAccordion = openAccordion === 2 ? null : 2" class="w-full flex justify-between items-center p-4 text-left text-gray-800 font-semibold">
-                    <span>Why Upskill Student?</span>
-                    <i :class="openAccordion === 2 ? 'fa-minus' : 'fa-plus'" class="fas text-red-500"></i>
-                </button>
-                <div x-show="openAccordion === 2" x-transition class="p-4 bg-white">
-                    <p class="text-gray-600">
-                        Upskilling helps students gain industry-relevant skills, increasing their job opportunities and career growth in emerging technologies.
-                    </p>
-                </div>
-            </div>
-            <div class="border border-red-500 rounded-lg">
-                <button @click="openAccordion = openAccordion === 3 ? null : 3" class="w-full flex justify-between items-center p-4 text-left text-gray-800 font-semibold">
-                    <span>How do I enroll in a course?</span>
-                    <i :class="openAccordion === 3 ? 'fa-minus' : 'fa-plus'" class="fas text-red-500"></i>
-                </button>
+            @endforeach
         </div>
     </div>
 
     <!-- Facilities Providing Section -->
-    <div class="container mx-auto px-5 py-10 max-w-6xl">
+    <div class="container mx-auto px-5 py-10 max-w-7xl">
         <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-5">
             Facilities <span class="text-orange-500">Providing</span>
         </h2>
@@ -339,7 +384,7 @@
     </div>
 
     <!-- Course Certificates Section -->
-    <div class="container mx-auto px-5 py-10 max-w-6xl">
+    <div class="container mx-auto px-5 py-10 max-w-7xl">
         <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-5">
             Course <span class="text-orange-500">Certificates</span>
         </h2>
@@ -372,7 +417,6 @@
         </div>
     </div>
 
-    <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
         // Initialize Swiper
@@ -384,9 +428,18 @@
                 clickable: true,
             },
             breakpoints: {
-                640: { slidesPerView: 2, spaceBetween: 20 },
-                768: { slidesPerView: 3, spaceBetween: 20 },
-                1024: { slidesPerView: 4, spaceBetween: 20 },
+                640: {
+                    slidesPerView: 2,
+                    spaceBetween: 20
+                },
+                768: {
+                    slidesPerView: 3,
+                    spaceBetween: 20
+                },
+                1024: {
+                    slidesPerView: 4,
+                    spaceBetween: 20
+                },
             },
         });
 
@@ -398,11 +451,21 @@
         async function fetchBatches() {
             try {
                 const response = await fetch(`/api/batches?id=${courseId}`);
-                batches = await response.json();
+                const allBatches = await response.json();
                 if (response.ok) {
+                    // Filter batches for upcoming or current month
+                    const now = new Date();
+                    const currentMonth = now.getMonth();
+                    const currentYear = now.getFullYear();
+                    batches = allBatches.filter(batch => {
+                        const batchDate = new Date(batch.startDate);
+                        const isUpcoming = batchDate > now;
+                        const isCurrentMonth = batchDate.getMonth() === currentMonth && batchDate.getFullYear() === currentYear;
+                        return isUpcoming || isCurrentMonth;
+                    });
                     renderBatchCards(batches);
                 } else {
-                    console.error('Error fetching batches:', batches.error);
+                    console.error('Error fetching batches:', allBatches.error);
                 }
             } catch (error) {
                 console.error('Error fetching batches:', error);
@@ -425,16 +488,16 @@
                 }
                 batchCard.setAttribute("onclick", `selectBatch('${batch.date}')`);
                 const cardContent = `
-                    <div class="batch-date text-sm text-gray-600 font-semibold">${batch.date}</div>
-                    <div class="batch-details">
-                        <p class="text-sm text-gray-600 mt-1">${
-                            batch.status === "started" ? "Batch Started" : batch.status === "soon" ? "Soon" : "Upcoming"
-                        }</p>
-                        <p class="text-sm text-gray-600">SAT - SUN</p>
-                        <p class="text-sm text-gray-600">Weekend Class | 6 Months</p>
-                        <p class="text-sm text-gray-600 mt-2">08:00 PM TO 11:00 PM IST (GMT +5:30)</p>
-                    </div>
-                `;
+                <div class="batch-date text-sm text-gray-600 font-semibold">${batch.date}</div>
+                <div class="batch-details">
+                    <p class="text-sm text-gray-600 mt-1">${
+                        batch.status === "started" ? "Batch Started" : batch.status === "soon" ? "Soon" : "Upcoming"
+                    }</p>
+                    <p class="text-sm text-gray-600">SAT - SUN</p>
+                    <p class="text-sm text-gray-600">Weekend Class | 6 Months</p>
+                    <p class="text-sm text-gray-600 mt-2">08:00 PM TO 11:00 PM IST (GMT +5:30)</p>
+                </div>
+            `;
                 batchCard.innerHTML = cardContent;
                 batchCardsContainer.appendChild(batchCard);
                 if (batch.status === "upcoming" && new Date() < new Date(batch.startDate)) {
@@ -495,7 +558,7 @@
         }
 
         // Handle Enroll Now button click
-        document.getElementById("batch-enroll-button").addEventListener("click", function () {
+        document.getElementById("batch-enroll-button").addEventListener("click", function() {
             if (window.selectedBatch) {
                 const batch = window.selectedBatch;
                 const params = new URLSearchParams({
@@ -521,7 +584,22 @@
 
         // Fetch batches on page load
         document.addEventListener("DOMContentLoaded", fetchBatches);
+    </script>
 
-       
+    <script>
+        function toggleAccordion(element) {
+            const content = element.nextElementSibling;
+            const chevron = element.querySelector('.chevron');
+            content.classList.toggle('active');
+            chevron.classList.toggle('active');
+        }
+
+        // Ensure the first two modules are expanded by default
+        document.querySelectorAll('.accordion-title').forEach((title, index) => {
+            if (index < 2) {
+                title.nextElementSibling.classList.add('active');
+                title.querySelector('.chevron').classList.add('active');
+            }
+        });
     </script>
     @endsection

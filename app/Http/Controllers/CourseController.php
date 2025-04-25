@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Course;
+use App\Models\CourseDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -141,12 +142,13 @@ public function courseDetails($slug)
 
     // Slug se course ki row database se fetch karo
     $course = Course::where('slug', $slug)->first();
+    $course_details = CourseDetail::where('course_name', $course->name)->first();
 
     if (!$course) {
         return view('website.course_details')->with('error', 'Course not found!');
     }
 
     // Course details ke saath view pe bhejo
-    return view('website.course_details', ['course' => $course]);
+    return view('website.course_details', ['course' => $course,'course_details' => $course_details]);
 }
 }
