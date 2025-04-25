@@ -107,13 +107,13 @@ class InternshipController extends Controller
 
     public function contentstore(Request $request)
     {
-        $request->validate([
-            'internship_id' => 'required|exists:internships,id',
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'file' => 'nullable|file|mimes:pdf|max:5120',
-            'deadline' => 'nullable|date|after:today',
-        ]);
+        // $request->validate([
+        //     'internship_id' => 'required|exists:internships,id',
+        //     'title' => 'required|string|max:255',
+        //     'description' => 'nullable|string',
+        //     'file' => 'nullable|file|mimes:pdf|max:5120',
+        //     'deadline' => 'nullable|date|after:today',
+        // ]);
 
         $data = $request->only(['internship_id', 'title', 'description', 'deadline']);
         if ($request->hasFile('file')) {
