@@ -11,6 +11,7 @@
                     <h3 class="text-lg font-semibold text-gray-700">{{ $enrollment->internship->name }}</h3>
                     <p class="text-gray-600">Status: {{ $enrollment->status }}</p>
                     <p class="text-gray-600">Progress: {{ number_format($enrollment->progress, 2) }}%</p>
+                    <p class="text-gray-600">Average Mark: {{ $enrollment->average_mark }}</p>
                     <a href="{{ route('student.internship.content', $enrollment) }}" class="bg-blue-500 text-white py-2 px-4 rounded-lg mt-4 inline-block">
                         View Tasks & Materials
                     </a>
