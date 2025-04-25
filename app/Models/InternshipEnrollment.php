@@ -22,8 +22,8 @@ class InternshipEnrollment extends Model
         return $this->belongsTo(Internship::class);
     }
 
-    // public function submissions()
-    // {
-    //     return $this->hasMany(InternshipSubmission::class);
-    // }
+    public function submissions()
+    {
+        return $this->hasMany(InternshipSubmission::class);
+    }
 }

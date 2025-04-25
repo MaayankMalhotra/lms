@@ -17,4 +17,9 @@ class Internship extends Model
         'price',
         'certified_button'
     ];
+
+    public function contents()
+    {
+        return $this->hasMany(InternshipContent::class, 'internship_id', 'id');
+    }
 }

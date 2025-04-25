@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Internship;
+use App\Models\InternshipEnrollment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class InternshipController extends Controller
 {
@@ -125,5 +127,111 @@ class InternshipController extends Controller
         DB::table('internship_contents')->insert($data);
 
         return redirect()->route('admin.internship.content.create')->with('success', 'Content added.');
+    }
+
+    // public function showOnStudentDashboard(){
+    //     // Get current user's ID
+    //     $userId = Auth::id();
+
+    //     // Fetch enrollments for the user with internship details
+    //     $enrollments = DB::table('internship_enrollments')
+    //         ->select('internship_enrollments.id', 'internship_enrollments.status', 'internship_enrollments.internship_id', 'internships.name')
+    //         ->join('internships', 'internship_enrollments.internship_id', '=', 'internships.id')
+    //         ->where('internship_enrollments.user_id', $userId)
+    //         ->get()
+    //         ->map(function ($enrollment) {
+    //             // Count total content for this internship
+    //             $total = DB::table('internship_contents')
+    //                 ->where('internship_id', $enrollment->internship_id)
+    //                 ->count();
+
+    //             // Count completed submissions for this enrollment
+    //             $completed = DB::table('internship_submissions')
+    //                 ->where('internship_enrollment_id', $enrollment->id)
+    //                 ->count();
+
+    //             // Calculate progress
+    //             $enrollment->progress = $total ? ($completed / $total) * 100 : 0;
+
+    //             return $enrollment;
+    //         });
+    //         dd($enrollments); // Debugging line to check the enrollments data
+    //     // Remove dd() for production; used for debugging
+
+    //     return view('student.internshipdash', compact('enrollments'));
+    // }
+    public function showOnStudentDashboard()
+{
+    $userId = Auth::id();
+    $enrollments = InternshipEnrollment::where('user_id', $userId)
+        ->with('internship') // Assuming a relationship is defined
+        ->get()
+        ->map(function ($enrollment) {
+            $total = $enrollment->internship->contents()->count();
+            $completed = $enrollment->submissions()->count();
+            $enrollment->progress = $total ? ($completed / $total) * 100 : 0;
+            return $enrollment;
+        });
+
+    return view('student.internshipdash', compact('enrollments'));
+}
+
+public function studentInternshipContent($enrollmentId)
+    {
+        $userId = Auth::id();
+        $enrollment = DB::table('internship_enrollments')
+        ->select('internship_enrollments.id', 'internship_enrollments.internship_id', 'internships.name')
+        ->join('internships', 'internship_enrollments.internship_id', '=', 'internships.id')
+        ->where('internship_enrollments.id', $enrollmentId)
+        ->where('internship_enrollments.user_id', $userId)
+        ->first();
+
+        $contents = DB::table('internship_contents')
+            ->select('internship_contents.id', 'internship_contents.title', 'internship_contents.description', 'internship_contents.file_path', 'internship_contents.deadline')
+            ->where('internship_contents.internship_id', $enrollment->internship_id)
+            ->get()
+            ->map(function ($content) use ($enrollmentId) {
+                // Check if submission exists for this content
+                $submission = DB::table('internship_submissions')
+                    ->select('submission_file')
+                    ->where('internship_content_id', $content->id)
+                    ->where('internship_enrollment_id', $enrollmentId)
+                    ->first();
+
+                $content->submission_file = $submission ? $submission->submission_file : null;
+                return $content;
+            });
+        return view('student.internship-content', compact('enrollment', 'contents'));
+    }
+
+    public function studentInternshipSubmit(Request $request, $contentId)
+    {
+        $userId = Auth::id();
+     // Verify content exists and get enrollment
+     $content = DB::table('internship_contents')
+     ->select('internship_contents.id', 'internship_contents.internship_id')
+     ->where('internship_contents.id', $contentId)
+     ->first();
+
+     $enrollment = DB::table('internship_enrollments')
+            ->select('id')
+            ->where('internship_id', $content->internship_id)
+            ->where('user_id', $userId)
+            ->first();
+
+        // Store submission
+        $filePath = $request->file('submission_file')->store('submissions', 'public');
+
+        DB::table('internship_submissions')->insert([
+            'internship_content_id' => $content->id,
+            'user_id' => $userId,
+            'internship_enrollment_id' => $enrollment->id,
+            'submission_file' => $filePath,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        return redirect()->route('student.internship.content', $enrollment->id)
+            ->with('success', 'Submission uploaded.');
     }
 }
