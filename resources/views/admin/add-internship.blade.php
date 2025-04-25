@@ -69,7 +69,7 @@
                                         <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
                                         <p class="text-sm text-gray-500">Drag & drop or click to upload</p>
                                     </div>
-                                    <input type="file" name="logo" class="opacity-0" id="logoInput" required>
+                                    <input type="file" name="logo" class="opacity-0" id="logoInput">
                                 </label>
                             </div>
                             @error('logo')
@@ -123,6 +123,20 @@
                                        placeholder="Enter number of projects"
                                        value="{{ old('project') }}">
                                 @error('project')
+                                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <!-- Price -->
+                            <div class="relative">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                ₹ Price
+                                </label>
+                                <input type="number" name="price" required step="0.01" min="0" 
+                                       class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
+                                       placeholder="e.g., 199.99"
+                                       value="{{ old('price') }}">
+                                @error('price')
                                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                                 @enderror
                             </div>

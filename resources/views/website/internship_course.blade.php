@@ -22,12 +22,12 @@
 
  <!-- Internships Section -->
  <section class="py-20 px-4 md:px-8 ">
-    <div class="max-w-6xl mx-auto">
+    <div class=" mx-auto">
         <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 text-orange-500">
             Internships
         </h2>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <!-- Internship Card -->
              @foreach($internships as $internship)
             <div class="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-200">
@@ -45,12 +45,16 @@
                 <div class="text-orange-700 font-semibold mb-4 text-center">
                     ⭐ {{ $internship->applicant }}
                 </div>
+                <div class="text-orange-700 font-semibold mb-4 text-center">
+             Price:   ₹ {{ $internship->price }}
+                </div>
                 <div class="bg-amber-300 text-black py-2 px-4 rounded-lg text-center mb-4 font-bold text-center">
                     {{ $internship->certified_button }}
                 </div>
-                <button class="w-full bg-orange-500 text-white py-2 rounded-lg hover:bg-orange-600 transition-colors text-center">
-                    Register Now
-                </button>
+                <a href="{{ route('internship.register', $internship->id) }}" 
+                           class="block w-full bg-orange-500 text-white py-2.5 rounded-lg hover:bg-orange-600 transition-colors text-center font-semibold">
+                            Register Now
+                        </a>
             </div>
             @endforeach
          

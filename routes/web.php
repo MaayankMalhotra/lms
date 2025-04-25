@@ -24,6 +24,7 @@ use App\Http\Controllers\ChatController;
 use App\Http\Controllers\CourseDetailsController;
 use App\Http\Controllers\StudentClassController;
 use App\Http\Controllers\TrainerController;
+use App\Http\Controllers\InternshipRegistrationController;
 
 Route::get('/student/quiz-sets', [StudentQuizController::class, 'index'])->name('student.quiz_sets');
 Route::get('/student/quiz-sets/{id}/take', [StudentQuizController::class, 'takeQuiz'])->name('student.quiz_sets.take');
@@ -338,3 +339,6 @@ Route::get('/student/quiz-attempt/{attemptId}', [StudentQuizController::class, '
 
 
 Route::post('/course-form', [CourseDetailsController::class, 'store'])->name('course.store');
+
+Route::get('/internship/register/{id}', [InternshipRegistrationController::class, 'show'])->name('internship.register');
+Route::post('/internship/register/submit', [InternshipRegistrationController::class, 'store'])->name('internship.register.submit');
