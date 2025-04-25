@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Internship;
+use App\Models\InternshipSubmission;
 use App\Models\InternshipEnrollment;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -56,4 +57,30 @@ class InternshipRegistrationController extends Controller
             'enrollment_id' => $enrollment->id,
         ], 200);
     }
+
+    public function submissions(Internship $internship)
+    {
+        // Fetch all submissions for the internship, including related enrollment and content
+        $submissions = InternshipSubmission::whereHas('enrollment', function ($query) use ($internship) {
+            $query->where('internship_id', $internship->id);
+        })
+            ->with(['enrollment.user', 'content'])
+            ->get();
+
+        return view('admin.internship-submissions', compact('internship', 'submissions'));
+    }
+
+    public function submitFeedback(Request $request, InternshipSubmission $submission)
+{
+    $request->validate([
+        'mark' => 'required|numeric|min:0|max:100', // Adjust max based on your grading scale
+    ]);
+
+    $submission->update([
+        'mark' => $request->input('mark'),
+    ]);
+
+    return redirect()->route('admin.internship.submissions', $submission->enrollment->internship_id)
+        ->with('success', 'Mark assigned successfully.');
+}
 }

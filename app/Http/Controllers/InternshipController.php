@@ -163,15 +163,20 @@ class InternshipController extends Controller
     public function showOnStudentDashboard()
 {
     $userId = Auth::id();
-    $enrollments = InternshipEnrollment::where('user_id', $userId)
-        ->with('internship') // Assuming a relationship is defined
-        ->get()
-        ->map(function ($enrollment) {
-            $total = $enrollment->internship->contents()->count();
-            $completed = $enrollment->submissions()->count();
-            $enrollment->progress = $total ? ($completed / $total) * 100 : 0;
-            return $enrollment;
-        });
+        $enrollments = InternshipEnrollment::where('user_id', $userId)
+            ->with('internship')
+            ->get()
+            ->map(function ($enrollment) {
+                $total = $enrollment->internship->contents()->count();
+                $completed = $enrollment->submissions()->count();
+                $enrollment->progress = $total ? ($completed / $total) * 100 : 0;
+
+                // Calculate average mark for completed submissions
+                $averageMark = $enrollment->submissions()->avg('mark');
+                $enrollment->average_mark = $averageMark ? number_format($averageMark, 2) : 'N/A';
+
+                return $enrollment;
+            });
 
     return view('student.internshipdash', compact('enrollments'));
 }
@@ -234,4 +239,9 @@ public function studentInternshipContent($enrollmentId)
         return redirect()->route('student.internship.content', $enrollment->id)
             ->with('success', 'Submission uploaded.');
     }
+
+    public function getInternshipList(){
+        $internships = Internship::all();
+        return view('admin.internship-list-admin', compact('internships'));
+        }
 }
