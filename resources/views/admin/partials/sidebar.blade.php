@@ -340,6 +340,49 @@
                     </li>
                 </ul>
             </li>
+
+             <!-- Events Management -->
+             <li x-data="{ isOpen: {{ request()->routeIs('admin.events.*') || request()->routeIs('admin.event-categories.*') ? 'true' : 'false' }} }">
+                <a href="javascript:void(0)" @click="isOpen = !isOpen"
+                    class="flex items-center justify-between p-3 {{ request()->routeIs('admin.events.*') || request()->routeIs('admin.event-categories.*') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
+                    <span class="flex items-center">
+                        <i class="fas fa-calendar-alt mr-3 text-lg"></i> Events Management
+                    </span>
+                    <i class="fas fa-chevron-down text-sm transition-transform" :class="{ 'rotate-180': isOpen }"></i>
+                </a>
+                <ul x-show="isOpen" x-collapse class="ml-6 mt-2 space-y-2 border-l-2 border-gray-300 pl-4">
+                    <li>
+                        <a href="{{ route('admin.event-categories.create') }}"
+                            class="flex items-center p-2 text-sm {{ request()->routeIs('admin.event-categories.create') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
+                            <i class="fas fa-folder-plus mr-2"></i> Create Category
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.event-categories.index') }}"
+                            class="flex items-center p-2 text-sm {{ request()->routeIs('admin.event-categories.index') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
+                            <i class="fas fa-folder mr-2"></i> View Categories
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.events.create') }}"
+                            class="flex items-center p-2 text-sm {{ request()->routeIs('admin.events.create') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
+                            <i class="fas fa-plus-circle mr-2"></i> Create Event
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.events.index') }}"
+                            class="flex items-center p-2 text-sm {{ request()->routeIs('admin.events.index') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
+                            <i class="fas fa-list mr-2"></i> View Events
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.events.enrollments') }}"
+                            class="flex items-center p-2 text-sm {{ request()->routeIs('admin.events.enrollments') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
+                            <i class="fas fa-users mr-2"></i> View Enrollments
+                        </a>
+                    </li>
+                </ul>
+            </li>
         @endif
         @if (auth()->user()->role == 1 || auth()->user()->role == 2)
             <!-- Trainer Management -->

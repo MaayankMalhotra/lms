@@ -26,6 +26,8 @@ use App\Http\Controllers\StudentClassController;
 use App\Http\Controllers\TrainerController;
 use App\Http\Controllers\InternshipRegistrationController;
 use App\Http\Controllers\NewsController;
+use App\Http\Controllers\EventController;
+use App\Http\Controllers\EventCategoryController;
 
 Route::get('/student/quiz-sets', [StudentQuizController::class, 'index'])->name('student.quiz_sets');
 Route::get('/student/quiz-sets/{id}/take', [StudentQuizController::class, 'takeQuiz'])->name('student.quiz_sets.take');
@@ -283,6 +285,21 @@ Route::prefix('admin')->group(function () {
     Route::get('news/{news}/edit', [NewsController::class, 'edit'])->name('admin.news.edit');
     Route::put('news/{news}', [NewsController::class, 'update'])->name('admin.news.update');
     Route::delete('news/{news}', [NewsController::class, 'destroy'])->name('admin.news.destroy');
+
+    Route::get('/events', [EventController::class, 'adminIndex'])->name('admin.events.index');
+    Route::get('/events/create', [EventController::class, 'create'])->name('admin.events.create');
+    Route::post('/events', [EventController::class, 'store'])->name('admin.events.store');
+    Route::get('/events/{event}/edit', [EventController::class, 'edit'])->name('admin.events.edit');
+    Route::put('/events/{event}', [EventController::class, 'update'])->name('admin.events.update');
+    Route::delete('/events/{event}', [EventController::class, 'destroy'])->name('admin.events.destroy');
+    Route::get('/events/enrollments', [EventController::class, 'enrollments'])->name('admin.events.enrollments');
+
+    Route::get('/event-categories', [EventCategoryController::class, 'index'])->name('admin.event-categories.index');
+    Route::get('/event-categories/create', [EventCategoryController::class, 'create'])->name('admin.event-categories.create');
+    Route::post('/event-categories', [EventCategoryController::class, 'store'])->name('admin.event-categories.store');
+    Route::get('/event-categories/{category}/edit', [EventCategoryController::class, 'edit'])->name('admin.event-categories.edit');
+    Route::put('/event-categories/{category}', [EventCategoryController::class, 'update'])->name('admin.event-categories.update');
+    Route::delete('/event-categories/{category}', [EventCategoryController::class, 'destroy'])->name('admin.event-categories.destroy');
 });
 Route::get('/coding-questions/delete-solution', [CodingQuestionController::class, 'deleteSolution'])->name('admin.coding_questions.delete_solution');
 // Student routes for coding tests
@@ -359,3 +376,7 @@ Route::post('/admin/internship/submissions/{submission}/feedback', [InternshipRe
 
 Route::get('/news/{slug}', [NewsController::class, 'show'])->name('news.show');
 Route::get('/news/image/{news}', [NewsController::class, 'showImage'])->name('news.image');
+
+Route::get('/events', [EventController::class, 'index'])->name('events.index');
+Route::get('/events/{slug}', [EventController::class, 'show'])->name('events.show');
+Route::post('/events/{slug}/enroll', [EventController::class, 'enroll'])->name('events.enroll');

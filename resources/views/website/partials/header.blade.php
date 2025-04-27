@@ -121,7 +121,7 @@
                     </button>
                     <div id="update-dropdown"
                         class="dropdown-content absolute bg-black/90 rounded-lg p-2 min-w-[200px] mt-2 shadow-lg z-50">
-                        <a href="{{ route('website.events') }}"
+                        <a href="{{ route('events.index') }}"
                             class="block px-4 py-2 text-white hover:bg-orange-500 rounded-md transition-colors">Event</a>
                         <a href="{{ route('news.index') }}"
                             class="block px-4 py-2 text-white hover:bg-orange-500 rounded-md transition-colors">News</a>
@@ -201,7 +201,7 @@
                         </svg>
                     </button>
                     <div id="mobile-update-dropdown" class="mobile-dropdown-content">
-                        <a href="{{ route('website.events') }}"
+                        <a href="{{ route('events.index') }}"
                             class="block px-4 py-2 text-white hover:bg-orange-500 rounded-md transition-colors">Event</a>
                         <a href="{{ route('news.index') }}"
                             class="block px-4 py-2 text-white hover:bg-orange-500 rounded-md transition-colors">News</a>
