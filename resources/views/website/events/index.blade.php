@@ -118,9 +118,7 @@
                         <p class="col-span-full text-center text-gray-500">No events found. Check back later!</p>
                     @endforelse
                 </div>
-                <div class="mt-8">
-                    {{ $events->links('vendor.pagination.tailwind') }}
-                </div>
+       
             </div>
         </div>
     </div>

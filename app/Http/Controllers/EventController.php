@@ -42,13 +42,7 @@ class EventController extends Controller
     {
         $event = Event::where('slug', $slug)->firstOrFail();
 
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'phone' => 'nullable|string|max: Bunzip64',
-            'comments' => 'nullable|string',
-        ]);
-
+   
         EventEnrollment::create([
             'event_id' => $event->id,
             'name' => $request->name,
