@@ -317,30 +317,42 @@
                 </a>
             </li>
 
-            <li x-data="{ isOpen: {{ request()->routeIs('admin.news.*') ? 'true' : 'false' }} }">
-                <a href="javascript:void(0)" @click="isOpen = !isOpen"
-                    class="flex items-center justify-between p-3 {{ request()->routeIs('admin.news.*') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
-                    <span class="flex items-center">
-                        <i class="fas fa-book mr-3 text-lg"></i> News Management
-                    </span>
-                    <i class="fas fa-chevron-down text-sm transition-transform" :class="{ 'rotate-180': isOpen }"></i>
-                </a>
-                <ul x-show="isOpen" x-collapse class="ml-6 mt-2 space-y-2 border-l-2 border-gray-300 pl-4">
-                    <li>
-                        <a href="{{ route('admin.news.create') }}"
-                            class="flex items-center p-2 text-sm {{ request()->routeIs('admin.news.create') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
-                            <i class="fas fa-plus-circle mr-2"></i> Create News
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('admin.news.index') }}"
-                            class="flex items-center p-2 text-sm {{ request()->routeIs('admin.news.index') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
-                            <i class="fas fa-list mr-2"></i> View News
-                        </a>
-                    </li>
-                </ul>
-            </li>
-
+          <!-- News Management -->
+          <li x-data="{ isOpen: {{ request()->routeIs('admin.news.*') || request()->routeIs('admin.news-categories.*') ? 'true' : 'false' }} }">
+            <a href="javascript:void(0)" @click="isOpen = !isOpen"
+                class="flex items-center justify-between p-3 {{ request()->routeIs('admin.news.*') || request()->routeIs('admin.news-categories.*') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
+                <span class="flex items-center">
+                    <i class="fas fa-book mr-3 text-lg"></i> News Management
+                </span>
+                <i class="fas fa-chevron-down text-sm transition-transform" :class="{ 'rotate-180': isOpen }"></i>
+            </a>
+            <ul x-show="isOpen" x-collapse class="ml-6 mt-2 space-y-2 border-l-2 border-gray-300 pl-4">
+                <li>
+                    <a href="{{ route('admin.news-categories.create') }}"
+                        class="flex items-center p-2 text-sm {{ request()->routeIs('admin.news-categories.create') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
+                        <i class="fas fa-folder-plus mr-2"></i> Create Category
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.news-categories.index') }}"
+                        class="flex items-center p-2 text-sm {{ request()->routeIs('admin.news-categories.index') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
+                        <i class="fas fa-folder mr-2"></i> View Categories
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.news.create') }}"
+                        class="flex items-center p-2 text-sm {{ request()->routeIs('admin.news.create') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
+                        <i class="fas fa-plus-circle mr-2"></i> Create News
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.news.index') }}"
+                        class="flex items-center p-2 text-sm {{ request()->routeIs('admin.news.index') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
+                        <i class="fas fa-list mr-2"></i> View News
+                    </a>
+                </li>
+            </ul>
+        </li>
              <!-- Events Management -->
              <li x-data="{ isOpen: {{ request()->routeIs('admin.events.*') || request()->routeIs('admin.event-categories.*') ? 'true' : 'false' }} }">
                 <a href="javascript:void(0)" @click="isOpen = !isOpen"

@@ -28,6 +28,7 @@ use App\Http\Controllers\InternshipRegistrationController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\EventCategoryController;
+use App\Http\Controllers\NewsCategoryController;
 
 Route::get('/student/quiz-sets', [StudentQuizController::class, 'index'])->name('student.quiz_sets');
 Route::get('/student/quiz-sets/{id}/take', [StudentQuizController::class, 'takeQuiz'])->name('student.quiz_sets.take');
@@ -106,8 +107,6 @@ Route::get('/events', function () {
     return view('website.events');
 })->name('website.events');
 
-
-Route::get('/news', [NewsController::class, 'index'])->name('news.index');
 
 Route::get('/webinar', function () {
     if (Auth::user() && Auth::user()->role == 1) {
@@ -279,12 +278,21 @@ Route::prefix('admin')->group(function () {
 
     //news for admin
 
-    Route::get('news', [NewsController::class, 'adminIndex'])->name('admin.news.index');
-    Route::get('news/create', [NewsController::class, 'create'])->name('admin.news.create');
-    Route::post('news', [NewsController::class, 'store'])->name('admin.news.store');
-    Route::get('news/{news}/edit', [NewsController::class, 'edit'])->name('admin.news.edit');
-    Route::put('news/{news}', [NewsController::class, 'update'])->name('admin.news.update');
-    Route::delete('news/{news}', [NewsController::class, 'destroy'])->name('admin.news.destroy');
+  // News Routes
+  Route::get('/news', [NewsController::class, 'adminIndex'])->name('admin.news.index');
+  Route::get('/news/create', [NewsController::class, 'create'])->name('admin.news.create');
+  Route::post('/news', [NewsController::class, 'store'])->name('admin.news.store');
+  Route::get('/news/{news}/edit', [NewsController::class, 'edit'])->name('admin.news.edit');
+  Route::put('/news/{news}', [NewsController::class, 'update'])->name('admin.news.update');
+  Route::delete('/news/{news}', [NewsController::class, 'destroy'])->name('admin.news.destroy');
+
+  // News Category Routes
+  Route::get('/news-categories', [NewsCategoryController::class, 'index'])->name('admin.news-categories.index');
+  Route::get('/news-categories/create', [NewsCategoryController::class, 'create'])->name('admin.news-categories.create');
+  Route::post('/news-categories', [NewsCategoryController::class, 'store'])->name('admin.news-categories.store');
+  Route::get('/news-categories/{category}/edit', [NewsCategoryController::class, 'edit'])->name('admin.news-categories.edit');
+  Route::put('/news-categories/{category}', [NewsCategoryController::class, 'update'])->name('admin.news-categories.update');
+  Route::delete('/news-categories/{category}', [NewsCategoryController::class, 'destroy'])->name('admin.news-categories.destroy');
 
     Route::get('/events', [EventController::class, 'adminIndex'])->name('admin.events.index');
     Route::get('/events/create', [EventController::class, 'create'])->name('admin.events.create');
@@ -374,6 +382,7 @@ Route::get('/admin/internships/{internship}/submissions', [InternshipRegistratio
 Route::post('/admin/internship/submissions/{submission}/feedback', [InternshipRegistrationController::class, 'submitFeedback'])->name('admin.internship.submission.feedback');
 
 
+Route::get('/news', [NewsController::class, 'index'])->name('news.index');
 Route::get('/news/{slug}', [NewsController::class, 'show'])->name('news.show');
 Route::get('/news/image/{news}', [NewsController::class, 'showImage'])->name('news.image');
 
