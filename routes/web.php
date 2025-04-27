@@ -25,6 +25,7 @@ use App\Http\Controllers\CourseDetailsController;
 use App\Http\Controllers\StudentClassController;
 use App\Http\Controllers\TrainerController;
 use App\Http\Controllers\InternshipRegistrationController;
+use App\Http\Controllers\NewsController;
 
 Route::get('/student/quiz-sets', [StudentQuizController::class, 'index'])->name('student.quiz_sets');
 Route::get('/student/quiz-sets/{id}/take', [StudentQuizController::class, 'takeQuiz'])->name('student.quiz_sets.take');
@@ -103,16 +104,8 @@ Route::get('/events', function () {
     return view('website.events');
 })->name('website.events');
 
-Route::get('/news', function () {
-    if (Auth::user() && Auth::user()->role == 1) {
-        return to_route('admin.dash');
-    } elseif (Auth::user() && Auth::user()->role == 2) {
-        return to_route('trainer.dashboard');
-    } elseif (Auth::user() && Auth::user()->role == 3) {
-        return to_route('student.dashboard');
-    }
-    return view('website.news');
-})->name('website.news');
+
+Route::get('/news', [NewsController::class, 'index'])->name('news.index');
 
 Route::get('/webinar', function () {
     if (Auth::user() && Auth::user()->role == 1) {
@@ -253,7 +246,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/leave/apply', [AttendanceController::class, 'applyLeave'])->name('leave.apply');
     Route::post('/leave/{leave}/approve', [AttendanceController::class, 'approveLeave'])->name('leave.approve');
 
-    Route::get('/index-create-cd',[CourseDetailsController::class,'index'])->name('course-details-index');
+    Route::get('/index-create-cd', [CourseDetailsController::class, 'index'])->name('course-details-index');
 });
 
 Route::get('/api/batches', [BatchController::class, 'getBatchesByCourse'])->name('api.batches');
@@ -281,6 +274,15 @@ Route::prefix('admin')->group(function () {
     Route::get('/coding-questions/{id}/edit', [CodingQuestionController::class, 'edit'])->name('admin.coding_questions.edit');
     Route::put('/coding-questions/{id}', [CodingQuestionController::class, 'update'])->name('admin.coding_questions.update');
     Route::delete('/coding-questions/{id}', [CodingQuestionController::class, 'destroy'])->name('admin.coding_questions.destroy');
+
+    //news for admin
+
+    Route::get('news', [NewsController::class, 'adminIndex'])->name('admin.news.index');
+    Route::get('news/create', [NewsController::class, 'create'])->name('admin.news.create');
+    Route::post('news', [NewsController::class, 'store'])->name('admin.news.store');
+    Route::get('news/{news}/edit', [NewsController::class, 'edit'])->name('admin.news.edit');
+    Route::put('news/{news}', [NewsController::class, 'update'])->name('admin.news.update');
+    Route::delete('news/{news}', [NewsController::class, 'destroy'])->name('admin.news.destroy');
 });
 Route::get('/coding-questions/delete-solution', [CodingQuestionController::class, 'deleteSolution'])->name('admin.coding_questions.delete_solution');
 // Student routes for coding tests
@@ -353,3 +355,7 @@ Route::post('/student/internship/content/{contentId}/submit', [InternshipControl
 Route::get('get-internship-list', [InternshipController::class, 'getInternshipList'])->name('get-internship-list');
 Route::get('/admin/internships/{internship}/submissions', [InternshipRegistrationController::class, 'submissions'])->name('admin.internship.submissions');
 Route::post('/admin/internship/submissions/{submission}/feedback', [InternshipRegistrationController::class, 'submitFeedback'])->name('admin.internship.submission.feedback');
+
+
+Route::get('/news/{slug}', [NewsController::class, 'show'])->name('news.show');
+Route::get('/news/image/{news}', [NewsController::class, 'showImage'])->name('news.image');
