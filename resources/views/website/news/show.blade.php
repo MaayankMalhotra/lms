@@ -32,7 +32,7 @@
                 <div class="flex flex-wrap items-center mb-6 space-x-4">
                     <span
                         class="inline-flex items-center bg-yellow-400 text-gray-800 px-3 py-1 rounded-full text-sm font-medium">
-                        <i class="fas fa-folder mr-1"></i> {{ $news->category }}
+                        <i class="fas fa-folder mr-1"></i> {{ $news->category->name    ?? 'Uncategorized' }}
                     </span>
                     <span class="text-sm text-gray-600 flex items-center">
                         <i class="fas fa-calendar-alt mr-1"></i> {{ $news->published_at->format('M d, Y') }}

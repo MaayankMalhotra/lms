@@ -51,7 +51,7 @@
                                     @endif
                                 </td>
                                 <td class="p-4">{{ Str::limit($item->title, 50) }}</td>
-                                <td class="p-4">{{ $item->category }}</td>
+                                <td class="p-4">{{ $item->category->name ?? 'Uncategorized' }}</td>
                                 <td class="p-4">{{ $item->published_at->format('M d, Y') }}</td>
                                 <td class="p-4 flex space-x-2">
                                     <a href="{{ route('admin.news.edit', $item) }}"
@@ -81,8 +81,7 @@
                     </tbody>
                 </table>
             </div>
+        
         </div>
-
- 
     </div>
 @endsection

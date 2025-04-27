@@ -9,27 +9,33 @@ use Illuminate\Support\Str;
 class News extends Model
 {
     use HasFactory;
-    protected $table = 'news';
-    protected $fillable = ['title', 'description', 'image', 'category', 'slug', 'published_at', 'created_by'];
 
-    protected $dates = ['published_at'];
+    protected $fillable = [
+        'title', 'slug', 'description', 'image', 'category_id', 'published_at', 'created_by'
+    ];
+
+    protected $casts = [
+        'published_at' => 'date',
+    ];
 
     public function user()
     {
         return $this->belongsTo(User::class, 'created_by');
     }
 
+    public function category()
+    {
+        return $this->belongsTo(NewsCategory::class, 'category_id');
+    }
+
     public function setTitleAttribute($value)
     {
         $this->attributes['title'] = $value;
-        $this->attributes['slug'] = Str::slug($value);
+        $this->attributes['slug'] = Str::slug($value) . '-' . uniqid();
     }
 
     public function getImageUrlAttribute()
     {
-        if (Str::startsWith($this->image, 'data:image')) {
-            return $this->image; // Return base64 directly
-        }
-        return route('news.image', $this->id); // Serve image via controller
+        return $this->image ? $this->image : asset('images/placeholder.jpg');
     }
 }
