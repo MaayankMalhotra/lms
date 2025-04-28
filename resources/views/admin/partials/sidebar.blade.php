@@ -128,43 +128,43 @@
             </li>
         @endif
         @if (auth()->user()->role == 1)
-            <!-- Internship Management -->
-            <li x-data="{ isOpen: {{ request()->routeIs('admin.internship.*') ? 'true' : 'false' }} }">
-                <a href="javascript:void(0)" @click="isOpen = !isOpen"
-                    class="flex items-center justify-between p-3 {{ request()->routeIs('admin.internship.*') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
-                    <span class="flex items-center">
-                        <i class="fas fa-briefcase mr-3 text-lg"></i> Internship Management
-                    </span>
-                    <i class="fas fa-chevron-down text-sm transition-transform" :class="{ 'rotate-180': isOpen }"></i>
-                </a>
-                <ul x-show="isOpen" x-collapse class="ml-6 mt-2 space-y-2 border-l-2 border-gray-300 pl-4">
-                    <li>
-                        <a href="{{ route('admin.internship.add') }}"
-                            class="flex items-center p-2 text-sm {{ request()->routeIs('admin.internship.add') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
-                            <i class="fas fa-plus-circle mr-2"></i> Add Internship
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('admin.internship.list') }}"
-                            class="flex items-center p-2 text-sm {{ request()->routeIs('admin.internship.list') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
-                            <i class="fas fa-list mr-2"></i> View Internships
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('admin.internship.content.create') }}"
-                            class="flex items-center p-2 text-sm {{ request()->routeIs('admin.internship.content.create') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
-                            <i class="fas fa-list mr-2"></i> Create Internships Content
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('get-internship-list') }}"
-                            class="flex items-center p-2 text-sm {{ request()->routeIs('get-internship-list') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
-                            <i class="fas fa-list mr-2"></i> Get Internships List
-                        </a>
-                    </li>
-                </ul>
-            </li>
-        @endif
+        <!-- Internship Management -->
+        <li x-data="{ isOpen: {{ request()->routeIs('admin.internship.*') ? 'true' : 'false' }} }">
+            <a href="javascript:void(0)" @click="isOpen = !isOpen"
+               class="flex items-center justify-between p-3 {{ request()->routeIs('admin.internship.*') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
+                <span class="flex items-center">
+                    <i class="fas fa-briefcase mr-3 text-lg"></i> Internship Management
+                </span>
+                <i class="fas fa-chevron-down text-sm transition-transform" :class="{ 'rotate-180': isOpen }"></i>
+            </a>
+            <ul x-show="isOpen" x-collapse class="ml-6 mt-2 space-y-2 border-l-2 border-gray-300 pl-4">
+                <li>
+                    <a href="{{ route('admin.internship.add') }}"
+                       class="flex items-center p-2 text-sm {{ request()->routeIs('admin.internship.add') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
+                        <i class="fas fa-plus mr-2"></i> Add Internship
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.internship.list') }}"
+                       class="flex items-center p-2 text-sm {{ request()->routeIs('admin.internship.list') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
+                        <i class="fas fa-table-list mr-2"></i> View Internships
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.internship.content.create') }}"
+                       class="flex items-center p-2 text-sm {{ request()->routeIs('admin.internship.content.create') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
+                        <i class="fas fa-file-circle-plus mr-2"></i> Create Internship Content
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('get-internship-list') }}"
+                       class="flex items-center p-2 text-sm {{ request()->routeIs('get-internship-list') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
+                        <i class="fas fa-clipboard-list mr-2"></i> Get Internship List
+                    </a>
+                </li>
+            </ul>
+        </li>
+    @endif
         @if (auth()->user()->role == 1)
             <!-- enrollment Management -->
             <li x-data="{ isOpen: {{ request()->routeIs('admin.enrollment.*') ? 'true' : 'false' }} }">
