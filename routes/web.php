@@ -390,4 +390,3 @@ Route::get('/events', [EventController::class, 'index'])->name('events.index');
 Route::get('/events/{slug}', [EventController::class, 'show'])->name('events.show');
 Route::post('/events/{slug}/enroll', [EventController::class, 'enroll'])->name('events.enroll');
 
-Route::get('/stream/{path}', [App\Http\Controllers\FileController::class, 'stream'])->name('file.stream')->where('path', '.*');
