@@ -206,7 +206,7 @@ public function studentInternshipContent($enrollmentId)
                 $content->submission_file = $submission ? $submission->submission_file : null;
                 return $content;
             });
-        return view('student.internship-content', compact('enrollment', 'contents'));
+        return view('student.internship.internship-content', compact('enrollment', 'contents'));
     }
 
     public function studentInternshipSubmit(Request $request, $contentId)
