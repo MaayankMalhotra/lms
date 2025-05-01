@@ -9,7 +9,7 @@ class InternshipEnrollment extends Model
 {
     protected $fillable = [
         'user_id', 'internship_id', 'email', 'name', 'phone',
-        'payment_id', 'amount', 'status'
+        'payment_id', 'amount', 'status','batch_id', 'payment_status',
     ];
 
     public function user()
@@ -26,4 +26,10 @@ class InternshipEnrollment extends Model
     {
         return $this->hasMany(InternshipSubmission::class);
     }
+
+    public function batches()
+{
+    return $this->belongsToMany(InternshipBatch::class, 'internship_batch_student');
+}
+
 }

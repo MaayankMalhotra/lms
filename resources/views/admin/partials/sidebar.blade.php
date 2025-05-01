@@ -162,6 +162,33 @@
                         <i class="fas fa-clipboard-list mr-2"></i> Get Internship List
                     </a>
                 </li>
+
+                <li>
+                    <a href="{{ route('view-batch-enrollment') }}"
+                       class="flex items-center p-2 text-sm {{ request()->routeIs('view-batch-enrollment') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
+                        <i class="fas fa-clipboard-list mr-2"></i> Assign Students to Batch
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ route('admin.internship.class.create') }}"
+                       class="flex items-center p-2 text-sm {{ request()->routeIs('admin.internship.class.create') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
+                        <i class="fas fa-clipboard-list mr-2"></i> Create Internship Class
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ route('admin.internship.class.index') }}"
+                       class="flex items-center p-2 text-sm {{ request()->routeIs('admin.internship.class.index') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
+                        <i class="fas fa-clipboard-list mr-2"></i> View Internship Classes
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.internship-recording-courses.index') }}"
+                       class="flex items-center p-2 text-sm {{ request()->routeIs('admin.internship-recording-courses.index') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
+                        <i class="fas fa-clipboard-list mr-2"></i> View Internship Recording  Courses
+                    </a>
+                </li>
             </ul>
         </li>
     @endif
