@@ -439,3 +439,7 @@ Route::post('/admin/internship-classes', [AdminInternshipClassCreateController::
 
 // routes/web.php
 Route::post('/store-batch-data', [BatchController::class, 'storeBatchData']);
+
+Route::get('/register-website', function () {
+    return view('website.register-page');
+})->name('website-register-page');
