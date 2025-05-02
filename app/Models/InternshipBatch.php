@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class InternshipBatch extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'internship_id', 'batch_name', 'start_time', 'end_time', 'class_schedule',
+    ];
+    
 
     public function students()
 {
@@ -17,5 +21,10 @@ class InternshipBatch extends Model
 public function classes()
 {
     return $this->hasMany(InternshipClass::class,'batch_id');
+}
+
+public function internship()
+{
+    return $this->belongsTo(Internship::class, 'internship_id');
 }
 }

@@ -85,4 +85,6 @@ class InternshipRecordingController extends Controller
     $recordings = InternshipRecording::where('recording_course_id', $courseId)->get();
     return response()->json($recordings);
 }
+
+
 }

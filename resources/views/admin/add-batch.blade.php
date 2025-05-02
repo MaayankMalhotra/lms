@@ -1,3 +1,4 @@
+
 @extends('admin.layouts.app')
 
 @section('content')
@@ -12,7 +13,7 @@
                 <p class="text-gray-500 text-sm sm:text-base">Fill in the details to add a new batch program</p>
             </div>
 
-            <form action="{{ route('admin.batches.store') }}" method="POST" enctype="multipart/form-data">
+            <form id="batchForm" action="{{ route('admin.batches.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 
                 <div class="space-y-6">
@@ -108,7 +109,6 @@
                                         class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all">
                                     <option value="SAT - SUN" {{ old('days') == 'SAT - SUN' ? 'selected' : '' }}>SAT - SUN</option>
                                     <option value="MON - FRI" {{ old('days') == 'MON - FRI' ? 'selected' : '' }}>MON - FRI</option>
-                                    <!-- Add more options as needed -->
                                 </select>
                                 @error('days')
                                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -148,7 +148,7 @@
                                 <label class="block text-sm font-medium text-gray-700 mb-2">
                                     <i class="fas fa-rupee-sign mr-2 text-blue-400"></i>Price (₹)
                                 </label>
-                                <input type="number" name="price" required 
+                                <input type="number" name="price" id="price" required 
                                        class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
                                        placeholder="e.g., 40014"
                                        value="{{ old('price') }}">
@@ -156,6 +156,29 @@
                                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
+                        </div>
+
+                        <!-- EMI Options -->
+                        <div class="mt-6">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                <input type="checkbox" id="emiAvailable" name="emi_available" class="mr-2" {{ old('emi_available') ? 'checked' : '' }}>
+                                <i class="fas fa-money-check-alt mr-2 text-blue-400"></i>Allow EMI Payments
+                            </label>
+                            <div id="emiPlans" class="mt-2 {{ old('emi_available') ? '' : 'hidden' }}">
+                                <h3 class="text-lg font-semibold mb-2 text-gray-700">EMI Plans</h3>
+                                <div id="emiPlansContainer">
+                                    <div class="emi-plan flex items-center space-x-4 mb-2">
+                                        <input type="number" name="emi_plans[0][installments]" class="w-1/4 px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all" placeholder="Installments (e.g., 3)" min="2" required>
+                                        <input type="number" name="emi_plans[0][amount]" class="w-1/4 px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all" placeholder="Amount per Installment" step="0.01" readonly>
+                                        <input type="number" name="emi_plans[0][interval_months]" class="w-1/4 px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all" placeholder="Interval (months)" min="1" required>
+                                        <button type="button" class="remove-plan text-red-600 hover:text-red-800">Remove</button>
+                                    </div>
+                                </div>
+                                <button type="button" id="addEmiPlan" class="bg-blue-500 text-white px-4 py-2 rounded-lg mt-2 hover:bg-blue-600 transition">Add EMI Plan</button>
+                            </div>
+                            @error('emi_plans')
+                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
                     </div>
 
@@ -222,4 +245,82 @@
         </div>
     </div>
 </div>
+
+<script>
+    // Toggle EMI Plans visibility
+    const emiAvailableCheckbox = document.getElementById('emiAvailable');
+    const emiPlansSection = document.getElementById('emiPlans');
+    emiAvailableCheckbox.addEventListener('change', function() {
+        emiPlansSection.classList.toggle('hidden', !this.checked);
+    });
+
+    // Add new EMI plan
+    document.getElementById('addEmiPlan').addEventListener('click', function() {
+        const container = document.getElementById('emiPlansContainer');
+        const index = container.children.length;
+        const planDiv = document.createElement('div');
+        planDiv.className = 'emi-plan flex items-center space-x-4 mb-2';
+        planDiv.innerHTML = `
+            <input type="number" name="emi_plans[${index}][installments]" class="w-1/4 px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all" placeholder="Installments (e.g., 3)" min="2" required>
+            <input type="number" name="emi_plans[${index}][amount]" class="w-1/4 px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all" placeholder="Amount per Installment" step="0.01" readonly>
+            <input type="number" name="emi_plans[${index}][interval_months]" class="w-1/4 px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all" placeholder="Interval (months)" min="1" required>
+            <button type="button" class="remove-plan text-red-600 hover:text-red-800">Remove</button>
+        `;
+        container.appendChild(planDiv);
+    });
+
+    // Remove EMI plan
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('remove-plan')) {
+            e.target.parentElement.remove();
+        }
+    });
+
+    // Update EMI amounts when price changes
+    document.getElementById('price').addEventListener('input', function() {
+        const price = parseFloat(this.value) || 0;
+        document.querySelectorAll('.emi-plan').forEach(plan => {
+            const installmentsInput = plan.querySelector('input[name$="[installments]"]');
+            const amountInput = plan.querySelector('input[name$="[amount]"]');
+            const installments = parseInt(installmentsInput.value) || 1;
+            amountInput.value = (price / installments).toFixed(2);
+        });
+    });
+
+    // Update EMI amount when installments change
+    document.addEventListener('input', function(e) {
+        if (e.target.name && e.target.name.includes('emi_plans') && e.target.name.includes('[installments]')) {
+            const price = parseFloat(document.getElementById('price').value) || 0;
+            const installments = parseInt(e.target.value) || 1;
+            const amountInput = e.target.parentElement.querySelector('input[name$="[amount]"]');
+            amountInput.value = (price / installments).toFixed(2);
+        }
+    });
+
+    // Validate EMI plans on form submission
+    document.getElementById('batchForm').addEventListener('submit', function(e) {
+        if (emiAvailableCheckbox.checked) {
+            const emiPlans = document.querySelectorAll('.emi-plan');
+            if (emiPlans.length === 0) {
+                e.preventDefault();
+                alert('Please add at least one EMI plan.');
+                return;
+            }
+            let hasErrors = false;
+            emiPlans.forEach(plan => {
+                const installmentsInput = plan.querySelector('input[name$="[installments]"]');
+                const amountInput = plan.querySelector('input[name$="[amount]"]');
+                const intervalMonthsInput = plan.querySelector('input[name$="[interval_months]"]');
+                if (!installmentsInput.value || !amountInput.value || !intervalMonthsInput.value || 
+                    parseInt(installmentsInput.value) < 2 || parseInt(intervalMonthsInput.value) < 1) {
+                    hasErrors = true;
+                }
+            });
+            if (hasErrors) {
+                e.preventDefault();
+                alert('Please fill in all EMI plan details correctly (minimum 2 installments, minimum 1 month interval).');
+            }
+        }
+    });
+</script>
 @endsection

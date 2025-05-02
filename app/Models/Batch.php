@@ -9,7 +9,14 @@ class Batch extends Model
     protected $fillable = [
         'start_date', 'status', 'days', 'duration', 'time_slot', 
         'price', 'discount_info', 'slots_available', 'slots_filled', 
-        'course_id', 'teacher_id','batch_id'
+        'course_id', 'teacher_id','emi_available',
+        'emi_plans',
+    ];
+
+    protected $casts = [
+        'emi_available' => 'boolean',
+        'emi_plans' => 'array', // Cast emi_plans as array (stored as JSON in database)
+        'start_date' => 'date',
     ];
     protected $dates = ['start_date'];
 

@@ -557,23 +557,44 @@
             return `${days}d ${hours}h ${minutes}m ${seconds}s`;
         }
 
-        // Handle Enroll Now button click
-        document.getElementById("batch-enroll-button").addEventListener("click", function() {
-            if (window.selectedBatch) {
-                const batch = window.selectedBatch;
-                const params = new URLSearchParams({
-                    batch_id: batch.id,
-                    date: batch.date,
-                    price: batch.price,
-                    slotsAvailable: batch.slotsAvailable,
-                    slotsFilled: batch.slotsFilled,
-                    mode: batch.mode,
-                    status: batch.status,
-                    startDate: batch.startDate,
-                });
-                window.location.href = `/register?${params.toString()}`;
+       // Handle Enroll Now button click
+document.getElementById("batch-enroll-button").addEventListener("click", async function() {
+    if (window.selectedBatch) {
+        const batch = window.selectedBatch;
+        console.log('Selected batch:', batch); // Debug log
+        
+        try {
+            const response = await fetch('/store-batch-data', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({
+                    batch_id: batch.id
+                })
+            });
+
+            console.log('Response status:', response.status); // Debug log
+            
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error('Server error:', errorData);
+                throw new Error(errorData.message || 'Failed to store batch data');
             }
-        });
+
+            const data = await response.json();
+            console.log('Success:', data); // Debug log
+            
+            window.location.href = '/register';
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Failed to proceed to registration: ' + error.message);
+        }
+    } else {
+        alert('Please select a batch first');
+    }
+});
 
         // Update countdown timer every second
         setInterval(() => {

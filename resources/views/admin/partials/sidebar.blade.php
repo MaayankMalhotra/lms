@@ -14,93 +14,93 @@
 <!-- Navigation -->
 <nav class="bg-white shadow-lg rounded-tl-lg rounded-tr-lg p-4 flex-grow overflow-y-auto scrollbar-hide">
     <ul class="list-none p-0 m-0 space-y-2 !text-sm">
-        <!-- Dashboard (Sabko dikhega) -->
+        <!-- Dashboard -->
         <li>
             <a href="{{ route('admin.dash') }}"
                 class="flex items-center p-3 {{ request()->routeIs('admin.dash') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
-                <i class="fas fa-home mr-3 text-lg"></i> Dashboard Panel
+                <i class="fas fa-home mr-3 text-lg"></i> Dashboard
             </a>
         </li>
+
         @if (auth()->user()->role == 3)
-            <!-- Quiz Management Students -->
+            <!-- Student Quiz -->
             <li>
                 <a href="{{ route('student.quiz_sets') }}"
                     class="flex items-center p-3 {{ request()->routeIs('student.quiz_sets') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
-                    <i class="fas fa-question-circle mr-3 text-lg"></i> Quiz Management
+                    <i class="fas fa-question-circle mr-3 text-lg"></i> Quizzes
                 </a>
                 <a href="{{ route('student.coding_tests.index') }}"
                     class="flex items-center p-3 {{ request()->routeIs('student.coding_tests.index') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
-                    <i class="fas fa-question-circle mr-3 text-lg"></i> Coding Module
+                    <i class="fas fa-code mr-3 text-lg"></i> Coding Tests
                 </a>
             </li>
         @endif
+
         @if (auth()->user()->role == 2 || auth()->user()->role == 3)
-            <!-- Quiz Management Students -->
+            <!-- Chat -->
             <li>
                 <a href="{{ route('chat.index') }}"
                     class="flex items-center p-3 {{ request()->routeIs('chat.index') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
-                    <i class="fas fa-question-circle mr-3 text-lg"></i> Chat Management
+                    <i class="fas fa-comments mr-3 text-lg"></i> Chat
                 </a>
-
             </li>
         @endif
+
         @if (auth()->user()->role == 2)
-            <!-- Quiz Management Students -->
+            <!-- Trainer Batches -->
             <li>
                 <a href="{{ route('get-trainer-course') }}"
                     class="flex items-center p-3 {{ request()->routeIs('get-trainer-course') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
-                    <i class="fas fa-question-circle mr-3 text-lg"></i> My Batches
+                    <i class="fas fa-users mr-3 text-lg"></i> My Batches
                 </a>
-
             </li>
         @endif
+
         @if (auth()->user()->role == 3)
+            <!-- Student Classes -->
             <li>
                 <a href="{{ route('student.classes.index') }}"
                     class="flex items-center p-3 {{ request()->routeIs('student.classes.index') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
-                    <i class="fas fa-question-circle mr-3 text-lg"></i> My Classes
+                    <i class="fas fa-chalkboard mr-3 text-lg"></i> My Classes
                 </a>
-
             </li>
-
+            <!-- Attendance -->
             <li>
                 <a href="{{ route('student.attendance') }}"
                     class="flex items-center p-3 {{ request()->routeIs('student.attendance') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
-                    <i class="fas fa-question-circle mr-3 text-lg"></i> Attendance
+                    <i class="fas fa-check-square mr-3 text-lg"></i> Attendance
                 </a>
-
             </li>
+            <!-- Recordings -->
             <li>
                 <a href="{{ route('recordings') }}"
                     class="flex items-center p-3 {{ request()->routeIs('recordings') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
-                    <i class="fas fa-question-circle mr-3 text-lg"></i> Recordings
+                    <i class="fas fa-video mr-3 text-lg"></i> Recordings
                 </a>
-
             </li>
-
+            <!-- Assignments -->
             <li>
                 <a href="{{ route('assignment') }}"
                     class="flex items-center p-3 {{ request()->routeIs('assignment') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
-                    <i class="fas fa-question-circle mr-3 text-lg"></i> My Assignments
+                    <i class="fas fa-tasks mr-3 text-lg"></i> Assignments
                 </a>
-
             </li>
+            <!-- Internships -->
             <li>
                 <a href="{{ route('student.internships.index') }}"
                     class="flex items-center p-3 {{ request()->routeIs('student.internships.index') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
-                    <i class="fas fa-question-circle mr-3 text-lg"></i> My Internships
+                    <i class="fas fa-briefcase mr-3 text-lg"></i> Internships
                 </a>
-
             </li>
         @endif
-        <!-- Admin ke liye baaki sections (Sirf role == 1 ko dikhega) -->
+
         @if (auth()->user()->role == 1)
-            <!-- Course Management -->
+            <!-- Courses -->
             <li x-data="{ isOpen: {{ request()->routeIs('admin.course.*') ? 'true' : 'false' }} }">
                 <a href="javascript:void(0)" @click="isOpen = !isOpen"
                     class="flex items-center justify-between p-3 {{ request()->routeIs('admin.course.*') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
                     <span class="flex items-center">
-                        <i class="fas fa-book mr-3 text-lg"></i> Course Management
+                        <i class="fas fa-book mr-3 text-lg"></i> Courses
                     </span>
                     <i class="fas fa-chevron-down text-sm transition-transform" :class="{ 'rotate-180': isOpen }"></i>
                 </a>
@@ -117,7 +117,6 @@
                             <i class="fas fa-list mr-2"></i> View Courses
                         </a>
                     </li>
-
                     <li>
                         <a href="{{ route('course-details-index') }}"
                             class="flex items-center p-2 text-sm {{ request()->routeIs('course-details-index') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
@@ -126,122 +125,120 @@
                     </li>
                 </ul>
             </li>
-        @endif
-        @if (auth()->user()->role == 1)
-        <!-- Internship Management -->
-        <li x-data="{ isOpen: {{ request()->routeIs('admin.internship.*') ? 'true' : 'false' }} }">
-            <a href="javascript:void(0)" @click="isOpen = !isOpen"
-               class="flex items-center justify-between p-3 {{ request()->routeIs('admin.internship.*') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
-                <span class="flex items-center">
-                    <i class="fas fa-briefcase mr-3 text-lg"></i> Internship Management
-                </span>
-                <i class="fas fa-chevron-down text-sm transition-transform" :class="{ 'rotate-180': isOpen }"></i>
-            </a>
-            <ul x-show="isOpen" x-collapse class="ml-6 mt-2 space-y-2 border-l-2 border-gray-300 pl-4">
-                <li>
-                    <a href="{{ route('admin.internship.add') }}"
-                       class="flex items-center p-2 text-sm {{ request()->routeIs('admin.internship.add') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
-                        <i class="fas fa-plus mr-2"></i> Add Internship
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('admin.internship.list') }}"
-                       class="flex items-center p-2 text-sm {{ request()->routeIs('admin.internship.list') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
-                        <i class="fas fa-table-list mr-2"></i> View Internships
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('admin.internship.content.create') }}"
-                       class="flex items-center p-2 text-sm {{ request()->routeIs('admin.internship.content.create') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
-                        <i class="fas fa-file-circle-plus mr-2"></i> Create Internship Content
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('get-internship-list') }}"
-                       class="flex items-center p-2 text-sm {{ request()->routeIs('get-internship-list') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
-                        <i class="fas fa-clipboard-list mr-2"></i> Get Internship List
-                    </a>
-                </li>
-
-                <li>
-                    <a href="{{ route('view-batch-enrollment') }}"
-                       class="flex items-center p-2 text-sm {{ request()->routeIs('view-batch-enrollment') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
-                        <i class="fas fa-clipboard-list mr-2"></i> Assign Students to Batch
-                    </a>
-                </li>
-
-                <li>
-                    <a href="{{ route('admin.internship.class.create') }}"
-                       class="flex items-center p-2 text-sm {{ request()->routeIs('admin.internship.class.create') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
-                        <i class="fas fa-clipboard-list mr-2"></i> Create Internship Class
-                    </a>
-                </li>
-
-                <li>
-                    <a href="{{ route('admin.internship.class.index') }}"
-                       class="flex items-center p-2 text-sm {{ request()->routeIs('admin.internship.class.index') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
-                        <i class="fas fa-clipboard-list mr-2"></i> View Internship Classes
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('admin.internship-recording-courses.index') }}"
-                       class="flex items-center p-2 text-sm {{ request()->routeIs('admin.internship-recording-courses.index') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
-                        <i class="fas fa-clipboard-list mr-2"></i> View Internship Recording  Courses
-                    </a>
-                </li>
-            </ul>
-        </li>
-    @endif
-        @if (auth()->user()->role == 1)
-            <!-- enrollment Management -->
-            <li x-data="{ isOpen: {{ request()->routeIs('admin.enrollment.*') ? 'true' : 'false' }} }">
+            <!-- Internships -->
+            <li x-data="{ isOpen: {{ request()->routeIs('admin.internship.*') || request()->routeIs('admin.internship-batches.*') || request()->routeIs('admin.internship-recording-courses.*') || request()->routeIs('admin.internship.class.*') ? 'true' : 'false' }} }">
                 <a href="javascript:void(0)" @click="isOpen = !isOpen"
-                    class="flex items-center justify-between p-3 {{ request()->routeIs('admin.enrollment.*') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
+                    class="flex items-center justify-between p-3 {{ request()->routeIs('admin.internship.*') || request()->routeIs('admin.internship-batches.*') || request()->routeIs('admin.internship-recording-courses.*') || request()->routeIs('admin.internship.class.*') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
                     <span class="flex items-center">
-                        <i class="fas fa-briefcase mr-3 text-lg"></i> Enrollment Management
+                        <i class="fas fa-briefcase mr-3 text-lg"></i> Internships
                     </span>
                     <i class="fas fa-chevron-down text-sm transition-transform" :class="{ 'rotate-180': isOpen }"></i>
                 </a>
                 <ul x-show="isOpen" x-collapse class="ml-6 mt-2 space-y-2 border-l-2 border-gray-300 pl-4">
-
+                    <li>
+                        <a href="{{ route('admin.internship.add') }}"
+                            class="flex items-center p-2 text-sm {{ request()->routeIs('admin.internship.add') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
+                            <i class="fas fa-plus mr-2"></i> Add Internship
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.internship.list') }}"
+                            class="flex items-center p-2 text-sm {{ request()->routeIs('admin.internship.list') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
+                            <i class="fas fa-table-list mr-2"></i> View Internships
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.internship.content.create') }}"
+                            class="flex items-center p-2 text-sm {{ request()->routeIs('admin.internship.content.create') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
+                            <i class="fas fa-file-circle-plus mr-2"></i> Add Content
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('get-internship-list') }}"
+                            class="flex items-center p-2 text-sm {{ request()->routeIs('get-internship-list') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
+                            <i class="fas fa-clipboard-list mr-2"></i> Internship List
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.internship-batches.create') }}"
+                            class="flex items-center p-2 text-sm {{ request()->routeIs('admin.internship-batches.create') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
+                            <i class="fas fa-users mr-2"></i> Add Batch
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.internship-batches.index') }}"
+                            class="flex items-center p-2 text-sm {{ request()->routeIs('admin.internship-batches.index') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
+                            <i class="fas fa-users mr-2"></i> View Batches
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.internship.class.create') }}"
+                            class="flex items-center p-2 text-sm {{ request()->routeIs('admin.internship.class.create') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
+                            <i class="fas fa-chalkboard mr-2"></i> Add Class
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.internship.class.index') }}"
+                            class="flex items-center p-2 text-sm {{ request()->routeIs('admin.internship.class.index') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
+                            <i class="fas fa-chalkboard mr-2"></i> View Classes
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.internship-recording-courses.index') }}"
+                            class="flex items-center p-2 text-sm {{ request()->routeIs('admin.internship-recording-courses.index') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
+                            <i class="fas fa-video mr-2"></i> View Recordings
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.internship-enrollment-view') }}"
+                            class="flex items-center p-2 text-sm {{ request()->routeIs('admin.internship-enrollment-view') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
+                            <i class="fas fa-users mr-2"></i> View Enrollments
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <!-- Enrollments -->
+            <li x-data="{ isOpen: {{ request()->routeIs('admin.enrollment.*') ? 'true' : 'false' }} }">
+                <a href="javascript:void(0)" @click="isOpen = !isOpen"
+                    class="flex items-center justify-between p-3 {{ request()->routeIs('admin.enrollment.*') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
+                    <span class="flex items-center">
+                        <i class="fas fa-user-plus mr-3 text-lg"></i> Enrollments
+                    </span>
+                    <i class="fas fa-chevron-down text-sm transition-transform" :class="{ 'rotate-180': isOpen }"></i>
+                </a>
+                <ul x-show="isOpen" x-collapse class="ml-6 mt-2 space-y-2 border-l-2 border-gray-300 pl-4">
                     <li>
                         <a href="{{ route('admin.enrollment.index') }}"
-                            class="flex items-center p-2 text-sm {{ request()->routeIs('admin.enrollment.list') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
+                            class="flex items-center p-2 text-sm {{ request()->routeIs('admin.enrollment.index') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
                             <i class="fas fa-list mr-2"></i> View Enrollments
                         </a>
                     </li>
                 </ul>
             </li>
-        @endif
-        @if (auth()->user()->role == 1 || auth()->user()->role == 2)
             <!-- Coding Module -->
-            <li x-data="{ isOpen: {{ request()->routeIs('admin.enrollment.*') ? 'true' : 'false' }} }">
+            <li x-data="{ isOpen: {{ request()->routeIs('admin.coding_questions.*') ? 'true' : 'false' }} }">
                 <a href="javascript:void(0)" @click="isOpen = !isOpen"
-                    class="flex items-center justify-between p-3 {{ request()->routeIs('admin.enrollment.*') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
+                    class="flex items-center justify-between p-3 {{ request()->routeIs('admin.coding_questions.*') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
                     <span class="flex items-center">
-                        <i class="fas fa-briefcase mr-3 text-lg"></i> Coding Module
+                        <i class="fas fa-code mr-3 text-lg"></i> Coding Module
                     </span>
                     <i class="fas fa-chevron-down text-sm transition-transform" :class="{ 'rotate-180': isOpen }"></i>
                 </a>
                 <ul x-show="isOpen" x-collapse class="ml-6 mt-2 space-y-2 border-l-2 border-gray-300 pl-4">
-
                     <li>
                         <a href="{{ route('admin.coding_questions.index') }}"
                             class="flex items-center p-2 text-sm {{ request()->routeIs('admin.coding_questions.index') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
-                            <i class="fas fa-list mr-2"></i> Coding Module
+                            <i class="fas fa-list mr-2"></i> View Questions
                         </a>
                     </li>
                 </ul>
             </li>
-        @endif
-
-        @if (auth()->user()->role == 1)
-            <!-- Batch Management -->
+            <!-- Batches -->
             <li x-data="{ isOpen: {{ request()->routeIs('admin.batches.*') ? 'true' : 'false' }} }">
                 <a href="javascript:void(0)" @click="isOpen = !isOpen"
                     class="flex items-center justify-between p-3 {{ request()->routeIs('admin.batches.*') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
                     <span class="flex items-center">
-                        <i class="fas fa-briefcase mr-3 text-lg"></i> Batches Management
+                        <i class="fas fa-users mr-3 text-lg"></i> Batches
                     </span>
                     <i class="fas fa-chevron-down text-sm transition-transform" :class="{ 'rotate-180': isOpen }"></i>
                 </a>
@@ -249,25 +246,23 @@
                     <li>
                         <a href="{{ route('admin.batches.add') }}"
                             class="flex items-center p-2 text-sm {{ request()->routeIs('admin.batches.add') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
-                            <i class="fas fa-plus-circle mr-2"></i> Add Batches
+                            <i class="fas fa-plus-circle mr-2"></i> Add Batch
                         </a>
                     </li>
                     <li>
                         <a href="{{ route('admin.batches.index') }}"
-                            class="flex items-center p-2 text-sm {{ request()->routeIs('admin.batches.list') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
+                            class="flex items-center p-2 text-sm {{ request()->routeIs('admin.batches.index') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
                             <i class="fas fa-list mr-2"></i> View Batches
                         </a>
                     </li>
                 </ul>
             </li>
-        @endif
-        @if (auth()->user()->role == 1)
-            <!-- Recordings Class Management -->
+            <!-- Recordings -->
             <li x-data="{ isOpen: {{ request()->routeIs('admin.recordings.*') ? 'true' : 'false' }} }">
                 <a href="javascript:void(0)" @click="isOpen = !isOpen"
                     class="flex items-center justify-between p-3 {{ request()->routeIs('admin.recordings.*') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
                     <span class="flex items-center">
-                        <i class="fas fa-briefcase mr-3 text-lg"></i> Recordings Management
+                        <i class="fas fa-video mr-3 text-lg"></i> Recordings
                     </span>
                     <i class="fas fa-chevron-down text-sm transition-transform" :class="{ 'rotate-180': isOpen }"></i>
                 </a>
@@ -275,25 +270,23 @@
                     <li>
                         <a href="{{ route('admin.recordings.create') }}"
                             class="flex items-center p-2 text-sm {{ request()->routeIs('admin.recordings.create') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
-                            <i class="fas fa-plus-circle mr-2"></i> Add Recordings
+                            <i class="fas fa-plus-circle mr-2"></i> Add Recording
                         </a>
                     </li>
                     <li>
                         <a href="{{ route('admin.recordings.index') }}"
                             class="flex items-center p-2 text-sm {{ request()->routeIs('admin.recordings.index') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
-                            <i class="fas fa-list mr-2"></i> View Recording
+                            <i class="fas fa-list mr-2"></i> View Recordings
                         </a>
                     </li>
                 </ul>
             </li>
-        @endif
-        @if (auth()->user()->role == 1)
-            <!-- Live Class Management -->
+            <!-- Live Classes -->
             <li x-data="{ isOpen: {{ request()->routeIs('admin.live_classes.*') ? 'true' : 'false' }} }">
                 <a href="javascript:void(0)" @click="isOpen = !isOpen"
                     class="flex items-center justify-between p-3 {{ request()->routeIs('admin.live_classes.*') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
                     <span class="flex items-center">
-                        <i class="fas fa-briefcase mr-3 text-lg"></i> Live Class Management
+                        <i class="fas fa-chalkboard-teacher mr-3 text-lg"></i> Live Classes
                     </span>
                     <i class="fas fa-chevron-down text-sm transition-transform" :class="{ 'rotate-180': isOpen }"></i>
                 </a>
@@ -307,85 +300,78 @@
                     <li>
                         <a href="{{ route('admin.live_classes.index') }}"
                             class="flex items-center p-2 text-sm {{ request()->routeIs('admin.live_classes.index') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
-                            <i class="fas fa-list mr-2"></i> View Live Class
+                            <i class="fas fa-list mr-2"></i> View Live Classes
                         </a>
                     </li>
                 </ul>
             </li>
-        @endif
-
-
-        @if (auth()->user()->role == 1 || auth()->user()->role == 2)
-            <!-- Quiz Management -->
+            <!-- Quizzes -->
             <li>
                 <a href="{{ route('admin.quiz_sets') }}"
                     class="flex items-center p-3 {{ request()->routeIs('admin.quiz_sets') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
-                    <i class="fas fa-question-circle mr-3 text-lg"></i> Quiz Management
+                    <i class="fas fa-question-circle mr-3 text-lg"></i> Quizzes
                 </a>
                 <a href="{{ route('student.batch_quiz_ranking') }}"
                     class="flex items-center p-3 {{ request()->routeIs('student.batch_quiz_ranking') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
-                    <i class="fas fa-question-circle mr-3 text-lg"></i> Rankings
+                    <i class="fas fa-trophy mr-3 text-lg"></i> Rankings
                 </a>
             </li>
-        @endif
-        @if (auth()->user()->role == 1)
-            <!-- Student Management -->
+            <!-- Students -->
             <li>
                 <a href="{{ route('student-management') }}"
                     class="flex items-center p-3 {{ request()->routeIs('student-management') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
-                    <i class="fas fa-question-circle mr-3 text-lg"></i> Student Management
+                    <i class="fas fa-user-graduate mr-3 text-lg"></i> Students
                 </a>
             </li>
-            <!-- Trainer Management -->
+            <!-- Trainers -->
             <li>
                 <a href="{{ route('trainer-management') }}"
                     class="flex items-center p-3 {{ request()->routeIs('trainer-management') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
-                    <i class="fas fa-question-circle mr-3 text-lg"></i> Trainer Management
+                    <i class="fas fa-user-tie mr-3 text-lg"></i> Trainers
                 </a>
             </li>
-
-          <!-- News Management -->
-          <li x-data="{ isOpen: {{ request()->routeIs('admin.news.*') || request()->routeIs('admin.news-categories.*') ? 'true' : 'false' }} }">
-            <a href="javascript:void(0)" @click="isOpen = !isOpen"
-                class="flex items-center justify-between p-3 {{ request()->routeIs('admin.news.*') || request()->routeIs('admin.news-categories.*') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
-                <span class="flex items-center">
-                    <i class="fas fa-book mr-3 text-lg"></i> News Management
-                </span>
-                <i class="fas fa-chevron-down text-sm transition-transform" :class="{ 'rotate-180': isOpen }"></i>
-            </a>
-            <ul x-show="isOpen" x-collapse class="ml-6 mt-2 space-y-2 border-l-2 border-gray-300 pl-4">
-                <li>
-                    <a href="{{ route('admin.news-categories.create') }}"
-                        class="flex items-center p-2 text-sm {{ request()->routeIs('admin.news-categories.create') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
-                        <i class="fas fa-folder-plus mr-2"></i> Create Category
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('admin.news-categories.index') }}"
-                        class="flex items-center p-2 text-sm {{ request()->routeIs('admin.news-categories.index') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
-                        <i class="fas fa-folder mr-2"></i> View Categories
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('admin.news.create') }}"
-                        class="flex items-center p-2 text-sm {{ request()->routeIs('admin.news.create') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
-                        <i class="fas fa-plus-circle mr-2"></i> Create News
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('admin.news.index') }}"
-                        class="flex items-center p-2 text-sm {{ request()->routeIs('admin.news.index') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
-                        <i class="fas fa-list mr-2"></i> View News
-                    </a>
-                </li>
-            </ul>
-        </li>
-             <!-- Events Management -->
-             <li x-data="{ isOpen: {{ request()->routeIs('admin.events.*') || request()->routeIs('admin.event-categories.*') ? 'true' : 'false' }} }">
+            <!-- News -->
+            <li x-data="{ isOpen: {{ request()->routeIs('admin.news.*') || request()->routeIs('admin.news-categories.*') ? 'true' : 'false' }} }">
+                <a href="javascript:void(0)" @click="isOpen = !isOpen"
+                    class="flex items-center justify-between p-3 {{ request()->routeIs('admin.news.*') || request()->routeIs('admin.news-categories.*') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
+                    <span class="flex items-center">
+                        <i class="fas fa-newspaper mr-3 text-lg"></i> News
+                    </span>
+                    <i class="fas fa-chevron-down text-sm transition-transform" :class="{ 'rotate-180': isOpen }"></i>
+                </a>
+                <ul x-show="isOpen" x-collapse class="ml-6 mt-2 space-y-2 border-l-2 border-gray-300 pl-4">
+                    <li>
+                        <a href="{{ route('admin.news-categories.create') }}"
+                            class="flex items-center p-2 text-sm {{ request()->routeIs('admin.news-categories.create') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
+                            <i class="fas fa-folder-plus mr-2"></i> Add Category
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.news-categories.index') }}"
+                            class="flex items-center p-2 text-sm {{ request()->routeIs('admin.news-categories.index') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
+                            <i class="fas fa-folder mr-2"></i> View Categories
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.news.create') }}"
+                            class="flex items-center p-2 text-sm {{ request()->routeIs('admin.news.create') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
+                            <i class="fas fa-plus-circle mr-2"></i> Add News
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.news.index') }}"
+                            class="flex items-center p-2 text-sm {{ request()->routeIs('admin.news.index') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
+                            <i class="fas fa-list mr-2"></i> View News
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <!-- Events -->
+            <li x-data="{ isOpen: {{ request()->routeIs('admin.events.*') || request()->routeIs('admin.event-categories.*') ? 'true' : 'false' }} }">
                 <a href="javascript:void(0)" @click="isOpen = !isOpen"
                     class="flex items-center justify-between p-3 {{ request()->routeIs('admin.events.*') || request()->routeIs('admin.event-categories.*') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
                     <span class="flex items-center">
-                        <i class="fas fa-calendar-alt mr-3 text-lg"></i> Events Management
+                        <i class="fas fa-calendar-alt mr-3 text-lg"></i> Events
                     </span>
                     <i class="fas fa-chevron-down text-sm transition-transform" :class="{ 'rotate-180': isOpen }"></i>
                 </a>
@@ -393,7 +379,7 @@
                     <li>
                         <a href="{{ route('admin.event-categories.create') }}"
                             class="flex items-center p-2 text-sm {{ request()->routeIs('admin.event-categories.create') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
-                            <i class="fas fa-folder-plus mr-2"></i> Create Category
+                            <i class="fas fa-folder-plus mr-2"></i> Add Category
                         </a>
                     </li>
                     <li>
@@ -405,7 +391,7 @@
                     <li>
                         <a href="{{ route('admin.events.create') }}"
                             class="flex items-center p-2 text-sm {{ request()->routeIs('admin.events.create') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
-                            <i class="fas fa-plus-circle mr-2"></i> Create Event
+                            <i class="fas fa-plus-circle mr-2"></i> Add Event
                         </a>
                     </li>
                     <li>
@@ -423,19 +409,20 @@
                 </ul>
             </li>
         @endif
+
         @if (auth()->user()->role == 1 || auth()->user()->role == 2)
-            <!-- Trainer Management -->
+            <!-- Attendance -->
             <li>
                 <a href="{{ route('admin.leaves') }}"
                     class="flex items-center p-3 {{ request()->routeIs('admin.leaves') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
-                    <i class="fas fa-question-circle mr-3 text-lg"></i> Attendance Management
+                    <i class="fas fa-check-square mr-3 text-lg"></i> Attendance
                 </a>
             </li>
-
+            <!-- Assignments -->
             <li>
                 <a href="{{ route('admin.assignments.create') }}"
                     class="flex items-center p-3 {{ request()->routeIs('admin.assignments.create') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
-                    <i class="fas fa-question-circle mr-3 text-lg"></i> Assignment Management
+                    <i class="fas fa-tasks mr-3 text-lg"></i> Assignments
                 </a>
             </li>
         @endif

@@ -10,7 +10,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
-  <!-- Google Font (Inter) -->
+    <!-- Google Font (Inter) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -32,7 +32,7 @@
 <body class="bg-gray-100 text-gray-900 font-sans" style="font-family: 'Inter', sans-serif;">
     <div class="flex h-screen">
         <!-- Sidebar -->
-        <aside class="h-full bg-[#2c1d56] px-2  transition-all flex flex-col">
+        <aside class="h-full bg-[#2c1d56] px-2 w-64 transition-all flex flex-col">
             @include('admin.partials.sidebar')
         </aside>
 

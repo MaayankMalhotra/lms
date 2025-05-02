@@ -29,6 +29,7 @@ use App\Http\Controllers\InternshipRegistrationController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\EventCategoryController;
+use App\Http\Controllers\InternshipBatchController;
 use App\Http\Controllers\InternshipEnrollmentController;
 use App\Http\Controllers\InternshipRecordingController;
 use App\Http\Controllers\NewsCategoryController;
@@ -254,7 +255,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::get('/api/batches', [BatchController::class, 'getBatchesByCourse'])->name('api.batches');
-Route::get('/register', [BatchController::class, 'showr'])->name('register');
+Route::get('/register', [BatchController::class, 'show'])->name('register');
 // Route::post('/register/submit', [BatchController::class, 'submit'])->name('register.submit');
 Route::post('/register/submit', [BatchController::class, 'submitr'])->name('register.submit');
 
@@ -384,11 +385,21 @@ Route::put('/internship-recordings/{recording}', [InternshipRecordingController:
 Route::delete('/internship-recordings/{recording}', [InternshipRecordingController::class, 'destroyRecording'])->name('admin.internship-recordings.destroy');
 
 // Fetch recordings by course (for live class creation)
-Route::get('/admin/internship-recordings-by-course/{courseId}', [InternshipRecordingController::class, 'getRecordingsByCourse'])->name('admin.internship-recordings.by-course');
+Route::get('/internship-enrollment-view',[InternshipEnrollmentController::class, 'viewEnrollments'])->name('admin.internship-enrollment-view');
+Route::patch('/admin/internship-enrollments/{id}/toggle-status', [InternshipEnrollmentController::class, 'toggleEnrollmentStatus'])
+    ->name('admin.internship-enrollments.toggleStatus');
+});
+
+Route::get('admin/internship-enrollments/{id}/edit', [InternshipEnrollmentController::class, 'edit'])->name('admin.internship-enrollments.edit');
+Route::put('admin/internship-enrollments/{id}', [InternshipEnrollmentController::class, 'update'])->name('admin.internship-enrollments.update');
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::resource('internship-batches', InternshipBatchController::class)->except(['show']);
 });
 
 Route::post('/admin/quiz-sets/{quizSetId}/bulk-upload', [QuizController::class, 'bulkUpload'])
     ->name('admin.quiz_sets.bulk_upload');
+
+    Route::get('/internship-enrollment-view',[InternshipEnrollmentController::class, 'viewEnrollments'])->name('admin.internship-enrollment-view');
 
 Route::get('/get-trainer-course', [TrainerController::class, 'myCourse'])->name('get-trainer-course');
 // extra code 
@@ -426,3 +437,5 @@ Route::post('/assign-students-to-batch', [InternshipEnrollmentController::class,
 
 Route::post('/admin/internship-classes', [AdminInternshipClassCreateController::class, 'store'])->name('admin.internship-classes.store');
 
+// routes/web.php
+Route::post('/store-batch-data', [BatchController::class, 'storeBatchData']);
