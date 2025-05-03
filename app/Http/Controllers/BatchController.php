@@ -264,29 +264,30 @@ class BatchController extends Controller
     public function getBatchesByCourse(Request $request)
     {
         $courseId = $request->query('id');
-        dd($courseId);
         if (!$courseId) {
             return response()->json(['error' => 'Course ID is required'], 400);
         }
 
         $batches = Batch::where('course_id', $courseId)
             ->with('course', 'teacher')
-            ->get() 
-            ->map(function ($batch) {
-                return [
-                    'id' => $batch->id,
-                    'date' => $batch->start_date->format('d M'),
-                    'price' => $batch->price,
-                    'slotsAvailable' => $batch->slots_available,
-                    'slotsFilled' => $batch->slots_filled,
-                    'mode' => $batch->course->mode ?? 'Online',
-                    'status' => $batch->status === 'Batch Started' ? 'started' : ($batch->status === 'Upcoming' ? 'upcoming' : 'soon'),
-                    'startDate' => $batch->start_date->toISOString(),
-                    'discount_info' => $batch->discount_info,
-                    'emi_available' => $batch->emi_available,
-                    'emi_plans' => $batch->emi_plans ?? [],
-                ];
-            });
+            ->get();
+
+            dd($batches);
+            // ->map(function ($batch) {
+            //     return [
+            //         'id' => $batch->id,
+            //         'date' => $batch->start_date->format('d M'),
+            //         'price' => $batch->price,
+            //         'slotsAvailable' => $batch->slots_available,
+            //         'slotsFilled' => $batch->slots_filled,
+            //         'mode' => $batch->course->mode ?? 'Online',
+            //         'status' => $batch->status === 'Batch Started' ? 'started' : ($batch->status === 'Upcoming' ? 'upcoming' : 'soon'),
+            //         'startDate' => $batch->start_date->toISOString(),
+            //         'discount_info' => $batch->discount_info,
+            //         'emi_available' => $batch->emi_available,
+            //         'emi_plans' => $batch->emi_plans ?? [],
+            //     ];
+            // });
 
         return response()->json($batches);
     }
