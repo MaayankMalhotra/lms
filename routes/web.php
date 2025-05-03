@@ -20,8 +20,10 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AdminLiveClassController;
 use App\Http\Controllers\AdminRecordingController;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\CareerHighlightController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\ContactUsController;
 use App\Http\Controllers\CourseDetailsController;
 use App\Http\Controllers\StudentClassController;
 use App\Http\Controllers\TrainerController;
@@ -33,6 +35,9 @@ use App\Http\Controllers\InternshipBatchController;
 use App\Http\Controllers\InternshipEnrollmentController;
 use App\Http\Controllers\InternshipRecordingController;
 use App\Http\Controllers\NewsCategoryController;
+use App\Http\Controllers\TestimonialController;
+use App\Http\Controllers\WebinarController;
+use App\Http\Controllers\YouTubeReviewController;
 
 Route::get('/student/quiz-sets', [StudentQuizController::class, 'index'])->name('student.quiz_sets');
 Route::get('/student/quiz-sets/{id}/take', [StudentQuizController::class, 'takeQuiz'])->name('student.quiz_sets.take');
@@ -78,16 +83,16 @@ Route::get('/about', function () {
     return view('website.about');
 })->name('about-page');
 
-Route::get('/reveiws', function () {
-    if (Auth::user() && Auth::user()->role == 1) {
-        return to_route('admin.dash');
-    } elseif (Auth::user() && Auth::user()->role == 2) {
-        return to_route('trainer.dashboard');
-    } elseif (Auth::user() && Auth::user()->role == 3) {
-        return to_route('student.dashboard');
-    }
-    return view('website.reviews');
-})->name('website.reviews');
+// Route::get('/reveiws', function () {
+//     if (Auth::user() && Auth::user()->role == 1) {
+//         return to_route('admin.dash');
+//     } elseif (Auth::user() && Auth::user()->role == 2) {
+//         return to_route('trainer.dashboard');
+//     } elseif (Auth::user() && Auth::user()->role == 3) {
+//         return to_route('student.dashboard');
+//     }
+//     return view('website.reviews');
+// })->name('website.reviews');
 
 Route::get('/contact', function () {
     if (Auth::user() && Auth::user()->role == 1) {
@@ -112,16 +117,16 @@ Route::get('/events', function () {
 })->name('website.events');
 
 
-Route::get('/webinar', function () {
-    if (Auth::user() && Auth::user()->role == 1) {
-        return to_route('admin.dash');
-    } elseif (Auth::user() && Auth::user()->role == 2) {
-        return to_route('trainer.dashboard');
-    } elseif (Auth::user() && Auth::user()->role == 3) {
-        return to_route('student.dashboard');
-    }
-    return view('website.webinars');
-})->name('website.webinar');
+// Route::get('/webinar', function () {
+//     if (Auth::user() && Auth::user()->role == 1) {
+//         return to_route('admin.dash');
+//     } elseif (Auth::user() && Auth::user()->role == 2) {
+//         return to_route('trainer.dashboard');
+//     } elseif (Auth::user() && Auth::user()->role == 3) {
+//         return to_route('student.dashboard');
+//     }
+//     return view('website.webinars');
+// })->name('website.webinar');
 
 
 Route::get('/course', function () {
@@ -358,6 +363,35 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/assignment', [StudentClassController::class, 'assignment'])->name('assignment');
 
+    //career hightlight
+    
+    Route::get('/career-highlights-create',[CareerHighlightController::class, 'create'])->name('admin.career_highlight.create');
+    Route::post('/career-highlights-store',[CareerHighlightController::class, 'store'])->name('admin.career_highlight.store');
+    Route::get('/career-highlights-show',[CareerHighlightController::class, 'show_career_highlight'])->name('admin.career_highlight.show');
+    Route::delete('/admin/career-highlight/delete-all', [CareerHighlightController::class, 'deleteAll'])->name('admin.career_highlight.deleteAll');
+    Route::get('/testimonials/index', [TestimonialController::class, 'index'])->name('admin.testimonials.index');
+    Route::get('/testimonials/create', [TestimonialController::class, 'create'])->name('admin.testimonials.create');
+    Route::post('/testimonials/', [TestimonialController::class, 'store'])->name('admin.testimonials.store');
+    Route::get('/testimonials/{testimonial}/edit', [TestimonialController::class, 'edit'])->name('admin.testimonials.edit');
+    Route::put('/testimonials/{testimonial}', [TestimonialController::class, 'update'])->name('admin.testimonials.update');
+    Route::delete('/testimonials/{testimonial}', [TestimonialController::class, 'destroy'])->name('admin.testimonials.destroy');
+    Route::get('/youtubereview/index', [YouTubeReviewController::class, 'index'])->name('admin.youtubereview.index');
+    Route::get('/youtubereview/create', [YouTubeReviewController::class, 'create'])->name('admin.youtubereview.create');
+    Route::post('/youtubereview', [YouTubeReviewController::class, 'store'])->name('admin.youtubereview.store'); 
+    Route::get('/youtubereview/{id}/edit', [YouTubeReviewController::class, 'edit'])->name('admin.youtubereview.edit');
+    Route::put('/youtubereview/{id}', [YouTubeReviewController::class, 'update'])->name('admin.youtubereview.update');
+    Route::delete('/youtubereview/{id}', [YouTubeReviewController::class, 'destroy'])->name('admin.youtubereview.destroy');
+    Route::get('/webinar/index', [WebinarController::class, 'index'])->name('admin.webinar.index');
+    Route::get('/webinar/create', [WebinarController::class, 'create'])->name('admin.webinar.create');
+    Route::post('/webinar', [WebinarController::class, 'store'])->name('admin.webinar.store'); 
+    Route::get('/webinar/{id}/edit', [WebinarController::class, 'edit'])->name('admin.webinar.edit');
+    Route::put('/webinar/{id}', [WebinarController::class, 'update'])->name('admin.webinar.update');
+    Route::delete('/webinar/{id}', [WebinarController::class, 'destroy'])->name('admin.webinar.destroy');
+    Route::get('/contact-us', [ContactUsController::class, 'contactindex'])->name('admin.contactus.index');
+    Route::post('/contact-us/{id}/resolve', [ContactUsController::class, 'resolve'])->name('admin.contactus.resolve');
+
+    //end
+
     Route::get('/view-batch-enrollment',[InternshipEnrollmentController::class, 'assignBatchView'])->name('view-batch-enrollment');
 
     Route::get('/internship-class-create', [AdminInternshipClassCreateController::class, 'create'])->name('admin.internship.class.create');
@@ -443,3 +477,27 @@ Route::post('/store-batch-data', [BatchController::class, 'storeBatchData']);
 Route::get('/register-website', function () {
     return view('website.register-page');
 })->name('website-register-page');
+
+
+Route::post('/register', [LoginController::class, 'register'])->name('register.submit');
+
+Route::get('/career-highlights',[CareerHighlightController::class, 'show'])->name('career_hightlight_show');
+Route::get('/webinars', [WebinarController::class, 'show'])->name('webinar.show');
+Route::get('/contactus', [ContactUsController::class, 'index'])->name('contact.index');
+Route::post('/contact-us', [ContactUsController::class, 'store'])->name('contact.store');
+
+// Route::get('/reveiws', function () {
+//     if (Auth::user() && Auth::user()->role == 1) {
+//         return to_route('admin.dash');
+//     } elseif (Auth::user() && Auth::user()->role == 2) {
+//         return to_route('trainer.dashboard');
+//     } elseif (Auth::user() && Auth::user()->role == 3) {
+//         return to_route('student.dashboard');
+//     }
+//     return view('website.reviews');
+// })->name('website.reviews');
+
+Route::get('/webinar-detail',function(){
+    return view('website.webinar.webinar_detail');
+});
+

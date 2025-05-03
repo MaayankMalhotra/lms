@@ -1,10 +1,14 @@
 <!-- Sidebar Container -->
+<!-- Sidebar Container -->
 <style>
     .scrollbar-hide::-webkit-scrollbar {
         display: none;
     }
+    .sidebar {
+        height: 100vh; /* Full height of the viewport */
+        overflow-y: auto; /* Enable vertical scrolling */
+    }
 </style>
-
 <!-- Logo -->
 <div class="text-center mb-4 mt-4 flex-shrink-0">
     <img src="https://think-champ.com/wp-content/uploads/2024/05/THINK-CHAMP-logo-1024x502.png" alt="Logo"
@@ -12,7 +16,7 @@
 </div>
 
 <!-- Navigation -->
-<nav class="bg-white shadow-lg rounded-tl-lg rounded-tr-lg p-4 flex-grow overflow-y-auto scrollbar-hide">
+<nav class="bg-white shadow-lg rounded-tl-lg rounded-tr-lg p-4 flex-grow sidebar scrollbar-hide">
     <ul class="list-none p-0 m-0 space-y-2 !text-sm">
         <!-- Dashboard -->
         <li>
@@ -426,5 +430,86 @@
                 </a>
             </li>
         @endif
+
+        @if (auth()->user()->role == 1)
+        <!-- Career Highlights and Reviews -->
+        <li x-data="{ isOpen: {{ request()->routeIs('admin.career_highlight.*') ? 'true' : 'false' }} }">
+            <a href="javascript:void(0)" @click="isOpen = !isOpen"
+                class="flex items-center justify-between p-3 {{ request()->routeIs('admin.career_highlight.*') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
+                <span class="flex items-center">
+                    <i class="fas fa-briefcase mr-3 text-lg"></i> Career Highlights and Reviews
+                </span>
+                <i class="fas fa-chevron-down text-sm transition-transform" :class="{ 'rotate-180': isOpen }"></i>
+            </a>
+            <ul x-show="isOpen" x-collapse class="ml-6 mt-2 space-y-2 border-l-2 border-gray-300 pl-4">
+                <li>
+                    <a href="{{ route('admin.career_highlight.create') }}"
+                        class="flex items-center p-2 text-sm {{ request()->routeIs('admin.career_highlight.create') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
+                        <i class="fas fa-plus-circle mr-2"></i> Create Career Highlights
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.career_highlight.show') }}"
+                        class="flex items-center p-2 text-sm {{ request()->routeIs('admin.career_highlight.show') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
+                        <i class="fas fa-plus-circle mr-2"></i> Show Career Highlights
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.testimonials.index') }}"
+                        class="flex items-center p-2 text-sm {{ request()->routeIs('admin.testimonials.index') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
+                        <i class="fas fa-plus-circle mr-2"></i> Show testimonial
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.youtubereview.index') }}"
+                        class="flex items-center p-2 text-sm {{ request()->routeIs('admin.youtubereview.index') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
+                        <i class="fas fa-plus-circle mr-2"></i> Show Youtube Reviews
+                    </a>
+                </li>
+            </ul>
+        </li>
+    @endif
+
+    @if (auth()->user()->role == 1)
+        <!-- Webinar -->
+        <li x-data="{ isOpen: {{ request()->routeIs('admin.webinar.*') ? 'true' : 'false' }} }">
+            <a href="javascript:void(0)" @click="isOpen = !isOpen"
+                class="flex items-center justify-between p-3 {{ request()->routeIs('admin.webinar.*') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
+                <span class="flex items-center">
+                    <i class="fas fa-briefcase mr-3 text-lg"></i> Webinar
+                </span>
+                <i class="fas fa-chevron-down text-sm transition-transform" :class="{ 'rotate-180': isOpen }"></i>
+            </a>
+            <ul x-show="isOpen" x-collapse class="ml-6 mt-2 space-y-2 border-l-2 border-gray-300 pl-4">
+                <li>
+                    <a href="{{ route('admin.webinar.index') }}"
+                        class="flex items-center p-2 text-sm {{ request()->routeIs('admin.webinar.index') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
+                        <i class="fas fa-plus-circle mr-2"></i> Show Webinars 
+                    </a>
+                </li>         
+            </ul>
+        </li>
+    @endif
+
+    @if (auth()->user()->role == 1)
+        <!-- Webinar -->
+        <li x-data="{ isOpen: {{ request()->routeIs('admin.contactus.*') ? 'true' : 'false' }} }">
+            <a href="javascript:void(0)" @click="isOpen = !isOpen"
+                class="flex items-center justify-between p-3 {{ request()->routeIs('admin.contactus.*') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
+                <span class="flex items-center">
+                    <i class="fas fa-briefcase mr-3 text-lg"></i> Contact Us Enquires
+                </span>
+                <i class="fas fa-chevron-down text-sm transition-transform" :class="{ 'rotate-180': isOpen }"></i>
+            </a>
+            <ul x-show="isOpen" x-collapse class="ml-6 mt-2 space-y-2 border-l-2 border-gray-300 pl-4">
+                <li>
+                    <a href="{{ route('admin.contactus.index') }}"
+                        class="flex items-center p-2 text-sm {{ request()->routeIs('admin.contactus.index') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
+                        <i class="fas fa-plus-circle mr-2"></i> Show Contact Us Enquires 
+                    </a>
+                </li>         
+            </ul>
+        </li>
+    @endif
     </ul>
 </nav>

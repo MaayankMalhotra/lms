@@ -6,121 +6,57 @@
     <h2 class="text-3xl font-bold mb-6">All <span class="text-blue-500">Webinars</span></h2>
   
     <!-- Tags Box on Top (Optional) -->
-    <div class="bg-gray-100 p-6 rounded-lg mb-8">
-      <h5 class="text-lg font-semibold mb-4">Tags</h5>
-      <ul class="flex flex-wrap gap-2">
-        <li class="bg-white px-4 py-2 rounded-full text-sm">Interview Preparation</li>
-        <li class="bg-white px-4 py-2 rounded-full text-sm">Contest Solutions</li>
-        <li class="bg-white px-4 py-2 rounded-full text-sm">Competitive Programming</li>
-        <li class="bg-white px-4 py-2 rounded-full text-sm">Android</li>
-        <li class="bg-white px-4 py-2 rounded-full text-sm">Campus Event</li>
-      </ul>
+    <!-- Tags Filter -->
+<div class="bg-gray-100 p-4 rounded mb-6">
+    <h4 class="font-semibold mb-2">Filter by Tag:</h4>
+    <div class="flex flex-wrap gap-2">
+        @foreach($uniqueTags as $tag)
+            <a href="{{ route('webinar.show', ['tag' => $tag]) }}"
+               class="px-3 py-1 rounded-full border text-sm
+                      {{ $selectedTag === $tag ? 'bg-blue-500 text-white' : 'bg-white text-gray-800 border-gray-300' }}">
+                {{ $tag }}
+            </a>
+        @endforeach
+
+        @if($selectedTag)
+            <a href="{{ route('webinar.show') }}"
+               class="px-3 py-1 rounded-full bg-red-100 text-red-800 text-sm border border-red-300">
+                Clear Filter
+            </a>
+        @endif
     </div>
+</div>
   
     <!-- 4 Webinar Cards in 2 rows x 2 columns -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <!-- Card 1 -->
+      @foreach($webinars as $webinar) 
       <div class="bg-white rounded-lg shadow-md overflow-hidden">
         <img
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKF_YlFFlKS6AQ8no0Qs_xM6AkjvwFwP61og&s"
-          alt="Webinar 1"
+          src="{{ $webinar->image_url ?? 'https://via.placeholder.com/400x200' }}"
+          alt="{{ $webinar->title }}"
           class="w-full h-48 object-cover"
         />
         <div class="p-6">
-          <h5 class="text-xl font-semibold mb-2">Event: Your Career Next Level Future Approach</h5>
+          <h5 class="text-xl font-semibold mb-2">Event: {{ $webinar->title }}</h5>
           <div class="text-gray-600 mb-2">
-            Starts on <strong>08:00 PM, 15 Sep 2023</strong>
+            Starts on <strong>{{ \Carbon\Carbon::parse($webinar->start_time)->format('h:i A, d M Y') }}</strong>
           </div>
           <div class="text-gray-600 mb-2">
-            Entry Free | Registration Open till 15 Sep 2023
+            {{ $webinar->entry_type }}  | Registration Open till {{ \Carbon\Carbon::parse($webinar->registration_deadline)->format('d M Y') }}
           </div>
           <div class="text-gray-600 mb-4">
-            There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form by injected humour.
+            {{ Str::limit($webinar->description, 150) }}
           </div>
-          <div class="text-gray-600 mb-4">120000 participants Registered</div>
+          <div class="text-gray-600 mb-4">{{ number_format($webinar->participants_count) }} participants Registered</div>
           <button class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300">
             Register Now
           </button>
         </div>
       </div>
-  
-      <!-- Card 2 -->
-      <div class="bg-white rounded-lg shadow-md overflow-hidden">
-        <img
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKF_YlFFlKS6AQ8no0Qs_xM6AkjvwFwP61og&s"
-          alt="Webinar 2"
-          class="w-full h-48 object-cover"
-        />
-        <div class="p-6">
-          <h5 class="text-xl font-semibold mb-2">Event: Your Career Next Level Future Approach</h5>
-          <div class="text-gray-600 mb-2">
-            Starts on <strong>08:00 PM, 15 Sep 2023</strong>
-          </div>
-          <div class="text-gray-600 mb-2">
-            Entry Free | Registration Open till 15 Sep 2023
-          </div>
-          <div class="text-gray-600 mb-4">
-            There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form by injected humour.
-          </div>
-          <div class="text-gray-600 mb-4">120000 participants Registered</div>
-          <button class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300">
-            Register Now
-          </button>
-        </div>
-      </div>
+      @endforeach
     </div>
-  
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-      <!-- Card 3 -->
-      <div class="bg-white rounded-lg shadow-md overflow-hidden">
-        <img
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKF_YlFFlKS6AQ8no0Qs_xM6AkjvwFwP61og&s"
-          alt="Webinar 3"
-          class="w-full h-48 object-cover"
-        />
-        <div class="p-6">
-          <h5 class="text-xl font-semibold mb-2">Event: Your Career Next Level Future Approach</h5>
-          <div class="text-gray-600 mb-2">
-            Starts on <strong>08:00 PM, 15 Sep 2023</strong>
-          </div>
-          <div class="text-gray-600 mb-2">
-            Entry Free | Registration Open till 15 Sep 2023
-          </div>
-          <div class="text-gray-600 mb-4">
-            There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form by injected humour.
-          </div>
-          <div class="text-gray-600 mb-4">120000 participants Registered</div>
-          <button class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300">
-            Register Now
-          </button>
-        </div>
-      </div>
-  
-      <!-- Card 4 -->
-      <div class="bg-white rounded-lg shadow-md overflow-hidden">
-        <img
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKF_YlFFlKS6AQ8no0Qs_xM6AkjvwFwP61og&s"
-          alt="Webinar 4"
-          class="w-full h-48 object-cover"
-        />
-        <div class="p-6">
-          <h5 class="text-xl font-semibold mb-2">Event: Your Career Next Level Future Approach</h5>
-          <div class="text-gray-600 mb-2">
-            Starts on <strong>08:00 PM, 15 Sep 2023</strong>
-          </div>
-          <div class="text-gray-600 mb-2">
-            Entry Free | Registration Open till 15 Sep 2023
-          </div>
-          <div class="text-gray-600 mb-4">
-            There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form by injected humour.
-          </div>
-          <div class="text-gray-600 mb-4">120000 participants Registered</div>
-          <button class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300">
-            Register Now
-          </button>
-        </div>
-      </div>
-    </div>
+
   </section>
   
   <!-- Course Certificates Section -->

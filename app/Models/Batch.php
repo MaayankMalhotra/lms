@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Batch extends Model
 {
     protected $fillable = [
-        'start_date', 'status', 'days', 'duration', 'time_slot', 
+       'batch_name', 'start_date', 'status', 'days', 'duration', 'time_slot', 
         'price', 'discount_info', 'slots_available', 'slots_filled', 
         'course_id', 'teacher_id','emi_available',
         'emi_plans',

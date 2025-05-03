@@ -30,25 +30,26 @@
 </head>
 
 <body class="bg-gray-100 text-gray-900 font-sans" style="font-family: 'Inter', sans-serif;">
-    <div class="flex h-screen">
+    <div class="flex h-screen overflow-hidden">
         <!-- Sidebar -->
-        <aside class="h-full bg-[#2c1d56] px-2 w-64 transition-all flex flex-col">
+        <aside class="h-full bg-[#2c1d56] px-2 w-1/6 flex-shrink-0 ">
             @include('admin.partials.sidebar')
         </aside>
 
         <!-- Main Content Area -->
-        <div class="flex flex-col flex-grow h-screen">
+        <div class="flex flex-col flex-1 overflow-hidden">
             <!-- Header -->
-            <header class="bg-white shadow-md w-full px-6 py-2 flex justify-between items-center">
+            <header class="bg-white shadow-md w-full px-6 py-2 flex justify-between items-center flex-shrink-0">
                 @include('admin.partials.header')
             </header>
 
             <!-- Main Content -->
-            <main class="flex-grow overflow-y-auto p-4">
+            <main class="flex-1 overflow-auto p-4">
                 @yield('content')
             </main>
         </div>
     </div>
 </body>
+
 
 </html>
