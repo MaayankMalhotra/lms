@@ -32,7 +32,7 @@
 <body class="bg-gray-100 text-gray-900 font-sans" style="font-family: 'Inter', sans-serif;">
     <div class="flex h-screen overflow-hidden">
         <!-- Sidebar -->
-        <aside class="h-full bg-[#2c1d56] px-2 w-1/6 flex-shrink-0 ">
+        <aside class="h-full bg-[#2c1d56] px-2 w-1/5 flex-shrink-0 ">
             @include('admin.partials.sidebar')
         </aside>
 

@@ -19,7 +19,7 @@
         <div class="md:w-1/2">
           <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 animate-fade-in-up">
             Change the world <br>
-            with <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500">2030 ThinkChamp Ltd</span>
+            with <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500">ThinkChamp</span>
           </h1>
           <p class="text-lg md:text-xl mb-8 opacity-0 animate-fade-in-up delay-100">
             Learn coding using 500+ courses, practice problems, and AI. Become
