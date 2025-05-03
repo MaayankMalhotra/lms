@@ -484,7 +484,7 @@ Route::post('/register', [LoginController::class, 'register'])->name('register.s
 Route::get('/career-highlights',[CareerHighlightController::class, 'show'])->name('career_hightlight_show');
 Route::get('/webinars', [WebinarController::class, 'show'])->name('webinar.show');
 Route::get('/contactus', [ContactUsController::class, 'index'])->name('contact.index');
-Route::post('/contact-us', [ContactUsController::class, 'store'])->name('contact.store');
+// Route::post('/contact-us', [ContactUsController::class, 'store'])->name('contact.store');
 
 // Route::get('/reveiws', function () {
 //     if (Auth::user() && Auth::user()->role == 1) {
