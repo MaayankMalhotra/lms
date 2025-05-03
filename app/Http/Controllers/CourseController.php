@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Course;
 use App\Models\CourseDetail;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -42,7 +43,8 @@ class CourseController extends Controller
         // }
 
         // Create the course using mass assignment
-        Course::create($validated);
+      $data =  Course::create($validated);
+      Log::info('Course created successfully', ['course' => $data]);
 
         return redirect()->route('admin.course.add')->with('success', 'Course created successfully!');
     }

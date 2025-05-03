@@ -39,6 +39,11 @@ use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\WebinarController;
 use App\Http\Controllers\YouTubeReviewController;
 
+
+Route::get('/api/batches', [BatchController::class, 'getBatchesByCourse'])->name('api.batches');
+Route::get('/register', [BatchController::class, 'show'])->name('register');
+// Route::post('/register/submit', [BatchController::class, 'submit'])->name('register.submit');
+Route::post('/register/submit', [BatchController::class, 'submitr'])->name('register.submit');
 Route::get('/student/quiz-sets', [StudentQuizController::class, 'index'])->name('student.quiz_sets');
 Route::get('/student/quiz-sets/{id}/take', [StudentQuizController::class, 'takeQuiz'])->name('student.quiz_sets.take');
 Route::post('/student/quiz-sets/{id}/submit', [StudentQuizController::class, 'submitQuiz'])->name('student.quiz_sets.submit');
@@ -259,10 +264,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/index-create-cd', [CourseDetailsController::class, 'index'])->name('course-details-index');
 });
 
-Route::get('/api/batches', [BatchController::class, 'getBatchesByCourse'])->name('api.batches');
-Route::get('/register', [BatchController::class, 'show'])->name('register');
-// Route::post('/register/submit', [BatchController::class, 'submit'])->name('register.submit');
-Route::post('/register/submit', [BatchController::class, 'submitr'])->name('register.submit');
+
 
 // // Enrollment Management Routes
 // Route::get('/admin/enrollments', [EnrollmentController::class, 'index'])->name('admin.enrollment.index');
@@ -472,14 +474,14 @@ Route::post('/assign-students-to-batch', [InternshipEnrollmentController::class,
 Route::post('/admin/internship-classes', [AdminInternshipClassCreateController::class, 'store'])->name('admin.internship-classes.store');
 
 // routes/web.php
-Route::post('/store-batch-data', [BatchController::class, 'storeBatchData']);
+Route::post('/store-batch-data', [BatchController::class, 'storeBatchData'])->name('store.batch.data');
 
 Route::get('/register-website', function () {
     return view('website.register-page');
 })->name('website-register-page');
 
 
-Route::post('/register', [LoginController::class, 'register'])->name('register.submit');
+// Route::post('/register', [LoginController::class, 'register'])->name('register.submit');
 
 Route::get('/career-highlights',[CareerHighlightController::class, 'show'])->name('career_hightlight_show');
 Route::get('/webinars', [WebinarController::class, 'show'])->name('webinar.show');

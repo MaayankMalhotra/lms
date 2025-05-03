@@ -1,75 +1,73 @@
 @extends('website.layouts.app')
 
-@section('title', $course_details ? $course_details->course_name : 'Course Details')
+@section('title', $course_details->course_name)
 
 @section('content')
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
 <style>
     /* Custom rotate animation for the chevron */
     .rotate-180 {
         transform: rotate(180deg);
     }
-    /* Highlight selected batch card */
-    .batch-card.selected {
-        border: 2px solid #f97316;
+    .batch-card {
+        cursor: pointer;
+        transition: border-color 0.3s;
+    }
+    .batch-card.active {
+        border-color: #f97316 !important;
         background-color: #fff7ed;
+    }
+    .field-error {
+        border-color: #ef4444 !important;
     }
 </style>
 
 <div class="mt-10 container mx-auto px-5 py-10 max-w-7xl bg-white rounded-lg shadow-md">
     <div class="content flex flex-wrap justify-between items-center gap-5">
         <div class="left-section flex-1 min-w-[300px] text-center md:text-left order-2 md:order-1">
-            @if($course_details)
-                <p class="audience text-blue-500 text-sm font-bold uppercase mb-2">
-                    FOR BEGINNER AND EXPERIENCED LEARNERS
-                </p>
-                <h1 class="text-4xl md:text-5xl font-bold text-gray-800 leading-tight mb-5">
-                    {{ $course_details->course_name }}
-                </h1>
-                <p class="description text-base md:text-lg text-gray-600 leading-relaxed mb-5">
-                    {{ $course_details->course_description }}
-                </p>
-                <div class="flex flex-col sm:flex-row items-center gap-5 mb-5">
-                    <button class="bg-orange-500 text-white font-bold py-3 px-6 rounded-md flex items-center gap-2 hover:bg-orange-600 transition-colors">
-                        Enroll now <span>→</span>
-                    </button>
-                    <div class="flex items-center gap-1">
-                        <span class="text-orange-500 text-lg font-bold">{{ $course_details->course_rating }}</span>
-                        <div class="flex">
+            <p class="audience text-blue-500 text-sm font-bold uppercase mb-2">
+                FOR BEGINNER AND EXPERIENCED LEARNERS
+            </p>
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-800 leading-tight mb-5">
+                {{ $course_details->course_name }}
+            </h1>
+            <p class="description text-base md:text-lg text-gray-600 leading-relaxed mb-5">
+                {{ $course_details->course_description }}
+            </p>
+            <div class="flex flex-col sm:flex-row items-center gap-5 mb-5">
+                <button class="bg-orange-500 text-white font-bold py-3 px-6 rounded-md flex items-center gap-2 hover:bg-orange-600 transition-colors">
+                    Enroll now <span>→</span>
+                </button>
+                <div class="flex items-center gap-1">
+                    <span class="text-orange-500 text-lg font-bold">{{ $course_details->course_rating }}</span>
+                    <div class="flex">
+                        @for ($i = 0; $i < 5; $i++)
                             <span class="text-orange-500 text-lg">★</span>
-                            <span class="text-orange-500 text-lg">★</span>
-                            <span class="text-orange-500 text-lg">★</span>
-                            <span class="text-orange-500 text-lg">★</span>
-                            <span class="text-orange-500 text-lg">★</span>
-                        </div>
-                        <span class="text-gray-600 text-sm">({{ $course_details->course_rating_student_number }}K+ student)</span>
+                        @endfor
                     </div>
+                    <span class="text-gray-600 text-sm">({{ $course_details->course_rating_student_number }}K+ student)</span>
                 </div>
-                <div class="stats flex flex-col md:flex-row gap-5 mt-5 bg-blue-100 p-5 rounded-lg justify-between max-w-lg mx-auto md:mx-0">
-                    <div class="stat text-center">
-                        <span class="rating text-orange-500 text-2xl font-bold">
-                            4.8 <span class="star text-xl">★</span>
-                        </span>
-                        <p class="text-sm text-gray-600 mt-1">{{ $course_details->course_learner_enrolled }}K+ Learners enrolled</p>
-                    </div>
-                    <div class="stat text-center">
-                        <span class="text-2xl font-bold text-gray-800">{{ $course_details->course_lecture_hours }}+</span>
-                        <p class="text-sm text-gray-600 mt-1">Hours of lectures</p>
-                    </div>
-                    <div class="stat text-center">
-                        <span class="text-2xl font-bold text-gray-800">{{ $course_details->course_problem_counts }}+</span>
-                        <p class="text-sm text-gray-600 mt-1">Problems</p>
-                    </div>
+            </div>
+            <div class="stats flex flex-col md:flex-row gap-5 mt-5 bg-blue-100 p-5 rounded-lg justify-between max-w-lg mx-auto md:mx-0">
+                <div class="stat text-center">
+                    <span class="rating text-orange-500 text-2xl font-bold">
+                        4.8 <span class="star text-xl">★</span>
+                    </span>
+                    <p class="text-sm text-gray-600 mt-1">{{ $course_details->course_learner_enrolled }}K+ Learners enrolled</p>
                 </div>
-            @else
-                <p class="text-red-500 text-lg">Course details not found!</p>
-            @endif
+                <div class="stat text-center">
+                    <span class="text-2xl font-bold text-gray-800">{{ $course_details->course_lecture_hours }}+</span>
+                    <p class="text-sm text-gray-600 mt-1">Hours of lectures</p>
+                </div>
+                <div class="stat text-center">
+                    <span class="text-2xl font-bold text-gray-800">{{ $course_details->course_problem_counts }}+</span>
+                    <p class="text-sm text-gray-600 mt-1">Problems</p>
+                </div>
+            </div>
         </div>
         <div class="right-section flex-1 min-w-[300px] text-center order-1 md:order-2">
-            @if($course_details && $course_details->course_banner)
-                <img src="{{ asset('storage/' . $course_details->course_banner) }}" alt="Person studying with laptop and books" class="max-w-full h-auto">
-            @else
-                <p class="text-gray-600">No course banner available.</p>
-            @endif
+            <img src="{{ asset('storage/' . $course_details->course_banner) }}" alt="Person studying with laptop and books" class="max-w-full h-auto rounded-lg">
         </div>
     </div>
 </div>
@@ -130,7 +128,7 @@
             </div>
         </div>
         <!-- Batch Cards and Pricing -->
-        <div class="flex flex-col items-right gap-5">
+        <div class="flex flex-col lg:flex-row items-center lg:items-end gap-5">
             <!-- Batch Cards -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 flex-1" id="batch-cards">
                 <!-- Batches will be dynamically inserted here -->
@@ -138,10 +136,9 @@
             <!-- Pricing and Enroll Button -->
             <div class="text-center lg:text-right">
                 <p class="text-2xl font-bold text-gray-800" id="batch-price">₹40,014</p>
-                <p class="text-sm text-gray-600" id="batch-discount">
-                    10% OFF Expires in <span class="countdown-timer" id="batch-countdown">00d 22h 47m 06s</span>
-                </p>
-                <button class="bg-orange-500 text-white font-bold py-3 px-6 rounded-md mt-3 hover:bg-orange-600 transition-colors" id="batch-enroll-button" disabled>
+                <p class="text-sm text-gray-600 line-through" id="batch-original-price">₹44,460</p>
+                <p class="text-sm text-gray-600" id="batch-discount">10% OFF</p>
+                <button class="bg-orange-500 text-white font-bold py-3 px-6 rounded-md mt-3 hover:bg-orange-600 transition-colors" id="batch-enroll-button">
                     Enroll Now
                 </button>
             </div>
@@ -152,26 +149,19 @@
 <!-- About Course Overview Section -->
 <div class="container mx-auto px-5 py-10 max-w-7xl bg-gray-50">
     <h2 class="text-3xl font-bold mb-6 text-orange-500">About Course Overview</h2>
-    @if($course_details)
-        <p class="text-gray-600 mb-6">
-            {{ $course_details->course_overview_description }}
-        </p>
-
-        <h3 class="text-2xl font-bold mb-4 text-gray-900">Learning Outcomes:</h3>
-        <ul class="list-disc pl-6 mb-6 text-gray-700 space-y-2">
-            @foreach($course_details->learning_outcomes as $outcome)
-                <li>{{ $outcome }}</li>
-            @endforeach
-        </ul>
-
-        <h3 class="text-2xl font-bold mb-4 text-gray-900">Instructor Info:</h3>
-        <p class="text-gray-600 mb-6">
-            {{ $course_details->instructor_info }}
-        </p>
-    @else
-        <p class="text-gray-600 mb-6">No course overview available.</p>
-    @endif
-
+    <p class="text-gray-600 mb-6">
+        {{ $course_details->course_overview_description }}
+    </p>
+    <h3 class="text-2xl font-bold mb-4 text-gray-900">Learning Outcomes:</h3>
+    <ul class="list-disc pl-6 mb-6 text-gray-700 space-y-2">
+        @foreach($course_details->learning_outcomes as $outcome)
+            <li>{{ $outcome }}</li>
+        @endforeach
+    </ul>
+    <h3 class="text-2xl font-bold mb-4 text-gray-900">Instructor Info:</h3>
+    <p class="text-gray-600 mb-6">
+        {{ $course_details->instructor_info }}
+    </p>
     <h3 class="text-2xl font-bold mb-4 text-gray-900">Additional Benefits:</h3>
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
         <div class="bg-white p-6 rounded-lg shadow-md text-center border border-gray-200">
@@ -191,7 +181,7 @@
         </div>
         <div class="bg-white p-6 rounded-lg shadow-md text-center border border-gray-200">
             <div class="text-4xl mb-4 text-gray-400">🎓</div>
-            <h4 class="text-lg font-semibold text-gray-800 mb-2">Certifica Icon</h4>
+            <h4 class="text-lg font-semibold text-gray-800 mb-2">Certificate Icon</h4>
             <p class="text-gray-600">ISO Certified & ACITE Approved<br>Get a certificate that is ISO certified and ACITE approved, recognized globally.</p>
         </div>
     </div>
@@ -203,12 +193,12 @@
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
         <div class="bg-white p-6 rounded-lg shadow-md text-center border border-gray-200">
             <div class="text-3xl mb-4 text-gray-400">📅</div>
-            <h4 class="text-lg font-semibold text-gray-800 mb-2">Calender Icon</h4>
+            <h4 class="text-lg font-semibold text-gray-800 mb-2">Calendar Icon</h4>
             <p class="text-gray-600">Self-paced learning</p>
         </div>
         <div class="bg-white p-6 rounded-lg shadow-md text-center border border-gray-200">
             <div class="text-3xl mb-4 text-gray-400">🎓</div>
-            <h4 class="text-lg font-semibold text-gray-800 mb-2">Gradue Icon</h4>
+            <h4 class="text-lg font-semibold text-gray-800 mb-2">Graduate Icon</h4>
             <p class="text-gray-600">Access to recorded lectures</p>
         </div>
         <div class="bg-white p-6 rounded-lg shadow-md text-center border border-gray-200">
@@ -218,7 +208,7 @@
         </div>
         <div class="bg-white p-6 rounded-lg shadow-md text-center border border-gray-200">
             <div class="text-3xl mb-4 text-gray-400">🏆</div>
-            <h4 class="text-lg font-semibold text-gray-800 mb-2">Certific Icon</h4>
+            <h4 class="text-lg font-semibold text-gray-800 mb-2">Certificate Icon</h4>
             <p class="text-gray-600">Earn a certificate</p>
         </div>
     </div>
@@ -226,9 +216,7 @@
 
 <!-- Course Curriculum Section -->
 <div class="container mx-auto px-4 py-12 max-w-7xl" id="curriculum">
-    <!-- Course Curriculum Container -->
     <div class="course-container bg-white rounded-xl shadow-lg p-8">
-        <!-- Header: Course Description and Download Button -->
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-6">
             <div class="max-w-2xl">
                 <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-3">Course Curriculum</h2>
@@ -240,64 +228,49 @@
                 Download Curriculum
             </a>
         </div>
-
-        <!-- Course Modules Section -->
         <div class="text-xl font-semibold text-gray-800 mb-6 border-b-2 border-teal-100 pb-3">
             Course Modules
         </div>
-
-        @if($course_details && !empty($course_details->course_curriculum))
-            @forelse($course_details->course_curriculum as $index => $module)
-                <div class="accordion-item mb-4" x-data="{ open: false }">
-                    <!-- Accordion Title -->
-                    <div class="accordion-title flex justify-between items-center p-5 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-200" role="button" aria-expanded="false" @click="open = !open">
-                        <div class="flex items-center space-x-4">
-                            <span class="bg-teal-100 text-teal-800 text-sm font-medium px-4 py-1.5 rounded-sm">
-                                Module {{ $module['module_number'] }}
-                            </span>
-                            <h3 class="text-lg font-semibold text-gray-800">{{ $module['title'] }}</h3>
-                        </div>
-                        <svg class="chevron w-6 h-6 text-gray-500 transform transition-transform duration-300" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                        </svg>
+        @forelse($course_details->course_curriculum as $index => $module)
+            <div class="accordion-item mb-4" x-data="{ open: {{ $index < 2 ? 'true' : 'false' }} }">
+                <div class="accordion-title flex justify-between items-center p-5 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-200" role="button" @click="open = !open">
+                    <div class="flex items-center space-x-4">
+                        <span class="bg-teal-100 text-teal-800 text-sm font-medium px-4 py-1.5 rounded-sm">
+                            Module {{ $module['module_number'] }}
+                        </span>
+                        <h3 class="text-lg font-semibold text-gray-800">{{ $module['title'] }}</h3>
                     </div>
-
-                    <!-- Accordion Content -->
-                    <div class="accordion-content p-6 bg-white rounded-b-lg shadow-sm border border-gray-100" x-show="open" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform scale-y-0" x-transition:enter-end="opacity-100 transform scale-y-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 transform scale-y-100" x-transition:leave-end="opacity-0 transform scale-y-0">
-                        <!-- Duration -->
-                        <div class="flex items-center space-x-3 text-gray-600 mb-4">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                            </svg>
-                            <span class="text-sm font-medium">{{ $module['duration'] }}</span>
-                        </div>
-
-                        <!-- Description -->
-                        <p class="text-gray-600 text-base leading-relaxed mb-6">{{ $module['description'] }}</p>
-
-                        <!-- Topics and Subtopics -->
-                        <ul class="space-y-4">
-                            @foreach($module['topics'] as $topic)
-                                <li class="text-gray-700">
-                                    <h4 class="text-lg font-semibold text-gray-800 mb-2">{{ $topic['category'] }}</h4>
-                                    <ul class="ml-5 mt-2 space-y-2 list-disc">
-                                        @foreach($topic['subtopics'] as $subtopic)
-                                            @foreach(explode(',', $subtopic) as $item)
-                                                <li class="text-gray-600 text-sm">{{ trim($item) }}</li>
-                                            @endforeach
-                                        @endforeach
-                                    </ul>
-                                </li>
-                            @endforeach
-                        </ul>
-                    </div>
+                    <svg class="chevron w-6 h-6 text-gray-500 transform transition-transform duration-300" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
                 </div>
-            @empty
-                <p class="text-gray-600 text-center py-8">No modules available for this course.</p>
-            @endforelse
-        @else
-            <p class="text-gray-600 text-center py-8">No curriculum available for this course.</p>
-        @endif
+                <div class="accordion-content p-6 bg-white rounded-b-lg shadow-sm border border-gray-100" x-show="open" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform scale-y-0" x-transition:enter-end="opacity-100 transform scale-y-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 transform scale-y-100" x-transition:leave-end="opacity-0 transform scale-y-0">
+                    <div class="flex items-center space-x-3 text-gray-600 mb-4">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                        <span class="text-sm font-medium">{{ $module['duration'] }}</span>
+                    </div>
+                    <p class="text-gray-600 text-base leading-relaxed mb-6">{{ $module['description'] }}</p>
+                    <ul class="space-y-4">
+                        @foreach($module['topics'] as $topic)
+                            <li class="text-gray-700">
+                                <h4 class="text-lg font-semibold text-gray-800 mb-2">{{ $topic['category'] }}</h4>
+                                <ul class="ml-5 mt-2 space-y-2 list-disc">
+                                    @foreach($topic['subtopics'] as $subtopic)
+                                        @foreach(explode(',', $subtopic) as $item)
+                                            <li class="text-gray-600 text-sm">{{ trim($item) }}</li>
+                                        @endforeach
+                                    @endforeach
+                                </ul>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        @empty
+            <p class="text-gray-600 text-center py-8">No modules available for this course.</p>
+        @endforelse
     </div>
 </div>
 
@@ -308,31 +281,23 @@
     </h2>
     <div class="swiper mySwiper">
         <div class="swiper-wrapper">
-            @if($course_details && !empty($course_details->instructor_ids))
-                @foreach($course_details->instructor_ids as $instructor)
-                    @php
-                        $teacher = \App\Models\User::find($instructor);
-                    @endphp
-                    <div class="swiper-slide">
-                        <div class="bg-white p-5 rounded-lg shadow-md text-center">
-                            <img src="https://via.placeholder.com/150" alt="Instructor" class="w-24 h-24 rounded-full mx-auto mb-3">
-                            <h3 class="text-lg font-semibold text-gray-800">{{ $teacher ? $teacher->name : 'Unknown Instructor' }}</h3>
-                            <p class="text-sm text-gray-600 flex items-center justify-center gap-1 mt-1">
-                                <i class="fas fa-clock text-orange-500"></i>
-                                1600+ hours taught
-                            </p>
-                            <p class="text-sm text-gray-600 mt-1">Courses | teach</p>
-                            <p class="text-sm text-gray-600">Web Development</p>
-                        </div>
-                    </div>
-                @endforeach
-            @else
+            @foreach($course_details->instructor_ids as $instructor)
+                @php
+                    $teacher = \App\Models\User::find($instructor);
+                @endphp
                 <div class="swiper-slide">
                     <div class="bg-white p-5 rounded-lg shadow-md text-center">
-                        <p class="text-gray-600">No instructors available for this course.</p>
+                        <img src="https://via.placeholder.com/150" alt="Instructor" class="w-24 h-24 rounded-full mx-auto mb-3">
+                        <h3 class="text-lg font-semibold text-gray-800">{{ $teacher->name }}</h3>
+                        <p class="text-sm text-gray-600 flex items-center justify-center gap-1 mt-1">
+                            <i class="fas fa-clock text-orange-500"></i>
+                            1600+ hours taught
+                        </p>
+                        <p class="text-sm text-gray-600 mt-1">Courses | teach</p>
+                        <p class="text-sm text-gray-600">Web Development</p>
                     </div>
                 </div>
-            @endif
+            @endforeach
         </div>
         <div class="swiper-pagination mt-5"></div>
     </div>
@@ -344,23 +309,19 @@
         Wait! I Have Some <span class="text-orange-500">Questions</span>
     </h2>
     <div x-data="{ openAccordion: null }" class="space-y-2">
-        @if($course_details && !empty($course_details->faqs))
-            @foreach($course_details->faqs as $index => $faq)
-                <div class="border border-blue-500 rounded-lg">
-                    <button @click="openAccordion = openAccordion === {{ $index + 1 }} ? null : {{ $index + 1 }}" class="w-full flex justify-between items-center p-4 text-left text-gray-800 font-semibold">
-                        <span>{{ $faq['question'] }}</span>
-                        <i :class="openAccordion === {{ $index + 1 }} ? 'fa-minus' : 'fa-plus'" class="fas text-blue-500"></i>
-                    </button>
-                    <div x-show="openAccordion === {{ $index + 1 }}" x-transition class="p-4 bg-white">
-                        <p class="text-gray-600">
-                            {{ $faq['answer'] }}
-                        </p>
-                    </div>
+        @foreach($course_details->faqs as $index => $faq)
+            <div class="border border-blue-500 rounded-lg">
+                <button @click="openAccordion = openAccordion === {{ $index + 1 }} ? null : {{ $index + 1 }}" class="w-full flex justify-between items-center p-4 text-left text-gray-800 font-semibold">
+                    <span>{{ $faq['question'] }}</span>
+                    <i :class="openAccordion === {{ $index + 1 }} ? 'fa-minus' : 'fa-plus'" class="fas text-blue-500"></i>
+                </button>
+                <div x-show="openAccordion === {{ $index + 1 }}" x-transition class="p-4 bg-white">
+                    <p class="text-gray-600">
+                        {{ $faq['answer'] }}
+                    </p>
                 </div>
-            @endforeach
-        @else
-            <p class="text-gray-600">No FAQs available for this course.</p>
-        @endif
+            </div>
+        @endforeach
     </div>
 </div>
 
@@ -447,6 +408,8 @@
     </div>
 </div>
 
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
     // Initialize Swiper
@@ -473,154 +436,262 @@
         },
     });
 
-    // Fetch batches dynamically
-    document.addEventListener('DOMContentLoaded', function () {
-        const courseId = @json($course_details->id ?? null);
+    // Batch Section JavaScript
+    let batches = [];
+    const courseId = "{{ $course_details->id ?? '' }}";
+
+    // Function to fetch batches dynamically
+    async function fetchBatches() {
+        const batchCardsContainer = document.getElementById('batch-cards');
+        batchCardsContainer.innerHTML = '<p class="text-gray-600 text-center">Loading batches...</p>';
+
         if (!courseId) {
-            console.error('Course ID not found');
-            document.getElementById('batch-cards').innerHTML = '<p class="text-gray-600">Unable to load batches. Course not found.</p>';
+            console.error('Course ID is missing');
+            batchCardsContainer.innerHTML = '<p class="text-red-600 text-center">Error: Course ID is missing. Please ensure the course is correctly configured.</p>';
             return;
         }
 
-        fetch(`/api/batches/by-course?id=${courseId}`, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            const batchCardsContainer = document.getElementById('batch-cards');
-            const availableSlotsElement = document.getElementById('available-slots');
-            const filledSlotsElement = document.getElementById('filled-slots');
-            const modeOfTeachingElement = document.getElementById('mode-of-teaching');
-            const batchPriceElement = document.getElementById('batch-price');
-            const batchDiscountElement = document.getElementById('batch-discount');
-            const batchCountdownElement = document.getElementById('batch-countdown');
-            const enrollButton = document.getElementById('batch-enroll-button');
+        try {
+            console.log('Fetching batches for course ID:', courseId);
+            const response = await fetch(`/api/batches?id=${encodeURIComponent(courseId)}`, {
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+            console.log('API Response Status:', response.status);
 
-            if (!data || data.length === 0) {
-                batchCardsContainer.innerHTML = '<p class="text-gray-600">No batches available for this course.</p>';
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                console.error('API Error:', errorData);
+                let errorMessage = 'Failed to load batches. Please try again later.';
+                if (response.status === 404) {
+                    errorMessage = 'No batches found for this course.';
+                } else if (response.status === 500) {
+                    errorMessage = 'Server error occurred while fetching batches.';
+                } else if (errorData.error) {
+                    errorMessage = errorData.error;
+                }
+                batchCardsContainer.innerHTML = `<p class="text-red-600 text-center">${errorMessage}</p>`;
                 return;
             }
 
-            // Render batch cards
-            batchCardsContainer.innerHTML = data.map(batch => `
-                <div class="batch-card bg-gray-100 p-5 rounded-lg shadow-md text-center cursor-pointer" data-batch-id="${batch.id}" data-batch='${JSON.stringify(batch)}'>
-                    <p class="text-lg font-semibold text-gray-800">${batch.date}</p>
-                    <p class="text-sm text-gray-600 capitalize">${batch.status}</p>
-                </div>
-            `).join('');
+            const allBatches = await response.json();
+            console.log('All Batches:', allBatches);
 
-            // Add click event listeners to batch cards
-            let selectedBatch = null;
-            const batchCards = document.querySelectorAll('.batch-card');
-            batchCards.forEach(card => {
-                card.addEventListener('click', function () {
-                    // Remove selected class from all cards
-                    batchCards.forEach(c => c.classList.remove('selected'));
-                    // Add selected class to clicked card
-                    this.classList.add('selected');
+            if (!Array.isArray(allBatches)) {
+                console.error('Invalid response format: Expected an array, got:', allBatches);
+                batchCardsContainer.innerHTML = '<p class="text-red-600 text-center">Error: Invalid batch data format from server.</p>';
+                return;
+            }
 
-                    // Parse batch data
-                    selectedBatch = JSON.parse(this.dataset.batch);
-
-                    // Update slots and mode
-                    availableSlotsElement.textContent = selectedBatch.slotsAvailable;
-                    filledSlotsElement.textContent = selectedBatch.slotsFilled;
-                    modeOfTeachingElement.textContent = selectedBatch.mode;
-
-                    // Update price and discount
-                    const originalPrice = selectedBatch.price;
-                    const discountPercentage = selectedBatch.discount_percentage || 0;
-                    const discountedPrice = originalPrice * (1 - discountPercentage / 100);
-                    batchPriceElement.textContent = `₹${discountedPrice.toLocaleString('en-IN', { minimumFractionDigits: 0 })}`;
-
-                    if (discountPercentage > 0) {
-                        batchDiscountElement.innerHTML = `${discountPercentage}% OFF Expires in <span class="countdown-timer" id="batch-countdown"></span>`;
-                    } else {
-                        batchDiscountElement.innerHTML = 'No discount available';
-                    }
-
-                    // Update countdown timer
-                    if (selectedBatch.startDate) {
-                        const startDate = new Date(selectedBatch.startDate);
-                        const now = new Date();
-                        if (startDate > now) {
-                            const diff = startDate - now;
-                            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-                            batchCountdownElement.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-
-                            // Update countdown every second
-                            const countdownInterval = setInterval(() => {
-                                const newDiff = startDate - new Date();
-                                if (newDiff <= 0) {
-                                    clearInterval(countdownInterval);
-                                    batchCountdownElement.textContent = 'Batch Started';
-                                    return;
-                                }
-                                const d = Math.floor(newDiff / (1000 * 60 * 60 * 24));
-                                const h = Math.floor((newDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                                const m = Math.floor((newDiff % (1000 * 60 * 60)) / (1000 * 60));
-                                const s = Math.floor((newDiff % (1000 * 60)) / 1000);
-                                batchCountdownElement.textContent = `${d}d ${h}h ${m}m ${s}s`;
-                            }, 1000);
-                        } else {
-                            batchCountdownElement.textContent = 'Batch Started';
-                        }
-                    }
-
-                    // Enable enroll button
-                    enrollButton.disabled = false;
-                });
+            batches = allBatches.filter(batch => {
+                const requiredFields = ['id', 'date', 'price', 'slotsAvailable', 'slotsFilled', 'mode', 'status', 'startDate', 'discount_info'];
+                return requiredFields.every(field => batch[field] !== undefined && batch[field] !== null);
             });
+            console.log('Filtered Batches:', batches);
 
-            // Handle enroll button click
-            enrollButton.addEventListener('click', function () {
-                if (!selectedBatch) {
-                    alert('Please select a batch to enroll.');
-                    return;
+            if (batches.length === 0) {
+                batchCardsContainer.innerHTML = '<p class="text-gray-600 text-center">No valid batches available for this course. Please check back later or contact support.</p>';
+                return;
+            }
+
+            renderBatchCards(batches);
+
+            // Select the first batch by default
+            if (batches.length > 0) {
+                selectBatch(batches[0].date);
+            }
+
+        } catch (error) {
+            console.error('Error fetching batches:', error);
+            batchCardsContainer.innerHTML = `<p class="text-red-600 text-center">Failed to load batches: ${error.message || 'Network or server error'}. Please check your connection and try again.</p>`;
+        }
+    }
+
+    // Function to render batch cards dynamically
+    function renderBatchCards(batches) {
+        const batchCardsContainer = document.getElementById('batch-cards');
+        batchCardsContainer.innerHTML = '';
+
+        if (batches.length === 0) {
+            batchCardsContainer.innerHTML = '<p class="text-gray-600 text-center">No batches available for this course. Please check back later or contact support.</p>';
+            return;
+        }
+
+        batches.forEach((batch, index) => {
+            try {
+                const batchCard = document.createElement('div');
+                batchCard.classList.add('border', 'rounded-lg', 'p-4', 'text-center', 'relative', 'max-w-xs', 'batch-card');
+
+                // Highlight the first batch by default
+                if (index === 0) {
+                    batchCard.classList.add('active', 'border-orange-500');
+                } else if (batch.status === 'started') {
+                    batchCard.classList.add('active', 'border-orange-500');
+                } else if (batch.status === 'soon') {
+                    batchCard.classList.add('soon', 'border-gray-300');
+                } else {
+                    batchCard.classList.add('border-gray-300');
                 }
 
-                // Send batch ID to store in session
-                fetch('/store-batch-data', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    },
-                    body: JSON.stringify({ batch_id: selectedBatch.id })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        // Redirect to registration page
-                        window.location.href = '/register';
-                    } else {
-                        alert('Failed to proceed with enrollment. Please try again.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error storing batch data:', error);
-                    alert('An error occurred while proceeding to enrollment. Please try again.');
-                });
-            });
-        })
-        .catch(error => {
-            console.error('Error fetching batches:', error);
-            document.getElementById('batch-cards').innerHTML = '<p class="text-gray-600">Error loading batches. Please try again later.</p>';
+                batchCard.setAttribute('onclick', `selectBatch('${batch.date}')`);
+
+                const cardContent = `
+                    <div class="batch-date text-sm text-gray-600 font-semibold">${batch.date}</div>
+                    <div class="batch-details">
+                        <p class="text-sm text-gray-600 mt-1">${
+                            batch.status === 'started' ? 'Batch Started' :
+                            batch.status === 'soon' ? 'Starting Soon' : 'Upcoming'
+                        }</p>
+                        <p class="text-sm text-gray-600">SAT - SUN</p>
+                        <p class="text-sm text-gray-600">Weekend Class | 6 Months</p>
+                        <p class="text-sm text-gray-600 mt-2">08:00 PM TO 11:00 PM IST (GMT +5:30)</p>
+                    </div>
+                `;
+                batchCard.innerHTML = cardContent;
+                batchCardsContainer.appendChild(batchCard);
+            } catch (error) {
+                console.error(`Error rendering batch card for batch ${batch.id}:`, error);
+            }
         });
-703
+    }
+
+    // Function to update batch details
+    function updateBatchDetails(batch) {
+        try {
+            console.log('Updating batch details:', batch);
+
+            // Update price (total price after discount)
+            const discount = batch.discount_info ? parseFloat(batch.discount_info.replace('%', '')) : 0;
+            const discountedPrice = batch.price - (batch.price * (discount / 100));
+            document.getElementById('batch-price').innerText = `₹${discountedPrice.toLocaleString('en-IN')}`;
+            // document.getElementById('batch-price').innerText = `₹${batch.price.toLocaleString('en-IN')}`;
+
+            // Update original price
+            document.getElementById('batch-original-price').innerText = batch.price
+                ? `₹${batch.price.toLocaleString('en-IN')}`
+                : `₹${batch.price.toLocaleString('en-IN')}`;
+
+            // Update discount info (remove timer for upcoming batches)
+            document.getElementById('batch-discount').innerText = `${batch.discount_info}% OFF` || 'No discount available';
+
+     
+
+            // Update enroll button
+            const enrollStartDate = new Date(batch.startDate);
+            enrollStartDate.setDate(enrollStartDate.getDate() - 25);
+            const now = new Date();
+            const enrollButton = document.getElementById('batch-enroll-button');
+            enrollButton.disabled = now < enrollStartDate;
+            enrollButton.innerText = now >= enrollStartDate
+                ? (batch.status === 'started' ? 'Request to Join' : 'Enroll Now')
+                : `Registration starts on ${enrollStartDate.toLocaleDateString('en-IN')}`;
+
+            // Update slots and mode
+            document.getElementById('available-slots').innerText = batch.slotsAvailable;
+            document.getElementById('filled-slots').innerText = batch.slotsFilled;
+            document.getElementById('mode-of-teaching').innerText = batch.mode || 'Online';
+
+            // Store selected batch
+            window.selectedBatch = batch;
+        } catch (error) {
+            console.error('Error updating batch details:', error);
+            document.getElementById('batch-price').innerText = 'Error';
+        }
+    }
+
+    // Function to select batch
+    function selectBatch(batchDate) {
+        const selectedBatch = batches.find(batch => batch.date === batchDate);
+        if (!selectedBatch) {
+            console.error('Batch not found:', batchDate);
+            return;
+        }
+        updateBatchDetails(selectedBatch);
+        document.querySelectorAll('.batch-card').forEach(card => {
+            card.classList.remove('active', 'border-orange-500');
+            card.classList.add('border-gray-300');
+            if (card.querySelector('.batch-date').innerText === batchDate) {
+                card.classList.add('active', 'border-orange-500');
+                card.classList.remove('border-gray-300');
+            }
+        });
+    }
+
+    // Function to calculate countdown (kept for reference, not used for upcoming batches)
+    function calculateCountdown(startDate) {
+        try {
+            const now = new Date();
+            const start = new Date(startDate);
+            if (isNaN(start.getTime())) {
+                return 'Invalid Date';
+            }
+            const timeDiff = start - now;
+            if (timeDiff <= 0) return 'Expired';
+            const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+            return `${days}d ${hours}h ${minutes}m ${seconds}s`;
+        } catch (error) {
+            // console.error('Error calculating countdown:', error);
+            return 'Error';
+        }
+    }
+
+    // Handle Enroll Now button click
+    document.getElementById('batch-enroll-button').addEventListener('click', async function() {
+        if (!window.selectedBatch) {
+            alert('Please select a batch first');
+            return;
+        }
+        const batch = window.selectedBatch;
+        console.log('Selected batch:', batch);
+        try {
+            const response = await fetch('/store-batch-data', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    batch_id: batch.id
+                })
+            });
+            console.log('Response status:', response.status);
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Failed to store batch data');
+            }
+            const data = await response.json();
+            console.log('Success:', data);
+            window.location.href = '/register';
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Failed to proceed to registration: ' + error.message);
+        }
     });
+
+    // Fetch batches on page load
+    document.addEventListener('DOMContentLoaded', fetchBatches);
 </script>
 
-<!-- Include Alpine.js for Accordion Functionality -->
-<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+<script>
+    // Accordion toggle for curriculum (unchanged)
+    function toggleAccordion(element) {
+        const content = element.nextElementSibling;
+        const chevron = element.querySelector('.chevron');
+        content.classList.toggle('active');
+        chevron.classList.toggle('active');
+    }
+
+    // Ensure the first two modules are expanded by default
+    document.querySelectorAll('.accordion-title').forEach((title, index) => {
+        if (index < 2) {
+            title.nextElementSibling.classList.add('active');
+            title.querySelector('.chevron').classList.add('active');
+        }
+    });
+</script>
 @endsection

@@ -270,7 +270,7 @@ class BatchController extends Controller
 
         $batches = Batch::where('course_id', $courseId)
             ->with('course', 'teacher')
-            ->get()
+            ->get() 
             ->map(function ($batch) {
                 return [
                     'id' => $batch->id,
@@ -281,6 +281,7 @@ class BatchController extends Controller
                     'mode' => $batch->course->mode ?? 'Online',
                     'status' => $batch->status === 'Batch Started' ? 'started' : ($batch->status === 'Upcoming' ? 'upcoming' : 'soon'),
                     'startDate' => $batch->start_date->toISOString(),
+                    'discount_info' => $batch->discount_info,
                     'emi_available' => $batch->emi_available,
                     'emi_plans' => $batch->emi_plans ?? [],
                 ];
@@ -691,6 +692,7 @@ public function show(Request $request)
 
 public function submitr(Request $request)
 {
+    // dd($request->all());
     Log::info('Incoming registration request:', $request->all());
 
     try {
