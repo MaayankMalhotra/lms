@@ -264,6 +264,7 @@ class BatchController extends Controller
     public function getBatchesByCourse(Request $request)
     {
         $courseId = $request->query('id');
+        dd($courseId);
         if (!$courseId) {
             return response()->json(['error' => 'Course ID is required'], 400);
         }
@@ -278,6 +279,7 @@ class BatchController extends Controller
                     'price' => $batch->price,
                     'slotsAvailable' => $batch->slots_available,
                     'slotsFilled' => $batch->slots_filled,
+                    'mode' => $batch->course->mode ?? 'Online',
                     'status' => $batch->status === 'Batch Started' ? 'started' : ($batch->status === 'Upcoming' ? 'upcoming' : 'soon'),
                     'startDate' => $batch->start_date->toISOString(),
                     'discount_info' => $batch->discount_info,
@@ -285,7 +287,7 @@ class BatchController extends Controller
                     'emi_plans' => $batch->emi_plans ?? [],
                 ];
             });
-dd($batches);
+
         return response()->json($batches);
     }
 
