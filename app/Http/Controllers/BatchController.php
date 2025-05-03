@@ -264,7 +264,6 @@ class BatchController extends Controller
     public function getBatchesByCourse(Request $request)
     {
         $courseId = $request->query('id');
-        dd($courseId);
         if (!$courseId) {
             return response()->json(['error' => 'Course ID is required'], 400);
         }
@@ -287,7 +286,7 @@ class BatchController extends Controller
                     'emi_plans' => $batch->emi_plans ?? [],
                 ];
             });
-
+dd($batches);
         return response()->json($batches);
     }
 
