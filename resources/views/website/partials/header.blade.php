@@ -157,12 +157,13 @@
                     </button>
                     <div id="mobile-courses-dropdown"
                         class="mobile-dropdown-content h-28 bg-black/90 rounded py-4 px-2 overflow-y-scroll">
+
                         @php
                             $courses = DB::table('courses')->get();
                         @endphp
                         @foreach ($courses as $course)
-                            <a href="{{ route('website.course') }}"
-                                class="block px-4 py-2 text-white hover:bg-orange-500 rounded-md transition-colors">{{ $course->name }}</a>
+                            <a href="{{ route('website.course_details', $course->slug) }}"
+                                class="block px-1 py-2 text-white hover:bg-orange-500 rounded-md transition-colors text-sm">{{ $course->name }}</a>
                         @endforeach
                     </div>
                 </div>
