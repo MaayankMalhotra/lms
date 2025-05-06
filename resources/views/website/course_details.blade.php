@@ -502,7 +502,7 @@
 
     // Batch Section JavaScript
     let batches = [];
-    const courseId = "{{ $course_details->id ?? '' }}";
+    const courseId = "{{ $course_details->name ?? '' }}";
 
     // Function to fetch batches dynamically
     async function fetchBatches() {
