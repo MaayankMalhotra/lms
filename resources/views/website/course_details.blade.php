@@ -472,6 +472,9 @@
     </div>
 </div>
 
+@php
+    $course_id_detail = \App\Models\Course::where('name',$course_details->course_name)->value('id');
+@endphp
 <!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
@@ -502,7 +505,7 @@
 
     // Batch Section JavaScript
     let batches = [];
-    const courseId = "{{ $course_details->name ?? '' }}";
+    const courseId = "{{ $course_id_detail?? '' }}";
 
     // Function to fetch batches dynamically
     async function fetchBatches() {
