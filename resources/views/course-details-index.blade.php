@@ -389,7 +389,76 @@
                         </div>
                     </div>
                 </div>
-
+<!-- Demo Syllabus Section -->
+<div class="collapsible-section full-width">
+    <div class="collapsible-header" onclick="toggleSection(this)">
+        <span>Demo Syllabus</span>
+        <svg class="chevron w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+        </svg>
+    </div>
+    <div class="collapsible-content">
+        <div class="field-container">
+            <div id="demo-syllabus-container" class="dynamic-section">
+                <div class="dynamic-field">
+                    <div class="form-grid">
+                        <div class="field-container">
+                            <label>Module Number (e.g., Module 0)</label>
+                            <input type="text" name="demo_syllabus[0][module_number]" required value="{{ old('demo_syllabus.0.module_number') }}">
+                            @error('demo_syllabus.0.module_number')
+                                <div class="error">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="field-container">
+                            <label>Title (e.g., Programming Fundamentals)</label>
+                            <input type="text" name="demo_syllabus[0][title]" required value="{{ old('demo_syllabus.0.title') }}">
+                            @error('demo_syllabus.0.title')
+                                <div class="error">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="field-container">
+                            <label>Duration (e.g., 4 Weeks)</label>
+                            <input type="text" name="demo_syllabus[0][duration]" required value="{{ old('demo_syllabus.0.duration') }}">
+                            @error('demo_syllabus.0.duration')
+                                <div class="error">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="field-container full-width">
+                            <label>Description</label>
+                            <textarea name="demo_syllabus[0][description]" required>{{ old('demo_syllabus.0.description') }}</textarea>
+                            @error('demo_syllabus.0.description')
+                                <div class="error">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <!-- Topics Section -->
+                        <div class="field-container full-width">
+                            <label>Topics</label>
+                            <div class="nested-section" id="demo-topics-0-0">
+                                <div class="form-grid">
+                                    <div class="field-container">
+                                        <label>Topic Category (e.g., HTML)</label>
+                                        <input type="text" name="demo_syllabus[0][topics][0][category]" required value="{{ old('demo_syllabus.0.topics.0.category') }}">
+                                    </div>
+                                    <div class="field-container full-width">
+                                        <label>Subtopics (use comma(,) for multiple subtopics)</label>
+                                        <textarea name="demo_syllabus[0][topics][0][subtopics]" required placeholder="Enter subtopics, (use comma(,) for multiple subtopics)">{{ old('demo_syllabus.0.topics.0.subtopics') }}</textarea>
+                                    </div>
+                                </div>
+                                <button type="button" class="button remove-button mt-2" onclick="removeDemoTopic(0, this)">Remove Topic</button>
+                            </div>
+                            <button type="button" class="button add-button mt-2" onclick="addDemoTopic(0)">Add Topic</button>
+                        </div>
+                    </div>
+                    <button type="button" class="button remove-button mt-2" onclick="removeDemoSyllabus(this)">Remove Module</button>
+                </div>
+            </div>
+            <button type="button" class="button add-button mt-2" onclick="addDemoSyllabus()">Add Demo Syllabus Module</button>
+            @error('demo_syllabus')
+                <div class="error">{{ $message }}</div>
+            @enderror
+        </div>
+    </div>
+</div>
                 <!-- Key Points Section -->
                 <div class="collapsible-section full-width">
                     <div class="collapsible-header" onclick="toggleSection(this)">
@@ -496,8 +565,11 @@
 
     <script>
         let moduleCount = 1;
+        let demoModuleCount = 1;
         let faqCount = 1;
         let topicCounts = { 0: 1 }; // Track topic counts for each module
+        let demoTopicCounts = { 0: 1 }; // Track topic counts for demo syllabus modules
+
 
         function toggleSection(element) {
             const content = element.nextElementSibling;
@@ -616,6 +688,98 @@
                 topicCounts[moduleIndex]--;
             } else {
                 alert('At least one topic is required per module.');
+            }
+        }
+        function addDemoSyllabus() {
+            demoTopicCounts[demoModuleCount] = 1; // Initialize topic count for new demo module
+            const container = document.getElementById('demo-syllabus-container');
+            const div = document.createElement('div');
+            div.className = 'dynamic-field';
+            div.innerHTML = `
+                <div class="form-grid">
+                    <div class="field-container">
+                        <label>Module Number (e.g., Module ${demoModuleCount})</label>
+                        <input type="text" name="demo_syllabus[${demoModuleCount}][module_number]" required>
+                    </div>
+                    <div class="field-container">
+                        <label>Title</label>
+                        <input type="text" name="demo_syll 컬럼명abus[${demoModuleCount}][title]" required>
+                    </div>
+                    <div class="field-container">
+                        <label>Duration (e.g., 4 Weeks)</label>
+                        <input type="text" name="demo_syllabus[${demoModuleCount}][duration]" required>
+                    </div>
+                    <div class="field-container full.Width">
+                        <label>Description</label>
+                        <textarea name="demo_syllabus[${demoModuleCount}][description]" required></textarea>
+                    </div>
+                    <div class="field-container full-width">
+                        <label>Topics</label>
+                        <div class="nested-section" id="demo-topics-${demoModuleCount}-0">
+                            <div class="form-grid">
+                                <div class="field-container">
+                                    <label>Topic Category (e.g., HTML)</label>
+                                    <input type="text" name="demo_syllabus[${demoModuleCount}][topics][0][category]" required>
+                                </div>
+                                <div class="field-container full-width">
+                                    <label>Subtopics (use comma(,) for multiple subtopics)</label>
+                                    <textarea name="demo_syllabus[${demoModuleCount}][topics][0][subtopics]" required placeholder="Enter subtopics, (use comma(,) for multiple subtopics)"></textarea>
+                                </div>
+                            </div>
+                            <button type="button" class="button remove-button mt-2" onclick="removeDemoTopic(${demoModuleCount}, this)">Remove Topic</button>
+                        </div>
+                        <button type="button" class="button add-button mt-2" onclick="addDemoTopic(${demoModuleCount})">Add Topic</button>
+                    </div>
+                </div>
+                <button type="button" class="button remove-button mt-2" onclick="removeDemoSyllabus(this)">Remove Module</button>
+            `;
+            container.appendChild(div);
+            demoModuleCount++;
+        }
+
+        function removeDemoSyllabus(button) {
+            const fields = document.querySelectorAll('#demo-syllabus-container .dynamic-field');
+            if (fields.length > 1) {
+                const moduleIndex = Array.from(fields).indexOf(button.parentElement);
+                delete demoTopicCounts[moduleIndex];
+                button.parentElement.remove();
+                demoModuleCount--;
+            } else {
+                alert('At least one demo syllabus module is required.');
+            }
+        }
+
+        function addDemoTopic(moduleIndex) {
+            if (!demoTopicCounts[moduleIndex]) demoTopicCounts[moduleIndex] = 0;
+            const topicIndex = demoTopicCounts[moduleIndex]++;
+            const container = document.getElementById(`demo-topics-${moduleIndex}-${topicIndex - 1}`).parentElement;
+            const div = document.createElement('div');
+            div.className = 'nested-section';
+            div.id = `demo-topics-${moduleIndex}-${topicIndex}`;
+            div.innerHTML = `
+                <div class="form-grid">
+                    <div class="field-container">
+                        <label>Topic Category (e.g., HTML)</label>
+                        <input type="text" name="demo_syllabus[${moduleIndex}][topics][${topicIndex}][category]" required>
+                    </div>
+                    <div class="field-container full-width">
+                        <label>Subtopics (use comma(,) for multiple subtopics)</label>
+                        <textarea name="demo_syllabus[${moduleIndex}][topics][${topicIndex}][subtopics]" required placeholder="Enter subtopics, (use comma(,) for multiple subtopics)"></textarea>
+                    </div>
+                </div>
+                <button type="button" class="button remove-button mt-2" onclick="removeDemoTopic(${moduleIndex}, this)">Remove Topic</button>
+            `;
+            container.insertBefore(div, container.lastElementChild);
+        }
+
+        function removeDemoTopic(moduleIndex, button) {
+            const topicContainer = button.parentElement.parentElement;
+            const topics = topicContainer.querySelectorAll('.nested-section');
+            if (topics.length > 1) {
+                button.parentElement.remove();
+                demoTopicCounts[moduleIndex]--;
+            } else {
+                alert('At least one topic is required per demo module.');
             }
         }
 

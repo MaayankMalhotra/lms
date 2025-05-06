@@ -125,12 +125,12 @@
                             class="block px-4 py-2 text-white hover:bg-orange-500 rounded-md transition-colors">Event</a>
                         <a href="{{ route('news.index') }}"
                             class="block px-4 py-2 text-white hover:bg-orange-500 rounded-md transition-colors">News</a>
-                        <a href=""
+                        <a href="{{ route('webinar.show') }}"
                             class="block px-4 py-2 text-white hover:bg-orange-500 rounded-md transition-colors">Webinars</a>
                     </div>
                 </div>
 
-                <a href=""
+                <a href="{{ route('career_hightlight_show') }}"
                     class="text-white hover:text-amber-400 transition-colors duration-300">Reviews</a>
                 <a href="{{ route('website.contact') }}"
                     class="text-white hover:text-amber-400 transition-colors duration-300">Contact</a>
@@ -206,12 +206,12 @@
                             class="block px-4 py-2 text-white hover:bg-orange-500 rounded-md transition-colors">Event</a>
                         <a href="{{ route('news.index') }}"
                             class="block px-4 py-2 text-white hover:bg-orange-500 rounded-md transition-colors">News</a>
-                        <a href=""
+                        <a href="{{ route('webinar.show')}}"
                             class="block px-4 py-2 text-white hover:bg-orange-500 rounded-md transition-colors">Webinars</a>
                     </div>
                 </div>
 
-                <a href="" class="text-white hover:text-amber-400 py-2">Reviews</a>
+                <a href="{{ route('career_hightlight_show')}}" class="text-white hover:text-amber-400 py-2">Reviews</a>
                 <a href="{{ route('website.contact') }}" class="text-white hover:text-amber-400 py-2">Contact</a>
                 <a href="{{ route('login') }}"
                     class="bg-orange-500 px-6 py-2 rounded-lg text-white text-center hover:bg-orange-600 mt-2">Login</a>

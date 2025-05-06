@@ -9,12 +9,13 @@ use Illuminate\Http\Request;
 
 class CourseDetailsController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         $course_name  = Course::all();
-        $instructors = User::where('role',2)->get();
-     return view('course-details-index',compact('instructors','course_name'));
+        $instructors = User::where('role', 2)->get();
+        return view('course-details-index', compact('instructors', 'course_name'));
     }
-    
+
     public function store(Request $request)
     {
         // dd($request->all());
@@ -26,7 +27,15 @@ class CourseDetailsController extends Controller
             'course_curriculum.*.description' => 'required|string',
             'course_curriculum.*.topics' => 'nullable|array',
             'course_curriculum.*.topics.*.category' => 'required|string',
-            'course_curriculum.*.topics.*.subtopics' => 'required|string'
+            'course_curriculum.*.topics.*.subtopics' => 'required|string',
+            'demo_syllabus' => 'nullable|array',
+            'demo_syllabus.*.module_number' => 'required|string',
+            'demo_syllabus.*.title' => 'required|string',
+            'demo_syllabus.*.duration' => 'required|string',
+            'demo_syllabus.*.description' => 'required|string',
+            'demo_syllabus.*.topics' => 'nullable|array',
+            'demo_syllabus.*.topics.*.category' => 'required|string',
+            'demo_syllabus.*.topics.*.subtopics' => 'required|string',
         ]);
 
         // Handle file upload
@@ -35,17 +44,28 @@ class CourseDetailsController extends Controller
             $bannerPath = $request->file('course_banner')->store('banners', 'public');
         }
 
-   // Process topics: Convert subtopics textarea into an array
-   if (isset($validated['course_curriculum'])) {
-    foreach ($validated['course_curriculum'] as &$module) {
-        if (isset($module['topics'])) {
-            foreach ($module['topics'] as &$topic) {
-                $topic['subtopics'] = array_filter(array_map('trim', explode("\n", $topic['subtopics'])));
+        // Process topics: Convert subtopics textarea into an array
+        if (isset($validated['course_curriculum'])) {
+            foreach ($validated['course_curriculum'] as &$module) {
+                if (isset($module['topics'])) {
+                    foreach ($module['topics'] as &$topic) {
+                        $topic['subtopics'] = array_filter(array_map('trim', explode("\n", $topic['subtopics'])));
+                    }
+                }
             }
         }
-    }
-}
 
+
+        // Process demo syllabus topics: Convert subtopics textarea into an array
+        if (isset($validated['demo_syllabus'])) {
+            foreach ($validated['demo_syllabus'] as &$module) {
+                if (isset($module['topics'])) {
+                    foreach ($module['topics'] as &$topic) {
+                        $topic['subtopics'] = array_filter(array_map('trim', explode(',', $topic['subtopics'])));
+                    }
+                }
+            }
+        }
         // Store data in course_details table
         CourseDetail::create([
             'course_name' => $request->course_name,
@@ -61,6 +81,7 @@ class CourseDetailsController extends Controller
             'learning_outcomes' => $request->learning_outcomes,
             'instructor_info' => $request->instructor_info,
             'course_curriculum' => $validated['course_curriculum'] ?? [],
+            'demo_syllabus' => $validated['demo_syllabus'] ?? [],
             'instructor_ids' => $request->instructor_ids,
             'faqs' => $request->faqs
         ]);

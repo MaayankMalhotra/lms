@@ -214,12 +214,12 @@
     </div>
 </div>
 
-<!-- Course Curriculum Section -->
-<div class="container mx-auto px-4 py-12 max-w-7xl" id="curriculum">
+<!-- Curriculum and Demo Syllabus Tabs Section -->
+<div class="container mx-auto px-4 py-12 max-w-7xl" id="curriculum-tabs">
     <div class="course-container bg-white rounded-xl shadow-lg p-8">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-6">
             <div class="max-w-2xl">
-                <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-3">Course Curriculum</h2>
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-3">Course Curriculum & Demo Syllabus</h2>
                 <p class="text-gray-600 text-base leading-relaxed">
                     This online master’s course is designed to empower working professionals. Explore a multi-domain curriculum that encourages learners to carve their own paths to success.
                 </p>
@@ -228,49 +228,113 @@
                 Download Curriculum
             </a>
         </div>
-        <div class="text-xl font-semibold text-gray-800 mb-6 border-b-2 border-teal-100 pb-3">
-            Course Modules
-        </div>
-        @forelse($course_details->course_curriculum as $index => $module)
-            <div class="accordion-item mb-4" x-data="{ open: {{ $index < 2 ? 'true' : 'false' }} }">
-                <div class="accordion-title flex justify-between items-center p-5 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-200" role="button" @click="open = !open">
-                    <div class="flex items-center space-x-4">
-                        <span class="bg-teal-100 text-teal-800 text-sm font-medium px-4 py-1.5 rounded-sm">
-                            Module {{ $module['module_number'] }}
-                        </span>
-                        <h3 class="text-lg font-semibold text-gray-800">{{ $module['title'] }}</h3>
-                    </div>
-                    <svg class="chevron w-6 h-6 text-gray-500 transform transition-transform duration-300" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                </div>
-                <div class="accordion-content p-6 bg-white rounded-b-lg shadow-sm border border-gray-100" x-show="open" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform scale-y-0" x-transition:enter-end="opacity-100 transform scale-y-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 transform scale-y-100" x-transition:leave-end="opacity-0 transform scale-y-0">
-                    <div class="flex items-center space-x-3 text-gray-600 mb-4">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                        </svg>
-                        <span class="text-sm font-medium">{{ $module['duration'] }}</span>
-                    </div>
-                    <p class="text-gray-600 text-base leading-relaxed mb-6">{{ $module['description'] }}</p>
-                    <ul class="space-y-4">
-                        @foreach($module['topics'] as $topic)
-                            <li class="text-gray-700">
-                                <h4 class="text-lg font-semibold text-gray-800 mb-2">{{ $topic['category'] }}</h4>
-                                <ul class="ml-5 mt-2 space-y-2 list-disc">
-                                    @foreach($topic['subtopics'] as $subtopic)
-                                        @foreach(explode(',', $subtopic) as $item)
-                                            <li class="text-gray-600 text-sm">{{ trim($item) }}</li>
-                                        @endforeach
-                                    @endforeach
-                                </ul>
-                            </li>
-                        @endforeach
-                    </ul>
-                </div>
+        <!-- Tabs -->
+        <div x-data="{ activeTab: 'demo' }" class="mb-6">
+            <div class="flex border-b border-gray-200">
+                <button 
+                    x-on:click="activeTab = 'demo'" 
+                    :class="{ 'tab-active': activeTab === 'demo' }" 
+                    class="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-800 focus:outline-none"
+                >
+                    Demo Syllabus
+                </button>
+                <button 
+                    x-on:click="activeTab = 'curriculum'" 
+                    :class="{ 'tab-active': activeTab === 'curriculum' }" 
+                    class="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-800 focus:outline-none"
+                >
+                    Course Curriculum
+                </button>
             </div>
-        @empty
-            <p class="text-gray-600 text-center py-8">No modules available for this course.</p>
-        @endforelse
+            <!-- Demo Syllabus Content -->
+            <div x-show="activeTab === 'demo'" class="mt-6">
+                <div class="text-xl font-semibold text-gray-800 mb-6 border-b-2 border-teal-100 pb-3">
+                    Demo Syllabus Modules
+                </div>
+                @forelse($course_details->demo_syllabus as $index => $module)
+                    <div class="accordion-item mb-4" x-data="{ open: {{ $index < 2 ? 'true' : 'false' }} }">
+                        <div class="accordion-title flex justify-between items-center p-5 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-200" role="button" @click="open = !open">
+                            <div class="flex items-center space-x-4">
+                                <span class="bg-teal-100 text-teal-800 text-sm font-medium px-4 py-1.5 rounded-sm">
+                                    Module {{ $module['module_number'] }}
+                                </span>
+                                <h3 class="text-lg font-semibold text-gray-800">{{ $module['title'] }}</h3>
+                            </div>
+                            <svg class="chevron w-6 h-6 text-gray-500 transform transition-transform duration-300" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
+                        <div class="accordion-content p-6 bg-white rounded-b-lg shadow-sm border border-gray-100" x-show="open" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform scale-y-0" x-transition:enter-end="opacity-100 transform scale-y-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 transform scale-y-100" x-transition:leave-end="opacity-0 transform scale-y-0">
+                            <div class="flex items-center space-x-3 text-gray-600 mb-4">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                                <span class="text-sm font-medium">{{ $module['duration'] }}</span>
+                            </div>
+                            <p class="text-gray-600 text-base leading-relaxed mb-6">{{ $module['description'] }}</p>
+                            <ul class="space-y-4">
+                                @foreach($module['topics'] as $topic)
+                                    <li class="text-gray-700">
+                                        <h4 class="text-lg font-semibold text-gray-800 mb-2">{{ $topic['category'] }}</h4>
+                                        <ul class="ml-5 mt-2 space-y-2 list-disc">
+                                            @foreach($topic['subtopics'] as $subtopic)
+                                                <li class="text-gray-600 text-sm">{{ trim($subtopic) }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                @empty
+                    <p class="text-gray-600 text-center py-8">No demo syllabus modules available for this course.</p>
+                @endforelse
+            </div>
+            <!-- Course Curriculum Content -->
+            <div x-show="activeTab === 'curriculum'" class="mt-6">
+                <div class="text-xl font-semibold text-gray-800 mb-6 border-b-2 border-teal-100 pb-3">
+                    Course Curriculum Modules
+                </div>
+                @forelse($course_details->course_curriculum as $index => $module)
+                    <div class="accordion-item mb-4" x-data="{ open: {{ $index < 2 ? 'true' : 'false' }} }">
+                        <div class="accordion-title flex justify-between items-center p-5 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-200" role="button" @click="open = !open">
+                            <div class="flex items-center space-x-4">
+                                <span class="bg-teal-100 text-teal-800 text-sm font-medium px-4 py-1.5 rounded-sm">
+                                    Module {{ $module['module_number'] }}
+                                </span>
+                                <h3 class="text-lg font-semibold text-gray-800">{{ $module['title'] }}</h3>
+                            </div>
+                            <svg class="chevron w-6 h-6 text-gray-500 transform transition-transform duration-300" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
+                        <div class="accordion-content p-6 bg-white rounded-b-lg shadow-sm border border-gray-100" x-show="open" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform scale-y-0" x-transition:enter-end="opacity-100 transform scale-y-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 transform scale-y-100" x-transition:leave-end="opacity-0 transform scale-y-0">
+                            <div class="flex items-center space-x-3 text-gray-600 mb-4">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                                <span class="text-sm font-medium">{{ $module['duration'] }}</span>
+                            </div>
+                            <p class="text-gray-600 text-base leading-relaxed mb-6">{{ $module['description'] }}</p>
+                            <ul class="space-y-4">
+                                @foreach($module['topics'] as $topic)
+                                    <li class="text-gray-700">
+                                        <h4 class="text-lg font-semibold text-gray-800 mb-2">{{ $topic['category'] }}</h4>
+                                        <ul class="ml-5 mt-2 space-y-2 list-disc">
+                                            @foreach($topic['subtopics'] as $subtopic)
+                                                <li class="text-gray-600 text-sm">{{ trim($subtopic) }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                @empty
+                    <p class="text-gray-600 text-center py-8">No curriculum modules available for this course.</p>
+                @endforelse
+            </div>
+        </div>
     </div>
 </div>
 
