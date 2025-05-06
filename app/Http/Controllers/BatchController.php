@@ -263,7 +263,8 @@ class BatchController extends Controller
 
     public function getBatchesByCourse(Request $request)
     {
-        $courseId = $request->query('id');
+        $courseName  = $request->query('id');
+        $courseId = Course::where('name', $courseName)->value('id');
         if (!$courseId) {
             return response()->json(['error' => 'Course ID is required'], 400);
         }
