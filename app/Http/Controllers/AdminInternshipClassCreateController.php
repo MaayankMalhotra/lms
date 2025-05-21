@@ -88,5 +88,33 @@ class AdminInternshipClassCreateController extends Controller
           $internshipClass->delete();
           return redirect()->route('admin.internship.class.index')->with('success', 'Internship class deleted successfully');
       }
+
+      public function addNotes(Request $request, $id)
+    {
+        $request->validate([
+            'notes' => 'required|string',
+        ]);
+
+        $internshipClass = InternshipClass::findOrFail($id);
+        $internshipClass->update([
+            'notes' => $request->notes,
+        ]);
+
+        return redirect()->back()->with('success', 'Notes added successfully.');
+    }
+
+    public function addNotes2(Request $request, $id)
+    {
+        $request->validate([
+            'notes_2' => 'required|string',
+        ]);
+
+        $internshipClass = InternshipClass::findOrFail($id);
+        $internshipClass->update([
+            'notes_2' => $request->notes_2,
+        ]);
+
+        return redirect()->back()->with('success', 'Notes 2 added successfully.');
+    }
     
 }

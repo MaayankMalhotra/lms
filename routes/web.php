@@ -401,6 +401,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/internship-class-create', [AdminInternshipClassCreateController::class, 'create'])->name('admin.internship.class.create');
 
     Route::get('/internship-class-index', [AdminInternshipClassCreateController::class, 'index'])->name('admin.internship.class.index');
+    // New routes for adding notes
+Route::post('/internship-class/{id}/add-notes', [AdminInternshipClassCreateController::class, 'addNotes'])->name('admin.internship.class.addNotes');
+Route::post('/internship-class/{id}/add-notes-2', [AdminInternshipClassCreateController::class, 'addNotes2'])->name('admin.internship.class.addNotes2');
     Route::get('/internship-class-edit/{id}', [AdminInternshipClassCreateController::class, 'edit'])
     ->name('admin.internship.class.edit');
 

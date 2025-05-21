@@ -9,7 +9,8 @@ class InternshipClass extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'batch_id', 'class_date_time', 'link', 'thumbnail', 'status', 'subject', 'recording_id'
+        'batch_id', 'class_date_time', 'link', 'thumbnail', 'status', 'subject', 'recording_id','notes',     // Add notes
+        'notes_2',
     ];
 
     public function batch(){
