@@ -177,6 +177,7 @@ class InternshipController extends Controller
 
                 return $enrollment;
             });
+            dd($enrollments); // Debugging line to check the enrollments data
 
     return view('student.internshipdash', compact('enrollments'));
 }
