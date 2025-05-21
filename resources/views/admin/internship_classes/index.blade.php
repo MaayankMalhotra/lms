@@ -8,6 +8,10 @@
         <div class="bg-green-500 text-white p-3 mb-4 rounded">{{ session('success') }}</div>
     @endif
 
+    @if(session('error'))
+        <div class="bg-red-500 text-white p-3 mb-4 rounded">{{ session('error') }}</div>
+    @endif
+
     <div class="overflow-hidden bg-white shadow sm:rounded-lg">
         <table class="min-w-full divide-y divide-gray-200">
             <thead>
@@ -17,7 +21,7 @@
                     <th class="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase">Link</th>
                     <th class="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase">Thumbnail</th>
                     <th class="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase">Notes</th>
-                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase">Notes 2</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase">Assignments</th>
                     <th class="px-6 py-3 text-right text-sm font-medium text-gray-500 uppercase">Actions</th>
                 </tr>
             </thead>
@@ -35,12 +39,16 @@
                             @endif
                         </td>
                         <td class="px-6 py-4 text-sm text-gray-500">
-                            {{ $class->notes ?? 'No Notes' }}
+                            <div class="prose max-w-none">{!! $class->notes ?? 'No Notes' !!}</div>
                             <button class="ml-2 text-blue-600 hover:text-blue-900" onclick="openNotesModal({{ $class->id }})">Add Notes</button>
                         </td>
                         <td class="px-6 py-4 text-sm text-gray-500">
-                            {{ $class->notes_2 ?? 'No Notes 2' }}
-                            <button class="ml-2 text-blue-600 hover:text-blue-900" onclick="openNotes2Modal({{ $class->id }})">Add Notes 2</button>
+                            @if($class->notes_2)
+                                <a href="{{ $class->notes_2 }}" target="_blank" class="inline-block px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">Access Assignment</a>
+                            @else
+                                No Assignment
+                            @endif
+                            <button class="ml-2 text-blue-600 hover:text-blue-900" onclick="openAssignmentModal({{ $class->id }})">Add Assignment</button>
                         </td>
                         <td class="px-6 py-4 text-right text-sm font-medium">
                             <a href="{{ route('admin.internship.class.edit', $class->id) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
@@ -63,7 +71,7 @@
     </div>
 </div>
 
-<!-- Modal for Add Notes -->
+<!-- Modal for Add Notes (with TinyMCE) -->
 <div id="notesModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
     <div class="bg-white rounded-lg p-6 w-full max-w-md">
         <h3 class="text-lg font-semibold mb-4">Add Notes</h3>
@@ -71,7 +79,7 @@
             @csrf
             <div class="mb-4">
                 <label for="notes" class="block text-sm font-medium text-gray-700">Notes</label>
-                <textarea id="notes" name="notes" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" rows="3" required></textarea>
+                <textarea id="notes" name="notes" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" rows="5" required></textarea>
             </div>
             <div class="flex justify-end">
                 <button type="button" onclick="closeNotesModal()" class="mr-2 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">Cancel</button>
@@ -81,50 +89,63 @@
     </div>
 </div>
 
-<!-- Modal for Add Notes 2 -->
-<div id="notes2Modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
+<!-- Modal for Add Assignment -->
+<div id="assignmentModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
     <div class="bg-white rounded-lg p-6 w-full max-w-md">
-        <h3 class="text-lg font-semibold mb-4">Add Notes 2</h3>
-        <form id="notes2Form" method="POST">
+        <h3 class="text-lg font-semibold mb-4">Add Assignment Link</h3>
+        <form id="assignmentForm" method="POST">
             @csrf
             <div class="mb-4">
-                <label for="notes_2" class="block text-sm font-medium text-gray-700">Notes 2</label>
-                <textarea id="notes_2" name="notes_2" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" rows="3" required></textarea>
+                <label for="notes_2" class="block text-sm font-medium text-gray-700">Assignment Link</label>
+                <input type="url" id="notes_2" name="notes_2" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="https://example.com/assignment" required>
             </div>
             <div class="flex justify-end">
-                <button type="button" onclick="closeNotes2Modal()" class="mr-2 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">Cancel</button>
+                <button type="button" onclick="closeAssignmentModal()" class="mr-2 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">Cancel</button>
                 <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700">Save</button>
             </div>
         </form>
     </div>
 </div>
 
-<!-- JavaScript for Modals -->
+<!-- Include TinyMCE -->
+<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+
+<!-- JavaScript for Modals and TinyMCE -->
 <script>
+    // Initialize TinyMCE for the notes textarea
+    tinymce.init({
+        selector: '#notes',
+        plugins: 'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+        toolbar: 'undo redo | formatselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+        height: 300,
+        menubar: false,
+        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+    });
+
     function openNotesModal(classId) {
         const modal = document.getElementById('notesModal');
         const form = document.getElementById('notesForm');
-        form.action = `/internship-class/${classId}/add-notes`; // Set the form action dynamically
+        form.action = `/internship-class/${classId}/add-notes`;
         modal.classList.remove('hidden');
     }
 
     function closeNotesModal() {
         const modal = document.getElementById('notesModal');
         modal.classList.add('hidden');
-        document.getElementById('notes').value = ''; // Clear the textarea
+        tinymce.get('notes').setContent(''); // Clear the TinyMCE editor
     }
 
-    function openNotes2Modal(classId) {
-        const modal = document.getElementById('notes2Modal');
-        const form = document.getElementById('notes2Form');
-        form.action = `/internship-class/${classId}/add-notes-2`; // Set the form action dynamically
+    function openAssignmentModal(classId) {
+        const modal = document.getElementById('assignmentModal');
+        const form = document.getElementById('assignmentForm');
+        form.action = `/internship-class/${classId}/add-notes-2`;
         modal.classList.remove('hidden');
     }
 
-    function closeNotes2Modal() {
-        const modal = document.getElementById('notes2Modal');
+    function closeAssignmentModal() {
+        const modal = document.getElementById('assignmentModal');
         modal.classList.add('hidden');
-        document.getElementById('notes_2').value = ''; // Clear the textarea
+        document.getElementById('notes_2').value = ''; // Clear the input
     }
 </script>
 @endsection
