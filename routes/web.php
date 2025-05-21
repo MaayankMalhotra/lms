@@ -39,7 +39,9 @@ use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\WebinarController;
 use App\Http\Controllers\YouTubeReviewController;
 
+use App\Http\Controllers\RecordingController;
 
+Route::get('admin/internship-recordings-by-course/{courseId}', [InternshipRecordingController::class, 'getRecordingsByCourse']);
 Route::get('/api/batches', [BatchController::class, 'getBatchesByCourse'])->name('api.batches');
 Route::get('/register', [BatchController::class, 'show'])->name('register');
 // Route::post('/register/submit', [BatchController::class, 'submit'])->name('register.submit');

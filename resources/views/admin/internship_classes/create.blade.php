@@ -106,6 +106,7 @@
 
     document.getElementById('recording_course_id').addEventListener('change', function() {
         const courseId = this.value;
+        console.log(courseId);
         const recordingSelect = document.getElementById('recording_id');
         recordingSelect.tomselect.clear();
         recordingSelect.tomselect.clearOptions();
@@ -113,6 +114,7 @@
         if (courseId) {
             fetch(`${baseRoute}/${courseId}`)
                 .then(response => response.json())
+                .then(console.log(response))
                 .then(data => {
                     data.forEach(recording => {
                         recordingSelect.tomselect.addOption({
