@@ -39,7 +39,11 @@
                             @endif
                         </td>
                         <td class="px-6 py-4 text-sm text-gray-500">
-                            <div class="prose max-w-none">{!! $class->notes ?? 'No Notes' !!}</div>
+                            @if($class->notes)
+                                <a href="{{ $class->notes }}" target="_blank" class="inline-block px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">Access Notes</a>
+                            @else
+                                No Notes
+                            @endif
                             <button class="ml-2 text-blue-600 hover:text-blue-900" onclick="openNotesModal({{ $class->id }})">Add Notes</button>
                         </td>
                         <td class="px-6 py-4 text-sm text-gray-500">
@@ -71,15 +75,15 @@
     </div>
 </div>
 
-<!-- Modal for Add Notes (with TinyMCE) -->
+<!-- Modal for Add Notes -->
 <div id="notesModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
     <div class="bg-white rounded-lg p-6 w-full max-w-md">
-        <h3 class="text-lg font-semibold mb-4">Add Notes</h3>
+        <h3 class="text-lg font-semibold mb-4">Add Notes Link</h3>
         <form id="notesForm" method="POST">
             @csrf
             <div class="mb-4">
-                <label for="notes" class="block text-sm font-medium text-gray-700">Notes</label>
-                <textarea id="notes" name="notes" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" rows="5" required></textarea>
+                <label for="notes" class="block text-sm font-medium text-gray-700">Notes Link</label>
+                <input type="url" id="notes" name="notes" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="https://example.com/notes" required>
             </div>
             <div class="flex justify-end">
                 <button type="button" onclick="closeNotesModal()" class="mr-2 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">Cancel</button>
@@ -107,21 +111,8 @@
     </div>
 </div>
 
-<!-- Include TinyMCE with API Key -->
-<script src="https://cdn.tiny.cloud/1/0v44tnjc502em0r5xmgkvyos00xuyjzx83ubhp95ktnw7nla/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
-
-<!-- JavaScript for Modals and TinyMCE -->
+<!-- JavaScript for Modals -->
 <script>
-    // Initialize TinyMCE for the notes textarea
-    tinymce.init({
-        selector: '#notes',
-        plugins: 'advlist autolink lists link image charmap print preview hr anchor pagebreak',
-        toolbar: 'undo redo | formatselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
-        height: 300,
-        menubar: false,
-        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
-    });
-
     function openNotesModal(classId) {
         const modal = document.getElementById('notesModal');
         const form = document.getElementById('notesForm');
@@ -132,7 +123,7 @@
     function closeNotesModal() {
         const modal = document.getElementById('notesModal');
         modal.classList.add('hidden');
-        tinymce.get('notes').setContent(''); // Clear the TinyMCE editor
+        document.getElementById('notes').value = ''; // Clear the input
     }
 
     function openAssignmentModal(classId) {
