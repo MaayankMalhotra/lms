@@ -40,7 +40,6 @@ class InternshipBatchController extends Controller
 
     public function store(Request $request)
     {
-    dd($request->all());
         $request->validate([
             'internship_id' => 'required|integer',
             'batch_name' => 'required|string',
