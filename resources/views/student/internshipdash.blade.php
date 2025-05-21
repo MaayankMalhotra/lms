@@ -157,10 +157,10 @@
                         <p class="text-gray-600 dark:text-gray-300 text-lg">
                             No internships enrolled. Start your journey today!
                         </p>
-                        <a href="{{ route('internships.index') }}"
+                        {{-- <a href="{{ route('internships.index') }}"
                            class="mt-6 inline-flex items-center px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold rounded-xl shadow-lg hover:from-indigo-600 hover:to-purple-700 transform hover:scale-105 transition-all duration-300">
                             Explore Internships
-                        </a>
+                        </a> --}}
                     </div>
                 @endforelse
             </div>
