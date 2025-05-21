@@ -9,21 +9,21 @@ use Illuminate\Http\Request;
 
 class InternshipRecordingController extends Controller
 {
-    public function getRecordingsByCourse($courseId)
-    {
-        try {
-            // Fetch recordings where recording_course_id matches the provided courseId
-            $recordings = InternshipRecordingCourse::where('recording_course_id', $courseId)
-                ->select('id', 'topic', 'title') // Only select the fields needed by the JavaScript
-                ->get();
+    // public function getRecordingsByCourse($courseId)
+    // {
+    //     try {
+    //         // Fetch recordings where recording_course_id matches the provided courseId
+    //         $recordings = InternshipRecordingCourse::where('recording_course_id', $courseId)
+    //             ->select('id', 'topic', 'title') // Only select the fields needed by the JavaScript
+    //             ->get();
 
-            // Return the recordings as JSON
-            return response()->json($recordings);
-        } catch (\Exception $e) {
-            // Return an error response if something goes wrong
-            return response()->json(['error' => 'Failed to fetch recordings'], 500);
-        }
-    }
+    //         // Return the recordings as JSON
+    //         return response()->json($recordings);
+    //     } catch (\Exception $e) {
+    //         // Return an error response if something goes wrong
+    //         return response()->json(['error' => 'Failed to fetch recordings'], 500);
+    //     }
+    // }
     public function index()
     {
         $courses = InternshipRecordingCourse::with('recordings')->get();
