@@ -9,7 +9,7 @@
                 </div>
                 <div>
                     <h3 class="text-2xl font-bold text-gray-700">100</h3>
-                    <p class="text-gray-500">Enrolled Courses</p>
+                    <p class="text-gray-500">Enrolled Courses maayank</p>
                 </div>
             </div>
 
