@@ -107,8 +107,8 @@
     </div>
 </div>
 
-<!-- Include TinyMCE -->
-<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<!-- Include TinyMCE with API Key -->
+<script src="https://cdn.tiny.cloud/1/0v44tnjc502em0r5xmgkvyos00xuyjzx83ubhp95ktnw7nla/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
 
 <!-- JavaScript for Modals and TinyMCE -->
 <script>
