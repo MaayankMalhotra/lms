@@ -92,29 +92,43 @@ class AdminInternshipClassCreateController extends Controller
       public function addNotes(Request $request, $id)
     {
         $request->validate([
-            'notes' => 'required|string',
+            'links.*.name' => 'required|string|max:255',
+            'links.*.url' => 'required|url',
         ]);
 
         $internshipClass = InternshipClass::findOrFail($id);
+        $existingNotes = $internshipClass->notes ?? []; // Get existing notes or empty array
+        $newLinks = $request->links; // Array of {name, url} objects
+
+        // Append new links to existing ones
+        $updatedNotes = array_merge($existingNotes, $newLinks);
+
         $internshipClass->update([
-            'notes' => $request->notes,
+            'notes' => $updatedNotes,
         ]);
 
-        return redirect()->back()->with('success', 'Notes added successfully.');
+        return redirect()->back()->with('success', 'Notes links added successfully.');
     }
 
     public function addNotes2(Request $request, $id)
     {
         $request->validate([
-            'notes_2' => 'required|string',
+            'links.*.name' => 'required|string|max:255',
+            'links.*.url' => 'required|url',
         ]);
 
         $internshipClass = InternshipClass::findOrFail($id);
+        $existingAssignments = $internshipClass->notes_2 ?? []; // Get existing assignments or empty array
+        $newLinks = $request->links; // Array of {name, url} objects
+
+        // Append new links to existing ones
+        $updatedAssignments = array_merge($existingAssignments, $newLinks);
+
         $internshipClass->update([
-            'notes_2' => $request->notes_2,
+            'notes_2' => $updatedAssignments,
         ]);
 
-        return redirect()->back()->with('success', 'Notes 2 added successfully.');
+        return redirect()->back()->with('success', 'Assignment links added successfully.');
     }
     
 }

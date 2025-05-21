@@ -39,20 +39,28 @@
                             @endif
                         </td>
                         <td class="px-6 py-4 text-sm text-gray-500">
-                            @if($class->notes)
-                                <a href="{{ $class->notes }}" target="_blank" class="inline-block px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">Access Notes</a>
+                            @if($class->notes && count($class->notes) > 0)
+                                <div class="space-y-2">
+                                    @foreach($class->notes as $note)
+                                        <a href="{{ $note['url'] }}" target="_blank" class="block px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">{{ $note['name'] }}</a>
+                                    @endforeach
+                                </div>
                             @else
                                 No Notes
                             @endif
-                            <button class="ml-2 text-blue-600 hover:text-blue-900" onclick="openNotesModal({{ $class->id }})">Add Notes</button>
+                            <button class="mt-2 text-blue-600 hover:text-blue-900" onclick="openNotesModal({{ $class->id }})">Add Notes</button>
                         </td>
                         <td class="px-6 py-4 text-sm text-gray-500">
-                            @if($class->notes_2)
-                                <a href="{{ $class->notes_2 }}" target="_blank" class="inline-block px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">Access Assignment</a>
+                            @if($class->notes_2 && count($class->notes_2) > 0)
+                                <div class="space-y-2">
+                                    @foreach($class->notes_2 as $assignment)
+                                        <a href="{{ $assignment['url'] }}" target="_blank" class="block px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">{{ $assignment['name'] }}</a>
+                                    @endforeach
+                                </div>
                             @else
                                 No Assignment
                             @endif
-                            <button class="ml-2 text-blue-600 hover:text-blue-900" onclick="openAssignmentModal({{ $class->id }})">Add Assignment</button>
+                            <button class="mt-2 text-blue-600 hover:text-blue-900" onclick="openAssignmentModal({{ $class->id }})">Add Assignment</button>
                         </td>
                         <td class="px-6 py-4 text-right text-sm font-medium">
                             <a href="{{ route('admin.internship.class.edit', $class->id) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
@@ -78,13 +86,17 @@
 <!-- Modal for Add Notes -->
 <div id="notesModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
     <div class="bg-white rounded-lg p-6 w-full max-w-md">
-        <h3 class="text-lg font-semibold mb-4">Add Notes Link</h3>
+        <h3 class="text-lg font-semibold mb-4">Add Notes Links</h3>
         <form id="notesForm" method="POST">
             @csrf
-            <div class="mb-4">
-                <label for="notes" class="block text-sm font-medium text-gray-700">Notes Link</label>
-                <input type="url" id="notes" name="notes" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="https://example.com/notes" required>
+            <div id="notesLinksContainer">
+                <div class="link-entry mb-4">
+                    <label class="block text-sm font-medium text-gray-700">Link 1</label>
+                    <input type="text" name="links[0][name]" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="Name (e.g., Note 1)" required>
+                    <input type="url" name="links[0][url]" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="https://example.com/note1" required>
+                </div>
             </div>
+            <button type="button" onclick="addNotesLink()" class="mb-4 text-blue-600 hover:text-blue-900">Add Another Link</button>
             <div class="flex justify-end">
                 <button type="button" onclick="closeNotesModal()" class="mr-2 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">Cancel</button>
                 <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700">Save</button>
@@ -96,13 +108,17 @@
 <!-- Modal for Add Assignment -->
 <div id="assignmentModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
     <div class="bg-white rounded-lg p-6 w-full max-w-md">
-        <h3 class="text-lg font-semibold mb-4">Add Assignment Link</h3>
+        <h3 class="text-lg font-semibold mb-4">Add Assignment Links</h3>
         <form id="assignmentForm" method="POST">
             @csrf
-            <div class="mb-4">
-                <label for="notes_2" class="block text-sm font-medium text-gray-700">Assignment Link</label>
-                <input type="url" id="notes_2" name="notes_2" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="https://example.com/assignment" required>
+            <div id="assignmentLinksContainer">
+                <div class="link-entry mb-4">
+                    <label class="block text-sm font-medium text-gray-700">Link 1</label>
+                    <input type="text" name="links[0][name]" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="Name (e.g., Assignment 1)" required>
+                    <input type="url" name="links[0][url]" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="https://example.com/assignment1" required>
+                </div>
             </div>
+            <button type="button" onclick="addAssignmentLink()" class="mb-4 text-blue-600 hover:text-blue-900">Add Another Link</button>
             <div class="flex justify-end">
                 <button type="button" onclick="closeAssignmentModal()" class="mr-2 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">Cancel</button>
                 <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700">Save</button>
@@ -113,6 +129,9 @@
 
 <!-- JavaScript for Modals -->
 <script>
+    let notesLinkCount = 1;
+    let assignmentLinkCount = 1;
+
     function openNotesModal(classId) {
         const modal = document.getElementById('notesModal');
         const form = document.getElementById('notesForm');
@@ -122,8 +141,29 @@
 
     function closeNotesModal() {
         const modal = document.getElementById('notesModal');
+        const container = document.getElementById('notesLinksContainer');
+        container.innerHTML = `
+            <div class="link-entry mb-4">
+                <label class="block text-sm font-medium text-gray-700">Link 1</label>
+                <input type="text" name="links[0][name]" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="Name (e.g., Note 1)" required>
+                <input type="url" name="links[0][url]" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="https://example.com/note1" required>
+            </div>
+        `;
+        notesLinkCount = 1;
         modal.classList.add('hidden');
-        document.getElementById('notes').value = ''; // Clear the input
+    }
+
+    function addNotesLink() {
+        const container = document.getElementById('notesLinksContainer');
+        const newLink = document.createElement('div');
+        newLink.classList.add('link-entry', 'mb-4');
+        newLink.innerHTML = `
+            <label class="block text-sm font-medium text-gray-700">Link ${notesLinkCount + 1}</label>
+            <input type="text" name="links[${notesLinkCount}][name]" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="Name (e.g., Note ${notesLinkCount + 1})" required>
+            <input type="url" name="links[${notesLinkCount}][url]" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="https://example.com/note${notesLinkCount + 1}" required>
+        `;
+        container.appendChild(newLink);
+        notesLinkCount++;
     }
 
     function openAssignmentModal(classId) {
@@ -135,8 +175,29 @@
 
     function closeAssignmentModal() {
         const modal = document.getElementById('assignmentModal');
+        const container = document.getElementById('assignmentLinksContainer');
+        container.innerHTML = `
+            <div class="link-entry mb-4">
+                <label class="block text-sm font-medium text-gray-700">Link 1</label>
+                <input type="text" name="links[0][name]" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="Name (e.g., Assignment 1)" required>
+                <input type="url" name="links[0][url]" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="https://example.com/assignment1" required>
+            </div>
+        `;
+        assignmentLinkCount = 1;
         modal.classList.add('hidden');
-        document.getElementById('notes_2').value = ''; // Clear the input
+    }
+
+    function addAssignmentLink() {
+        const container = document.getElementById('assignmentLinksContainer');
+        const newLink = document.createElement('div');
+        newLink.classList.add('link-entry', 'mb-4');
+        newLink.innerHTML = `
+            <label class="block text-sm font-medium text-gray-700">Link ${assignmentLinkCount + 1}</label>
+            <input type="text" name="links[${assignmentLinkCount}][name]" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="Name (e.g., Assignment ${assignmentLinkCount + 1})" required>
+            <input type="url" name="links[${assignmentLinkCount}][url]" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="https://example.com/assignment${assignmentLinkCount + 1}" required>
+        `;
+        container.appendChild(newLink);
+        assignmentLinkCount++;
     }
 </script>
 @endsection
