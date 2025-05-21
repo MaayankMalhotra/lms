@@ -40,13 +40,13 @@ class InternshipBatchController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'internship_id' => 'required|integer',
-            'batch_name' => 'required|string',
-            'start_time' => 'required|date',
-            'end_time' => 'required|date|after:start_time',
-            'class_schedule' => 'required|string',
-        ]);
+        // $request->validate([
+        //     'internship_id' => 'required|integer',
+        //     'batch_name' => 'required|string',
+        //     'start_time' => 'required|date',
+        //     'end_time' => 'required|date|after:start_time',
+        //     'class_schedule' => 'required|string',
+        // ]);
 
         InternshipBatch::create($request->all());
 
