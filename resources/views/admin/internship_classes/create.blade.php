@@ -114,7 +114,6 @@
         if (courseId) {
             fetch(`${baseRoute}/${courseId}`)
                 .then(response => response.json())
-                .then(console.log(response))
                 .then(data => {
                     data.forEach(recording => {
                         recordingSelect.tomselect.addOption({
