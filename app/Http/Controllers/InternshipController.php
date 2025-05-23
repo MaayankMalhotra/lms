@@ -116,7 +116,7 @@ class InternshipController extends Controller
         //     'file' => 'nullable|file|mimes:pdf|max:5120',
         //     'deadline' => 'nullable|date|after:today',
         // ]);
-
+dd($request->hasFile('file'));
         $data = $request->only(['internship_id', 'title', 'description', 'deadline']);
         if ($request->hasFile('file')) {
             $data['file_path'] = $request->file('file')->store('content', 'public');
