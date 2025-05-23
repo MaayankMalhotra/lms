@@ -275,7 +275,7 @@ public function studentInternshipContent($enrollmentId)
 
         public function internshipclasses()
 {
-    $internshipClasses = InternshipClass::all(); // Or apply any filters as needed
+    $internshipClasses = Internshipclass::with('recording')->get();
     return view('student.internshipclass', compact('internshipClasses'));
 }
 }

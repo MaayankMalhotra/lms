@@ -139,6 +139,60 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <!-- Notes Section -->
+                                <div class="mt-6">
+                                    <p class="text-gray-600 dark:text-gray-300 font-semibold mb-3">
+                                        Notes:
+                                    </p>
+                                    @if (!empty($internshipClass->notes))
+                                        <ul class="list-disc list-inside text-gray-600 dark:text-gray-300">
+                                            @foreach ($internshipClass->notes as $note)
+                                                <li>
+                                                    <a href="{{ $note['url'] }}" target="_blank" class="text-indigo-500 hover:underline">
+                                                        {{ $note['name'] }}
+                                                    </a>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    @else
+                                        <p class="text-gray-500 dark:text-gray-400">No notes available.</p>
+                                    @endif
+                                </div>
+
+                                <!-- Assignments (Notes_2) Section -->
+                                <div class="mt-6">
+                                    <p class="text-gray-600 dark:text-gray-300 font-semibold mb-3">
+                                        Assignments:
+                                    </p>
+                                    @if (!empty($internshipClass->notes_2))
+                                        <ul class="list-disc list-inside text-gray-600 dark:text-gray-300">
+                                            @foreach ($internshipClass->notes_2 as $assignment)
+                                                <li>
+                                                    <a href="{{ $assignment['url'] }}" target="_blank" class="text-indigo-500 hover:underline">
+                                                        {{ $assignment['name'] }}
+                                                    </a>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    @else
+                                        <p class="text-gray-500 dark:text-gray-400">No assignments available.</p>
+                                    @endif
+                                </div>
+
+                                <!-- Recordings Section -->
+                                <div class="mt-6">
+                                    <p class="text-gray-600 dark:text-gray-300 font-semibold mb-3">
+                                        Recordings:
+                                    </p>
+                                    @if ($internshipClass->recording)
+                                        <a href="{{ $internshipClass->recording->url }}" target="_blank" class="text-indigo-500 hover:underline">
+                                            {{ $internshipClass->recording->name ?? 'Recording' }}
+                                        </a>
+                                    @else
+                                        <p class="text-gray-500 dark:text-gray-400">No recording available.</p>
+                                    @endif
+                                </div>
                             </div>
 
                             <!-- Right: Action Button -->
