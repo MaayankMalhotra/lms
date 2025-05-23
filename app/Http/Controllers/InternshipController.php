@@ -109,23 +109,49 @@ class InternshipController extends Controller
 
     public function contentstore(Request $request)
     {
-        // $request->validate([
-        //     'internship_id' => 'required|exists:internships,id',
-        //     'title' => 'required|string|max:255',
-        //     'description' => 'nullable|string',
-        //     'file' => 'nullable|file|mimes:pdf|max:5120',
-        //     'deadline' => 'nullable|date|after:today',
-        // ]);
-dd($request->hasFile('file'));
-        $data = $request->only(['internship_id', 'title', 'description', 'deadline']);
-        if ($request->hasFile('file')) {
-            $data['file_path'] = $request->file('file')->store('content', 'public');
+        // Validate input
+        try {
+            $request->validate([
+                'internship_id' => 'required|exists:internships,id',
+                'title' => 'required|string|max:255',
+                'description' => 'nullable|string',
+                'file' => 'nullable|file|mimes:pdf|max:5120', // Max 5MB
+                'deadline' => 'nullable|date|after:today',
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            dd('Validation Error:', $e->errors());
         }
+    
+        // Check if file is uploaded
+        if (!$request->hasFile('file')) {
+            dd('No file uploaded. Check form enctype or input name:', $request->all());
+        }
+    
+        // Check if file is valid
+        if (!$request->file('file')->isValid()) {
+            dd('Invalid file. Check file type/size:', $request->file('file')->getErrorMessage());
+        }
+    
+        // Prepare data
+        $data = $request->only(['internship_id', 'title', 'description', 'deadline']);
         $data['created_at'] = now();
         $data['updated_at'] = now();
-
-        DB::table('internship_contents')->insert($data);
-
+    
+        // Try storing file
+        try {
+            $filePath = $request->file('file')->store('content', 'public');
+            $data['file_path'] = $filePath;
+        } catch (\Exception $e) {
+            dd('File storage error:', $e->getMessage(), 'Storage path:', storage_path('app/public/content'));
+        }
+    
+        // Try inserting into database
+        try {
+            DB::table('internship_contents')->insert($data);
+        } catch (\Exception $e) {
+            dd('Database insert error:', $e->getMessage(), 'Data:', $data);
+        }
+    
         return redirect()->route('admin.internship.content.create')->with('success', 'Content added.');
     }
 
