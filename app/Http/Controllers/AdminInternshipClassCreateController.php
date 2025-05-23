@@ -18,14 +18,14 @@ class AdminInternshipClassCreateController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'batch_id' => 'required|exists:internship_batches,id',
-            'class_date_time' => 'required|date',
-            'link' => 'required|url',
-            'thumbnail' => 'nullable|image|max:2048',
-            'subject' => 'required|string|max:255',
-            'recording_id' => 'nullable|exists:internship_recordings,id'
-        ]);
+        // $request->validate([
+        //     'batch_id' => 'required|exists:internship_batches,id',
+        //     'class_date_time' => 'required|date',
+        //     'link' => 'required|url',
+        //     'thumbnail' => 'nullable|image|max:2048',
+        //     'subject' => 'required|string|max:255',
+        //     'recording_id' => 'nullable|exists:internship_recordings,id'
+        // ]);
     
         $data = $request->only(['batch_id', 'class_date_time', 'link','subject','recording_id']);
     
