@@ -276,6 +276,7 @@ public function studentInternshipContent($enrollmentId)
         public function internshipclasses()
 {
     $internshipClasses = Internshipclass::with('recording')->get();
+    dd( $internshipClasses);
     return view('student.internshipclass', compact('internshipClasses'));
 }
 }
