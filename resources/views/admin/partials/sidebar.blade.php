@@ -97,8 +97,8 @@
                 </a>
             </li>
             <li>
-                <a href="{{ route('student.internships.index') }}"
-                    class="flex items-center p-3 {{ request()->routeIs('student.internships.index') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
+                <a href="{{ route('student.internship.class') }}"
+                    class="flex items-center p-3 {{ request()->routeIs('student.internship.class') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
                     <i class="fas fa-briefcase mr-3 text-lg"></i> Internship Classes and Content
                 </a>
             </li>
