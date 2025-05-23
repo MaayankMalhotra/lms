@@ -454,6 +454,7 @@ Route::post('/course-form', [CourseDetailsController::class, 'store'])->name('co
 Route::get('/internship/register/{id}', [InternshipRegistrationController::class, 'show'])->name('internship.register');
 Route::post('/internship/register/submit', [InternshipRegistrationController::class, 'store'])->name('internship.register.submit');
 
+
 Route::get('/admin/internship/content/create', [InternshipController::class, 'contentCreate'])->name('admin.internship.content.create');
 Route::post('/admin/internship/content', [InternshipController::class, 'contentstore'])->name('admin.internship.content.store');
 
