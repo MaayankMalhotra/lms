@@ -457,7 +457,7 @@ Route::post('/internship/register/submit', [InternshipRegistrationController::cl
 
 Route::get('/admin/internship/content/create', [InternshipController::class, 'contentCreate'])->name('admin.internship.content.create');
 Route::post('/admin/internship/content', [InternshipController::class, 'contentstore'])->name('admin.internship.content.store');
-
+Route::get('/student-internships-classes', [InternshipController::class, 'internshipclasses']);
 Route::get('/student-internships', [InternshipController::class, 'showOnStudentDashboard'])->name('student.internships.index');
 Route::get('/student/internship/{enrollmentId}/content', [InternshipController::class, 'studentInternshipContent'])->name('student.internship.content');
 Route::post('/student/internship/content/{contentId}/submit', [InternshipController::class, 'studentInternshipSubmit'])->name('student.internship.submit');

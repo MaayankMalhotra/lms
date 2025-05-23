@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
-
+use App\Models\Internshipclass;
 class InternshipController extends Controller
 {
     public function create()
@@ -271,4 +271,11 @@ public function studentInternshipContent($enrollmentId)
         $internships = Internship::all();
         return view('admin.internship-list-admin', compact('internships'));
         }
+
+
+        public function internshipclasses()
+{
+    $internshipClasses = InternshipClass::all(); // Or apply any filters as needed
+    return view('student.internshipclass', compact('internshipClasses'));
+}
 }
