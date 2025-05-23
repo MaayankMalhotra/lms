@@ -84,7 +84,7 @@
                             Recordings:
                         </p>
                         @if ($internshipClass->recording)
-                            <a href="{{ $internshipClass->recording->url }}" target="_blank"
+                            <a href="{{ $internshipClass->recording->link }}" target="_blank"
                                class="inline-flex items-center px-4 py-2 bg-teal-500 text-white font-semibold rounded-lg shadow-md hover:bg-teal-600 transform hover:scale-105 transition-all duration-300">
                                 {{ $internshipClass->recording->name ?? 'Recording' }}
                             </a>
