@@ -19,4 +19,9 @@ class InternshipRecording extends Model
     {
         return $this->hasMany(LiveClass::class);
     }
+
+    public function course()
+    {
+        return $this->belongsTo(InternshipRecordingCourse::class, 'recording_course_id');
+    }
 }
