@@ -21,78 +21,73 @@
             </div>
         @endif
 
-        <!-- Internships Section -->
-        <section class="flex flex-col">
-            <!-- Internship List -->
-            <div class="w-full">
+        <!-- Row Format Section -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">Internship Classes (Row Format)</h2>
+            <div class="bg-white dark:bg-gray-800 bg-opacity-90 dark:bg-opacity-20 backdrop-blur-lg rounded-2xl shadow-xl p-6 border border-gray-100 dark:border-gray-700">
                 @forelse ($internshipClasses as $internshipClass)
-                    <div class="bg-white dark:bg-gray-800 bg-opacity-90 dark:bg-opacity-20 backdrop-blur-lg rounded-2xl shadow-xl p-6 mb-8 border border-gray-100 dark:border-gray-700 hover:border-indigo-300 dark:hover:border-indigo-500 transition-all duration-300 group transform hover:-translate-y-2 hover:shadow-2xl">
-                        <!-- Internship Card -->
-                        <div class="flex flex-col">
-                            <!-- Internship Details -->
-                            <div class="flex-1">
-                                <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-                                    {{ $internshipClass->subject ?? 'Untitled Internship' }}
-                                </h3>
-
-                                <!-- Notes Section -->
-                                <div class="mt-6">
-                                    <p class="text-gray-600 dark:text-gray-300 font-semibold mb-3">
-                                        Notes:
-                                    </p>
-                                    @if (!empty($internshipClass->notes))
-                                        <ul class="list-disc list-inside text-gray-600 dark:text-gray-300">
-                                            @foreach ($internshipClass->notes as $note)
-                                                <li>
-                                                    <a href="{{ $note['url'] }}" target="_blank" class="text-indigo-500 hover:underline">
-                                                        {{ $note['name'] }}
-                                                    </a>
-                                                </li>
-                                            @endforeach
-                                        </ul>
-                                    @else
-                                        <p class="text-gray-500 dark:text-gray-400">No notes available.</p>
-                                    @endif
-                                </div>
-
-                                <!-- Assignments (Notes_2) Section -->
-                                <div class="mt-6">
-                                    <p class="text-gray-600 dark:text-gray-300 font-semibold mb-3">
-                                        Assignments:
-                                    </p>
-                                    @if (!empty($internshipClass->notes_2))
-                                        <ul class="list-disc list-inside text-gray-600 dark:text-gray-300">
-                                            @foreach ($internshipClass->notes_2 as $assignment)
-                                                <li>
-                                                    <a href="{{ $assignment['url'] }}" target="_blank" class="text-indigo-500 hover:underline">
-                                                        {{ $assignment['name'] }}
-                                                    </a>
-                                                </li>
-                                            @endforeach
-                                        </ul>
-                                    @else
-                                        <p class="text-gray-500 dark:text-gray-400">No assignments available.</p>
-                                    @endif
-                                </div>
-
-                                <!-- Recordings Section -->
-                                <div class="mt-6">
-                                    <p class="text-gray-600 dark:text-gray-300 font-semibold mb-3">
-                                        Recordings:
-                                    </p>
-                                    @if ($internshipClass->recording)
-                                        <a href="{{ $internshipClass->recording->url }}" target="_blank" class="text-indigo-500 hover:underline">
-                                            {{ $internshipClass->recording->name ?? 'Recording' }}
-                                        </a>
-                                    @else
-                                        <p class="text-gray-500 dark:text-gray-400">No recording available.</p>
-                                    @endif
-                                </div>
-                            </div>
+                    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between py-4 border-b border-gray-200 dark:border-gray-700 last:border-b-0">
+                        <!-- Subject -->
+                        <div class="sm:w-1/5 mb-4 sm:mb-0">
+                            <p class="text-gray-900 dark:text-gray-100 font-semibold">
+                                {{ $internshipClass->subject ?? 'Untitled Internship' }}
+                            </p>
+                        </div>
+                        <!-- Class Time -->
+                        <div class="sm:w-1/5 mb-4 sm:mb-0">
+                            <p class="text-gray-600 dark:text-gray-300 font-semibold mb-2">Class Time:</p>
+                            <p class="text-gray-600 dark:text-gray-300">
+                                {{ \Carbon\Carbon::parse($internshipClass->class_date_time)->format('M d, Y, h:i A') }}
+                            </p>
+                        </div>
+                        <!-- Notes -->
+                        <div class="sm:w-1/5 mb-4 sm:mb-0">
+                            <p class="text-gray-600 dark:text-gray-300 font-semibold mb-2">Notes:</p>
+                            @if (!empty($internshipClass->notes))
+                                <ul class="list-disc list-inside text-gray-600 dark:text-gray-300">
+                                    @foreach ($internshipClass->notes as $note)
+                                        <li>
+                                            <a href="{{ $note['url'] }}" target="_blank" class="text-indigo-500 hover:underline">
+                                                {{ $note['name'] }}
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @else
+                                <p class="text-gray-500 dark:text-gray-400">No notes available.</p>
+                            @endif
+                        </div>
+                        <!-- Assignments -->
+                        <div class="sm:w-1/5 mb-4 sm:mb-0">
+                            <p class="text-gray-600 dark:text-gray-300 font-semibold mb-2">Assignments:</p>
+                            @if (!empty($internshipClass->notes_2))
+                                <ul class="list-disc list-inside text-gray-600 dark:text-gray-300">
+                                    @foreach ($internshipClass->notes_2 as $assignment)
+                                        <li>
+                                            <a href="{{ $assignment['url'] }}" target="_blank" class="text-indigo-500 hover:underline">
+                                                {{ $assignment['name'] }}
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @else
+                                <p class="text-gray-500 dark:text-gray-400">No assignments available.</p>
+                            @endif
+                        </div>
+                        <!-- Recordings -->
+                        <div class="sm:w-1/5">
+                            <p class="text-gray-600 dark:text-gray-300 font-semibold mb-2">Recordings:</p>
+                            @if ($internshipClass->recording)
+                                <a href="{{ $internshipClass->recording->url }}" target="_blank" class="text-indigo-500 hover:underline">
+                                    {{ $internshipClass->recording->name ?? 'Recording' }}
+                                </a>
+                            @else
+                                <p class="text-gray-500 dark:text-gray-400">No recording available.</p>
+                            @endif
                         </div>
                     </div>
                 @empty
-                    <div class="bg-white dark:bg-gray-800 bg-opacity-90 dark:bg-opacity-20 backdrop-blur-lg rounded-2xl shadow-xl p-8 text-center border border-gray-100 dark:border-gray-700">
+                    <div class="text-center py-8">
                         <svg class="w-12 h-12 mx-auto text-gray-500 dark:text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                         </svg>
@@ -102,6 +97,90 @@
                     </div>
                 @endforelse
             </div>
+        </section>
+
+        <!-- Button Format Section -->
+        <section>
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">Internship Classes (Button Format)</h2>
+            @forelse ($internshipClasses as $internshipClass)
+                <div class="bg-white dark:bg-gray-800 bg-opacity-90 dark:bg-opacity-20 backdrop-blur-lg rounded-2xl shadow-xl p-6 mb-8 border border-gray-100 dark:border-gray-700 hover:border-indigo-300 dark:hover:border-indigo-500 transition-all duration-300 group transform hover:-translate-y-2 hover:shadow-2xl">
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors mb-4">
+                        {{ $internshipClass->subject ?? 'Untitled Internship' }}
+                    </h3>
+
+                    <!-- Class Time -->
+                    <div class="mb-6">
+                        <p class="text-gray-600 dark:text-gray-300 font-semibold mb-3">
+                            Class Time:
+                        </p>
+                        <p class="text-gray-600 dark:text-gray-300">
+                            {{ \Carbon\Carbon::parse($internshipClass->class_date_time)->format('M d, Y, h:i A') }}
+                        </p>
+                    </div>
+
+                    <!-- Notes Section -->
+                    <div class="mb-6">
+                        <p class="text-gray-600 dark:text-gray-300 font-semibold mb-3">
+                            Notes:
+                        </p>
+                        @if (!empty($internshipClass->notes))
+                            <div class="flex flex-wrap gap-2">
+                                @foreach ($internshipClass->notes as $note)
+                                    <a href="{{ $note['url'] }}" target="_blank"
+                                       class="inline-flex items-center px-4 py-2 bg-indigo-500 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-600 transform hover:scale-105 transition-all duration-300">
+                                        {{ $note['name'] }}
+                                    </a>
+                                @endforeach
+                            </div>
+                        @else
+                            <p class="text-gray-500 dark:text-gray-400">No notes available.</p>
+                        @endif
+                    </div>
+
+                    <!-- Assignments (Notes_2) Section -->
+                    <div class="mb-6">
+                        <p class="text-gray-600 dark:text-gray-300 font-semibold mb-3">
+                            Assignments:
+                        </p>
+                        @if (!empty($internshipClass->notes_2))
+                            <div class="flex flex-wrap gap-2">
+                                @foreach ($internshipClass->notes_2 as $assignment)
+                                    <a href="{{ $assignment['url'] }}" target="_blank"
+                                       class="inline-flex items-center px-4 py-2 bg-purple-500 text-white font-semibold rounded-lg shadow-md hover:bg-purple-600 transform hover:scale-105 transition-all duration-300">
+                                        {{ $assignment['name'] }}
+                                    </a>
+                                @endforeach
+                            </div>
+                        @else
+                            <p class="text-gray-500 dark:text-gray-400">No assignments available.</p>
+                        @endif
+                    </div>
+
+                    <!-- Recordings Section -->
+                    <div>
+                        <p class="text-gray-600 dark:text-gray-300 font-semibold mb-3">
+                            Recordings:
+                        </p>
+                        @if ($internshipClass->recording)
+                            <a href="{{ $internshipClass->recording->url }}" target="_blank"
+                               class="inline-flex items-center px-4 py-2 bg-teal-500 text-white font-semibold rounded-lg shadow-md hover:bg-teal-600 transform hover:scale-105 transition-all duration-300">
+                                {{ $internshipClass->recording->name ?? 'Recording' }}
+                            </a>
+                        @else
+                            <p class="text-gray-500 dark:text-gray-400">No recording available.</p>
+                        @endif
+                    </div>
+                </div>
+            @empty
+                <div class="bg-white dark:bg-gray-800 bg-opacity-90 dark:bg-opacity-20 backdrop-blur-lg rounded-2xl shadow-xl p-8 text-center border border-gray-100 dark:border-gray-700">
+                    <svg class="w-12 h-12 mx-auto text-gray-500 dark:text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    <p class="text-gray-600 dark:text-gray-300 text-lg">
+                        No internship classes found. Start your journey today!
+                    </p>
+                </div>
+            @endforelse
         </section>
     </div>
 </div>
