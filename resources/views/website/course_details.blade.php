@@ -346,19 +346,13 @@
     <div class="swiper mySwiper">
         <div class="swiper-wrapper">
             @foreach($course_details->instructor_ids as $instructor)
-            @php
-            $teacher = \App\Models\User::find($instructor);
-        @endphp
-        
-        @if ($teacher === null)
-            teacher
-        @else
-            {{ $teacher->name ?? 'teacher' }} <!-- Assuming teacher has a 'name' attribute -->
-        @endif
+                @php
+                    $teacher = \App\Models\User::find($instructor);
+                @endphp
                 <div class="swiper-slide">
                     <div class="bg-white p-5 rounded-lg shadow-md text-center">
                         <img src="https://via.placeholder.com/150" alt="Instructor" class="w-24 h-24 rounded-full mx-auto mb-3">
-                        <h3 class="text-lg font-semibold text-gray-800">{{ $teacher->name }}</h3>
+                        <h3 class="text-lg font-semibold text-gray-800">{{ $teacher->name ?? 'teacher' }}</h3>
                         <p class="text-sm text-gray-600 flex items-center justify-center gap-1 mt-1">
                             <i class="fas fa-clock text-orange-500"></i>
                             1600+ hours taught
