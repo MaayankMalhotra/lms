@@ -34,7 +34,7 @@ class AdminController extends Controller
 
     public function updateTrainer(Request $request, $id)
     {
-        dd($request->all());
+       // dd($request->all());
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email,' . $id,
@@ -55,6 +55,6 @@ class AdminController extends Controller
     {
         $trainer = User::findOrFail($id);
         $trainer->delete();
-        return redirect()->route('admin.trainer_management')->with('success', 'Trainer deleted successfully');
+        return redirect()->route('student-management')->with('success', 'Trainer deleted successfully');
     }
 }
