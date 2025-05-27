@@ -12,7 +12,7 @@
             @csrf
             <div class="mb-4">
                 <label for="live_class_id" class="block text-gray-700 font-medium mb-2">Live Class</label>
-                <select name="live_class_id" id="live_class_id" class="w-full border-gray-300 rounded-md p-2 focus:ring focus:ring-blue-200">
+                <select name="live_class_id" id="live_class_id" class="w-full border-gray-500 border-2 rounded-md p-2 focus:ring focus:ring-blue-200">
                     @foreach ($liveClasses as $class)
                         <option value="{{ $class->id }}">{{ $class->topic }} ({{ $class->class_datetime->format('Y-m-d H:i') }})</option>
                     @endforeach
@@ -22,25 +22,25 @@
 
             <div class="mb-4">
                 <label for="title" class="block text-gray-700 font-medium mb-2">Title</label>
-                <input type="text" name="title" id="title" class="w-full border-gray-300 rounded-md p-2 focus:ring focus:ring-blue-200" value="{{ old('title') }}">
+                <input type="text" name="title" id="title" class="w-full border-gray-500 border-2 rounded-md p-2 focus:ring focus:ring-blue-200" value="{{ old('title') }}">
                 @error('title') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
             </div>
 
             <div class="mb-4">
                 <label for="description" class="block text-gray-700 font-medium mb-2">Description (Optional)</label>
-                <textarea name="description" id="description" class="w-full border-gray-300 rounded-md p-2 focus:ring focus:ring-blue-200">{{ old('description') }}</textarea>
+                <textarea name="description" id="description" class="w-full border-gray-500 border-2 rounded-md p-2 focus:ring focus:ring-blue-200">{{ old('description') }}</textarea>
                 @error('description') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
             </div>
 
             <div class="mb-4">
                 <label for="due_date" class="block text-gray-700 font-medium mb-2">Due Date</label>
-                <input type="datetime-local" name="due_date" id="due_date" class="w-full border-gray-300 rounded-md p-2 focus:ring focus:ring-blue-200" value="{{ old('due_date') }}">
+                <input type="datetime-local" name="due_date" id="due_date" class="w-full border-gray-500 border-2 rounded-md p-2 focus:ring focus:ring-blue-200" value="{{ old('due_date') }}">
                 @error('due_date') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
             </div>
 
             <div class="mb-4">
                 <label for="file" class="block text-gray-700 font-medium mb-2">Upload File (Photo/PDF)</label>
-                <input type="file" name="file" id="file" class="w-full border-gray-300 rounded-md p-2">
+                <input type="file" name="file" id="file" class="w-full border-gray-500 border-2 rounded-md p-2">
                 @error('file') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
             </div>
 
