@@ -138,39 +138,39 @@
         </div>
     </div>
 
-    <!-- Edit Trainer Modal -->
-    <div class="modal" id="editTrainerModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="text-lg font-bold">Edit Trainer</h2>
-                <span class="modal-close">×</span>
-            </div>
-            <form id="editTrainerForm" method="POST" action="">
-                @csrf
-                <input type="hidden" name="_method" value="PUT">
-                <input type="hidden" name="id" id="trainer_id">
-                <div class="mb-5">
-                    <label for="name" class="block">Name</label>
-                    <input type="text" name="name" id="name">
-                    <span class="error" id="name_error"></span>
-                </div>
-                <div class="mb-5">
-                    <label for="email" class="block">Email</label>
-                    <input type="email" name="email" id="email">
-                    <span class="error" id="email_error"></span>
-                </div>
-                <div class="mb-5">
-                    <label for="phone" class="block">Phone (Optional)</label>
-                    <input type="text" name="phone" id="phone">
-                    <span class="error" id="phone_error"></span>
-                </div>
-                <div class="flex justify-end space-x-3">
-                    <button type="button" class="modal-close bg-gray-200 text-gray-700 px-5 py-2.5 rounded-md hover:bg-gray-300 transition duration-200">X</button>
-                    <button type="submit" class="bg-blue-600 text-white px-5 py-2.5 rounded-md hover:bg-blue-700 transition duration-200">Save</button>
-                </div>
-            </form>
+<!-- Edit Trainer Modal -->
+<div class="modal" id="editTrainerModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); z-index: 1000; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s ease-in-out;">
+    <div class="modal-content" style="background-color: #ffffff; padding: 24px; border-radius: 12px; width: 100%; max-width: 600px; box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2); transform: translateY(-50px); transition: transform 0.3s ease-in-out;">
+        <div class="modal-header" style="background: linear-gradient(to right, #1e3a8a, #6b21a8); color: #ffffff; padding: 12px 24px; border-top-left-radius: 12px; border-top-right-radius: 12px; margin: -24px -24px 24px -24px; display: flex; justify-content: space-between; align-items: center;">
+            <h2 class="text-lg font-bold" style="font-size: 1.125rem; font-weight: 700; margin: 0;">Edit Trainer</h2>
+            <span class="modal-close" style="cursor: pointer; font-size: 1.5rem; color: #ffffff; transition: color 0.2s ease-in-out;">×</span>
         </div>
+        <form id="editTrainerForm" method="POST" action="">
+            @csrf
+            <input type="hidden" name="_method" value="PUT">
+            <input type="hidden" name="id" id="trainer_id">
+            <div class="mb-5" style="margin-bottom: 20px;">
+                <label for="name" class="block" style="color: #374151; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; display: block;">Name</label>
+                <input type="text" name="name" id="name" style="border: 2px solid #000000; border-radius: 6px; padding: 12px; width: 100%; box-sizing: border-box; transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out; font-size: 0.875rem; color: #1f2937;">
+                <span class="error" id="name_error" style="margin-top: 4px; color: #dc2626; font-size: 0.75rem; font-style: italic; display: block;"></span>
+            </div>
+            <div class="mb-5" style="margin-bottom: 20px;">
+                <label for="email" class="block" style="color: #374151; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; display: block;">Email</label>
+                <input type="email" name="email" id="email" style="border: 2px solid #000000; border-radius: 6px; padding: 12px; width: 100%; box-sizing: border-box; transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out; font-size: 0.875rem; color: #1f2937;">
+                <span class="error" id="email_error" style="margin-top: 4px; color: #dc2626; font-size: 0.75rem; font-style: italic; display: block;"></span>
+            </div>
+            <div class="mb-5" style="margin-bottom: 20px;">
+                <label for="phone" class="block" style="color: #374151; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; display: block;">Phone (Optional)</label>
+                <input type="text" name="phone" id="phone" style="border: 2px solid #000000; border-radius: 6px; padding: 12px; width: 100%; box-sizing: border-box; transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out; font-size: 0.875rem; color: #1f2937;">
+                <span class="error" id="phone_error" style="margin-top: 4px; color: #dc2626; font-size: 0.75rem; font-style: italic; display: block;"></span>
+            </div>
+            <div class="flex justify-end space-x-3" style="display: flex; justify-content: flex-end; gap: 12px;">
+                <button type="button" class="modal-close" style="background-color: #e5e7eb; color: #374151; padding: 10px 20px; border-radius: 6px; transition: background-color 0.2s ease-in-out; font-size: 0.875rem; font-weight: 500;">Cancel</button>
+                <button type="submit" style="background-color: #2563eb; color: #ffffff; padding: 10px 20px; border-radius: 6px; transition: background-color 0.2s ease-in-out; font-size: 0.875rem; font-weight: 500;">Save</button>
+            </div>
+        </form>
     </div>
+</div>
 
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
