@@ -200,9 +200,10 @@ Route::get('/trainer-management', [AdminController::class, 'trainer_management']
 // Route::delete('admin/student/{id}/delete', [AdminController::class, 'deleteStudent'])->name('admin.student.delete');
 
 
-Route::get('admin/trainer/{id}/edit', [AdminController::class, 'editTrainer'])->name('admin.trainer.edit');
-Route::put('admin/trainer/{id}', [AdminController::class, 'updateTrainer'])->name('admin.trainer.update');
-Route::delete('admin/trainer/{id}', [AdminController::class, 'deleteTrainer'])->name('admin.trainer.delete');
+Route::get('admin/student/{id}/edit', [AdminController::class, 'editTrainer'])->name('admin.trainer.edit');
+Route::put('admin/student/{id}', [AdminController::class, 'updateTrainer'])->name('admin.trainer.update');
+Route::delete('admin/student/{id}', [AdminController::class, 'deleteTrainer'])->name('admin.trainer.delete');
+
 Route::get('/upload', [ImageUploadController::class, 'showUploadForm'])->name('upload.form');
 Route::post('/upload', [ImageUploadController::class, 'uploadImage'])->name('upload.image');
 
