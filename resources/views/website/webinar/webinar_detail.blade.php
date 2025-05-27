@@ -70,7 +70,7 @@
       <div class="grid grid-cols-4 gap-4 mt-4 text-center">
         <div>
           <p class="text-gray-500">Participation points</p>
-          <p class="text-2xl font-bold text-gray-800">{{$webinar->learning_points}}</p>
+          <p class="text-2xl font-bold text-gray-800">{{$webinar->learning_points ?? ''}}</p>
         </div>
         <div>
           <p class="text-gray-500">Start time</p>
