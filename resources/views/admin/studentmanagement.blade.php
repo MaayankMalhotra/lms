@@ -96,7 +96,7 @@
                                           method="POST"
                                           class="inline"
                                           onsubmit="return confirm('Are you sure you want to delete this trainer?')">
-                                      
+                                        @csrf
                                         @method('DELETE')
                                         <button type="submit"
                                                 class="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition duration-300 flex items-center">
@@ -122,7 +122,7 @@
             <span class="modal-close text-gray-600 text-xl">&times;</span>
             <h2 class="text-xl font-bold mb-4">Edit Trainer</h2>
             <form id="editTrainerForm" method="POST" action="">
-             
+                @csrf
                 @method('PUT')
                 <input type="hidden" name="id" id="trainer_id">
                 <div class="mb-4">
