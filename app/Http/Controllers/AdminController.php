@@ -34,6 +34,7 @@ class AdminController extends Controller
 
     public function updateTrainer(Request $request, $id)
     {
+        dd($request->all());
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email,' . $id,
