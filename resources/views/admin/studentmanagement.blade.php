@@ -165,7 +165,7 @@
                     <span class="error" id="phone_error"></span>
                 </div>
                 <div class="flex justify-end space-x-3">
-                    <button type="button" class="modal-close bg-gray-200 text-gray-700 px-5 py-2.5 rounded-md hover:bg-gray-300 transition duration-200">Cancel</button>
+                    <button type="button" class="modal-close bg-gray-200 text-gray-700 px-5 py-2.5 rounded-md hover:bg-gray-300 transition duration-200">X</button>
                     <button type="submit" class="bg-blue-600 text-white px-5 py-2.5 rounded-md hover:bg-blue-700 transition duration-200">Save</button>
                 </div>
             </form>
