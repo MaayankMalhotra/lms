@@ -121,7 +121,7 @@
         <div class="modal-content">
             <span class="modal-close text-gray-600 text-xl">&times;</span>
             <h2 class="text-xl font-bold mb-4">Edit Trainer</h2>
-            <form id="editTrainerForm" method="POST" action="">
+            <form id="editTrainerForm" method="PUT" action="">
                 @csrf
                 @method('PUT')
                 <input type="hidden" name="id" id="trainer_id">
@@ -199,7 +199,7 @@
                 e.preventDefault();
                 $.ajax({
                     url: $(this).attr('action'),
-                    method: 'POST', // Laravel uses POST for _method=PUT
+                    method: 'PUT', // Laravel uses POST for _method=PUT
                     data: $(this).serialize(),
                     success: function (response) {
                         $('#editTrainerModal').removeClass('show');
