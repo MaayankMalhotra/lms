@@ -160,11 +160,7 @@
                         <p class="text-gray-600 dark:text-gray-300 text-lg">
                             No submissions found for this internship.
                         </p>
-                        <a href="{{ route('admin.internship.index') }}"
-                           class="mt-6 inline-flex items-center px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold rounded-xl shadow-lg hover:from-indigo-600 hover:to-purple-700 transform hover:scale-105 transition-all duration-300">
-                            <i class="fas fa-arrow-left mr-2"></i>
-                            Back to Internships
-                        </a>
+                       
                     </div>
                 @endforelse
             </div>
