@@ -1,35 +1,36 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
-use App\Models\User; 
+use App\Models\User;
+
 class AdminController extends Controller
 {
-    public function student_management()
+    public function trainer_management()
     {
-        $students = User::where('role', 3)->get();
-    return view('admin.studentmanagement', compact('students'));
+        $trainers = User::where('role', 2)
+            ->where('store.store_id', session('user_id'))
+            ->where('store.store_id', '!=', 47)
+            ->get();
+        return view('admin.trainermanagement', compact('trainers'));
     }
-     public function trainer_management()
-    {
-        $students = User::where('role', 2)->get();
-    return view('admin.trainermanagement', compact('students'));
-    }
-
-
-
-
 
     public function editTrainer($id)
     {
-        $trainer = User::findOrFail($id);
-        return response()->json([
-            'id' => $trainer->id,
-            'name' => $trainer->name,
-            'email' => $trainer->email,
-            'phone' => $trainer->phone ?? '',
-        ]);
+        try {
+            $trainer = User::findOrFail($id);
+            return response()->json([
+                'id' => $trainer->id,
+                'name' => $trainer->name,
+                'email' => $trainer->email,
+                'phone' => $trainer->phone ?? '',
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Edit Trainer Error: ' . $e->getMessage());
+            return response()->json(['message' => 'Trainer not found'], 404);
+        }
     }
 
     public function updateTrainer(Request $request, $id)
