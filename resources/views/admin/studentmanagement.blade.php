@@ -17,64 +17,75 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
+            background-color: rgba(0, 0, 0, 0.7); /* Slightly darker overlay */
             z-index: 1000;
             justify-content: center;
             align-items: center;
             opacity: 0;
-            transition: opacity 0.3s ease-in-out;
+            transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out;
+            visibility: hidden;
         }
         .modal.show {
             display: flex;
             opacity: 1;
+            visibility: visible;
         }
         .modal-content {
-            background-color: white;
-            padding: 24px;
-            border-radius: 12px;
+            background-color: #f9fafb; /* Light gray for modern look */
+            padding: 32px;
+            border-radius: 16px; /* Softer corners */
             width: 100%;
-            max-width: 600px;
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
-            transform: translateY(-50px);
-            transition: transform 0.3s ease-in-out;
+            max-width: 540px; /* Slightly smaller for focus */
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+            transform: translateY(-100px);
+            transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out;
         }
         .modal.show .modal-content {
             transform: translateY(0);
+            opacity: 1;
         }
         .modal-close {
             position: absolute;
-            top: 16px;
-            right: 16px;
+            top: 12px;
+            right: 12px;
             cursor: pointer;
-            font-size: 1.5rem;
-            color: #4b5563;
-            transition: color 0.2s;
+            font-size: 1.75rem;
+            color: #6b7280; /* Gray for subtlety */
+            transition: color 0.2s, transform 0.2s;
         }
         .modal-close:hover {
             color: #1f2937;
+            transform: scale(1.1); /* Subtle zoom on hover */
         }
         .modal-content input,
         .modal-content textarea {
-            @apply border-gray-500 border-2 rounded-md p-3 focus:ring focus:ring-blue-200 w-full transition-colors duration-200;
+            @apply border-gray-300 border-2 rounded-lg p-3 focus:ring-2 focus:ring-indigo-300 focus:border-indigo-500 w-full transition-all duration-300;
         }
         .modal-content label {
-            @apply text-gray-700 font-semibold mb-2 block text-sm uppercase tracking-wide;
+            @apply text-gray-800 font-medium mb-2 block text-sm uppercase tracking-wider;
         }
         .modal-content .error {
-            @apply mt-1 text-red-600 text-xs italic;
+            @apply mt-1.5 text-red-500 text-xs font-medium;
         }
         .modal-header {
-            @apply bg-gradient-to-r from-indigo-900 to-purple-800 text-white px-4 py-3 rounded-t-md -mx-6 -mt-6 mb-6;
+            @apply bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-4 rounded-t-lg -mx-8 -mt-8 mb-6;
+        }
+        /* Button Hover Effects */
+        .modal-content button[type="submit"] {
+            @apply bg-indigo-600 text-white px-6 py-2.5 rounded-lg hover:bg-indigo-700 hover:shadow-lg transition-all duration-300;
+        }
+        .modal-content button.modal-close:not(.modal-close-icon) {
+            @apply bg-gray-100 text-gray-600 px-6 py-2.5 rounded-lg hover:bg-gray-200 hover:shadow-md transition-all duration-300;
         }
     </style>
 
-    <!-- Card Section -->
+    <!-- Card Section (Unchanged) -->
     <div class="bg-white shadow-lg rounded-lg overflow-hidden">
         <div class="bg-gradient-to-r from-indigo-900 to-purple-800 text-white px-6 py-4 border-b-2 border-orange-500">
             <h4 class="text-xl font-bold">Trainer List</h4>
         </div>
         <div class="p-6">
-            <!-- Alerts -->
+            <!-- Alerts (Unchanged) -->
             @if(session('success'))
                 <div class="bg-green-100 text-green-700 p-4 rounded-lg mb-4">{{ session('success') }}</div>
             @endif
@@ -91,7 +102,7 @@
                 </div>
             @endif
 
-            <!-- Table -->
+            <!-- Table (Unchanged) -->
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse" id="trainersTable">
                     <thead class="bg-gradient-to-r from-indigo-900 to-purple-800 text-white">
@@ -138,41 +149,41 @@
         </div>
     </div>
 
-    <!-- Edit Trainer Modal -->
+    <!-- Edit Trainer Modal (Updated) -->
     <div class="modal" id="editTrainerModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="text-lg font-bold">Edit Trainer</h2>
-                <span class="modal-close">×</span>
+                <h2 class="text-xl font-semibold">Edit Trainer</h2>
+                <span class="modal-close modal-close-icon">×</span>
             </div>
             <form id="editTrainerForm" method="POST" action="">
                 @csrf
                 <input type="hidden" name="_method" value="PUT">
                 <input type="hidden" name="id" id="trainer_id">
-                <div class="mb-5">
+                <div class="mb-6">
                     <label for="name" class="block">Name</label>
-                    <input type="text" name="name" id="name">
+                    <input type="text" name="name" id="name" class="transition-all duration-300">
                     <span class="error" id="name_error"></span>
                 </div>
-                <div class="mb-5">
+                <div class="mb-6">
                     <label for="email" class="block">Email</label>
-                    <input type="email" name="email" id="email">
+                    <input type="email" name="email" id="email" class="transition-all duration-300">
                     <span class="error" id="email_error"></span>
                 </div>
-                <div class="mb-5">
+                <div class="mb-6">
                     <label for="phone" class="block">Phone (Optional)</label>
-                    <input type="text" name="phone" id="phone">
+                    <input type="text" name="phone" id="phone" class="transition-all duration-300">
                     <span class="error" id="phone_error"></span>
                 </div>
-                <div class="flex justify-end space-x-3">
-                    <button type="button" class="modal-close bg-gray-200 text-gray-700 px-5 py-2.5 rounded-md hover:bg-gray-300 transition duration-200">Cancel</button>
-                    <button type="submit" class="bg-blue-600 text-white px-5 py-2.5 rounded-md hover:bg-blue-700 transition duration-200">Save</button>
+                <div class="flex justify-end space-x-4">
+                    <button type="button" class="modal-close">Cancel</button>
+                    <button type="submit">Save</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Scripts -->
+    <!-- Scripts (Unchanged) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
