@@ -88,8 +88,17 @@
           <p class="text-lg font-semibold text-gray-800">{{$webinar->duration}} hour</p>
         </div>
       </div>
-      <p class="text-gray-600 mt-4">
-        Learn to build entire web applications from start to finish on one of the most versatile tech stacks: MongoDB, Express.js, React.js and Node.js
+      <p class="text-gray-600 mt-4"></p>
+       @php
+      $skills = explode(',', $webinar->learn_skills ?? '');
+      $formattedSkills = collect($skills)
+        ->map(function($skill) {
+            return '<strong>' . e(trim($skill)) . '</strong>';
+        })
+        ->implode(', ');
+      @endphp
+      <p>
+      Learn the skills as {!! $formattedSkills !!}.
       </p>
       <p class="text-gray-800 mt-4">
         <span class="font-semibold">TOPIC:</span> <span class="text-orange-500">{{$webinar->topic}}</span>
