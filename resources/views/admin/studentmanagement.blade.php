@@ -7,7 +7,7 @@
     <style>
         /* Custom Tailwind Overrides */
         .dataTables_wrapper .dataTables_filter input {
-            @apply border rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-indigo-500;
+            @apply border-gray-500 border-2 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-indigo-500;
         }
         /* Modal Styles */
         .modal {
@@ -38,6 +38,12 @@
             top: 10px;
             right: 10px;
             cursor: pointer;
+            font-size: 1.5rem;
+            color: #4b5563;
+        }
+        .modal-content input,
+        .modal-content textarea {
+            @apply border-gray-500 border-2 rounded-md p-2 focus:ring focus:ring-blue-200 w-full;
         }
     </style>
 
@@ -66,7 +72,7 @@
 
             <!-- Table -->
             <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse" id="studentsTable">
+                <table class="w-full text-left border-collapse" id="trainersTable">
                     <thead class="bg-gradient-to-r from-indigo-900 to-purple-800 text-white">
                         <tr>
                             <th class="px-4 py-3 font-semibold">#</th>
@@ -78,31 +84,27 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">
-                        @forelse ($students as $index => $student)
+                        @forelse ($trainers as $index => $trainer)
                             <tr class="hover:bg-orange-500 hover:text-white transition duration-200">
-                                <td class="px-4 py-3 text-gray-600">{{ $index + 1 }}</td>
-                                <td class="px-4 py-3 text-gray-800">{{ $student->name }}</td>
-                                <td class="px-4 py-3 text-gray-800">{{ $student->email }}</td>
-                                <td class="px-4 py-3 text-gray-600">{{ $student->phone ?? 'N/A' }}</td>
-                                <td class="px-4 py-3 text-gray-600">{{ date('d M Y', strtotime($student->created_at)) }}</td>
+                                <td class="px-4 py-3 text-gray Nowak
+System: gray-600">{{ $index + 1 }}</td>
+                                <td class="px-4 py-3 text-gray-800">{{ $trainer->name }}</td>
+                                <td class="px-4 py-3 text-gray-800">{{ $trainer->email }}</td>
+                                <td class="px-4 py-3 text-gray-600">{{ $trainer->phone ?? 'N/A' }}</td>
+                                <td class="px-4 py-3 text-gray-600">{{ date('d M Y', strtotime($trainer->created_at)) }}</td>
                                 <td class="px-4 py-3 flex space-x-2">
                                     <button type="button"
                                             class="bg-orange-500 text-white px-3 py-1 rounded-md hover:bg-orange-600 transition duration-300 flex items-center edit-trainer"
-                                            data-id="{{ $student->id }}"
-                                            data-url="{{ route('admin.trainer.edit', $student->id) }}">
+                                            data-id="{{ $trainer->id }}"
+                                            data-url="{{ route('admin.trainer.edit', $trainer->id) }}">
                                         <i class="fas fa-edit mr-1"></i>
                                     </button>
-                                    <form action="{{ route('admin.trainer.delete', $student->id) }}"
-                                          method="POST"
-                                          class="inline"
-                                          onsubmit="return confirm('Are you sure you want to delete this trainer?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
-                                                class="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition duration-300 flex items-center">
-                                            <i class="fas fa-trash mr-1"></i>
-                                        </button>
-                                    </form>
+                                    <button type="button"
+                                            class="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition duration-300 flex items-center delete-trainer"
+                                            data-id="{{ $trainer->id }}"
+                                            data-url="{{ route('admin.trainer.delete', $trainer->id) }}">
+                                        <i class="fas fa-trash mr-1"></i>
+                                    </button>
                                 </td>
                             </tr>
                         @empty
@@ -119,25 +121,25 @@
     <!-- Edit Trainer Modal -->
     <div class="modal" id="editTrainerModal">
         <div class="modal-content">
-            <span class="modal-close text-gray-600 text-xl">&times;</span>
+            <span class="modal-close">&times;</span>
             <h2 class="text-xl font-bold mb-4">Edit Trainer</h2>
-            <form id="editTrainerForm" method="PUT" action="">
+            <form id="editTrainerForm" method="POST" action="">
                 @csrf
-                @method('PUT')
+                <input type="hidden" name="_method" value="PUT">
                 <input type="hidden" name="id" id="trainer_id">
                 <div class="mb-4">
                     <label for="name" class="block text-gray-700 font-medium mb-2">Name</label>
-                    <input type="text" name="name" id="name" class="w-full border-gray-500 border-2 rounded-md p-2 focus:ring focus:ring-blue-200">
+                    <input type="text" name="name" id="name">
                     <span class="text-red-500 text-sm error" id="name_error"></span>
                 </div>
                 <div class="mb-4">
                     <label for="email" class="block text-gray-700 font-medium mb-2">Email</label>
-                    <input type="email" name="email" id="email" class="w-full border-gray-500 border-2 rounded-md p-2 focus:ring focus:ring-blue-200">
+                    <input type="email" name="email" id="email">
                     <span class="text-red-500 text-sm error" id="email_error"></span>
                 </div>
                 <div class="mb-4">
                     <label for="phone" class="block text-gray-700 font-medium mb-2">Phone (Optional)</label>
-                    <input type="text" name="phone" id="phone" class="w-full border-gray-500 border-2 rounded-md p-2 focus:ring focus:ring-blue-200">
+                    <input type="text" name="phone" id="phone">
                     <span class="text-red-500 text-sm error" id="phone_error"></span>
                 </div>
                 <div class="flex justify-end space-x-2">
@@ -153,8 +155,14 @@
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
     <script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
         $(document).ready(function () {
-            $('#studentsTable').DataTable({
+            $('#trainersTable').DataTable({
                 paging: false,
                 searching: true,
                 ordering: true,
@@ -168,7 +176,6 @@
                 }
             });
 
-            // Open modal and fetch trainer data
             $('.edit-trainer').on('click', function () {
                 const url = $(this).data('url');
                 $.ajax({
@@ -180,41 +187,61 @@
                         $('#email').val(data.email);
                         $('#phone').val(data.phone);
                         $('#editTrainerForm').attr('action', '{{ url("admin/trainer") }}/' + data.id);
-                        $('.error').text(''); // Clear previous errors
+                        $('.error').text('');
                         $('#editTrainerModal').addClass('show');
                     },
-                    error: function () {
-                        alert('Failed to load trainer data.');
+                    error: function (xhr) {
+                        console.error('Edit Error:', xhr);
+                        alert('Failed to load trainer data: ' + (xhr.responseJSON?.message || 'Unknown error'));
                     }
                 });
             });
 
-            // Close modal
             $('.modal-close').on('click', function () {
                 $('#editTrainerModal').removeClass('show');
             });
 
-            // Handle form submission
             $('#editTrainerForm').on('submit', function (e) {
                 e.preventDefault();
                 $.ajax({
                     url: $(this).attr('action'),
-                    method: 'PUT', // Laravel uses POST for _method=PUT
+                    method: 'POST',
                     data: $(this).serialize(),
                     success: function (response) {
                         $('#editTrainerModal').removeClass('show');
-                        window.location.reload(); // Refresh to show updated data
+                        window.location.reload();
                     },
                     error: function (xhr) {
-                        const errors = xhr.responseJSON.errors;
-                        $('.error').text(''); // Clear previous errors
+                        console.error('Update Error:', xhr);
+                        const errors = xhr.responseJSON?.errors;
+                        $('.error').text('');
                         if (errors) {
                             $('#name_error').text(errors.name ? errors.name[0] : '');
                             $('#email_error').text(errors.email ? errors.email[0] : '');
                             $('#phone_error').text(errors.phone ? errors.phone[0] : '');
                         } else {
-                            alert('An error occurred while updating the trainer.');
+                            alert('Failed to update trainer: ' + (xhr.responseJSON?.message || 'Unknown error'));
                         }
+                    }
+                });
+            });
+
+            $('.delete-trainer').on('click', function () {
+                if (!confirm('Are you sure you want to delete this trainer?')) return;
+                const url = $(this).data('url');
+                $.ajax({
+                    url: url,
+                    method: 'POST',
+                    data: {
+                        _method: 'DELETE',
+                        _token: $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (response) {
+                        window.location.reload();
+                    },
+                    error: function (xhr) {
+                        console.error('Delete Error:', xhr);
+                        alert('Failed to delete trainer: ' + (xhr.responseJSON?.message || 'Unknown error'));
                     }
                 });
             });

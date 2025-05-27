@@ -34,27 +34,38 @@ class AdminController extends Controller
 
     public function updateTrainer(Request $request, $id)
     {
-       // dd($request->all());
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:users,email,' . $id,
-            'phone' => 'nullable|string|max:20',
-        ]);
+        try {
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|max:255|unique:users,email,' . $id,
+                'phone' => 'nullable|string|max:20',
+            ]);
 
-        $trainer = User::findOrFail($id);
-        $trainer->update([
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-        ]);
+            $trainer = User::findOrFail($id);
+            $trainer->update([
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+            ]);
 
-        return redirect()->route('admin.trainer_management')->with('success', 'Trainer updated successfully');
+            return response()->json(['message' => 'Trainer updated successfully'], 200);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json(['errors' => $e->errors()], 422);
+        } catch (\Exception $e) {
+            \Log::error('Update Trainer Error: ' . $e->getMessage());
+            return response()->json(['message' => 'Failed to update trainer'], 500);
+        }
     }
 
     public function deleteTrainer($id)
     {
-        $trainer = User::findOrFail($id);
-        $trainer->delete();
-        return redirect()->route('student-management')->with('success', 'Trainer deleted successfully');
+        try {
+            $trainer = User::findOrFail($id);
+            $trainer->delete();
+            return response()->json(['message' => 'Trainer deleted successfully'], 200);
+        } catch (\Exception $e) {
+            \Log::error('Delete Trainer Error: ' . $e->getMessage());
+            return response()->json(['message' => 'Failed to delete trainer'], 500);
+        }
     }
 }
