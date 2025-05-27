@@ -8,7 +8,7 @@ class AdminController extends Controller
 {
     public function student_management()
     {
-        $students = User::where('role', 3)->get();
+        $trainers = User::where('role', 3)->get();
     return view('admin.studentmanagement', compact('trainers'));
     }
      public function trainer_management()
