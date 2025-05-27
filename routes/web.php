@@ -491,6 +491,9 @@ Route::get('/register-website', function () {
 
 Route::get('/career-highlights',[CareerHighlightController::class, 'show'])->name('career_hightlight_show');
 Route::get('/webinars', [WebinarController::class, 'show'])->name('webinar.show');
+Route::get('/webinars/{id}', [WebinarController::class, 'showWebinar'])->name('webinars.show');
+Route::post('/webinars/{id}/enroll', [WebinarController::class, 'enroll'])->name('webinars.enroll');
+
 Route::get('/contactus', [ContactUsController::class, 'index'])->name('contact.index');
 // Route::post('/contact-us', [ContactUsController::class, 'store'])->name('contact.store');
 
@@ -505,7 +508,7 @@ Route::get('/contactus', [ContactUsController::class, 'index'])->name('contact.i
 //     return view('website.reviews');
 // })->name('website.reviews');
 
-Route::get('/webinar-detail',function(){
-    return view('website.webinar.webinar_detail');
-});
+// Route::get('/webinar-detail',function(){
+//     return view('website.webinar.webinar_detail');
+// });
 

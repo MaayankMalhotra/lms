@@ -49,9 +49,13 @@
             {{ Str::limit($webinar->description, 150) }}
           </div>
           <div class="text-gray-600 mb-4">{{ number_format($webinar->participants_count) }} participants Registered</div>
-          <button class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300">
+          {{-- <button class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300">
             Register Now
-          </button>
+          </button> --}}
+          <a href="{{ route('webinars.show', $webinar->id) }}"
+                   class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 inline-block">
+                    Register Now
+                </a>
         </div>
       </div>
       @endforeach

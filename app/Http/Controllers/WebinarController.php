@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Webinar;
+use App\Models\WebinarEnrollment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class WebinarController extends Controller
 {
@@ -33,6 +35,37 @@ class WebinarController extends Controller
 
     return view('website.webinars', compact('webinars', 'uniqueTags', 'selectedTag'));
 }
+
+public function showWebinar($id){
+    $webinar = Webinar::findOrFail($id);
+    return view ('website.webinar.webinar_detail',compact('webinar'));
+}
+
+ public function enroll(Request $request, $id)
+    {
+        $webinar = Webinar::where('id', $id)->firstOrFail();
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'nullable|string|max:20',
+            'comments' => 'nullable|string|max:1000',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+        WebinarEnrollment::create([
+            'webinar_id' => $webinar->id,
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'comments' => $request->comments,
+        ]);
+
+        return redirect()->back()->with('success', 'Successfully enrolled in the webinar!');
+    }
+
 
 
 
