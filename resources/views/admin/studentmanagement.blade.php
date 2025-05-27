@@ -17,33 +17,54 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0.6);
             z-index: 1000;
             justify-content: center;
             align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
         }
         .modal.show {
             display: flex;
+            opacity: 1;
         }
         .modal-content {
             background-color: white;
-            padding: 20px;
-            border-radius: 8px;
+            padding: 24px;
+            border-radius: 12px;
             width: 100%;
-            max-width: 500px;
-            position: relative;
+            max-width: 600px;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+            transform: translateY(-50px);
+            transition: transform 0.3s ease-in-out;
+        }
+        .modal.show .modal-content {
+            transform: translateY(0);
         }
         .modal-close {
             position: absolute;
-            top: 10px;
-            right: 10px;
+            top: 16px;
+            right: 16px;
             cursor: pointer;
             font-size: 1.5rem;
             color: #4b5563;
+            transition: color 0.2s;
+        }
+        .modal-close:hover {
+            color: #1f2937;
         }
         .modal-content input,
         .modal-content textarea {
-            @apply border-gray-500 border-2 rounded-md p-2 focus:ring focus:ring-blue-200 w-full;
+            @apply border-gray-500 border-2 rounded-md p-3 focus:ring focus:ring-blue-200 w-full transition-colors duration-200;
+        }
+        .modal-content label {
+            @apply text-gray-700 font-semibold mb-2 block text-sm uppercase tracking-wide;
+        }
+        .modal-content .error {
+            @apply mt-1 text-red-600 text-xs italic;
+        }
+        .modal-header {
+            @apply bg-gradient-to-r from-indigo-900 to-purple-800 text-white px-4 py-3 rounded-t-md -mx-6 -mt-6 mb-6;
         }
     </style>
 
@@ -86,8 +107,7 @@
                     <tbody class="divide-y divide-gray-200">
                         @forelse ($trainers as $index => $trainer)
                             <tr class="hover:bg-orange-500 hover:text-white transition duration-200">
-                                <td class="px-4 py-3 text-gray Nowak
-System: gray-600">{{ $index + 1 }}</td>
+                                <td class="px-4 py-3 text-gray-600">{{ $index + 1 }}</td>
                                 <td class="px-4 py-3 text-gray-800">{{ $trainer->name }}</td>
                                 <td class="px-4 py-3 text-gray-800">{{ $trainer->email }}</td>
                                 <td class="px-4 py-3 text-gray-600">{{ $trainer->phone ?? 'N/A' }}</td>
@@ -121,30 +141,32 @@ System: gray-600">{{ $index + 1 }}</td>
     <!-- Edit Trainer Modal -->
     <div class="modal" id="editTrainerModal">
         <div class="modal-content">
-            <span class="modal-close">&times;</span>
-            <h2 class="text-xl font-bold mb-4">Edit Trainer</h2>
+            <div class="modal-header">
+                <h2 class="text-lg font-bold">Edit Trainer</h2>
+                <span class="modal-close">×</span>
+            </div>
             <form id="editTrainerForm" method="POST" action="">
                 @csrf
                 <input type="hidden" name="_method" value="PUT">
                 <input type="hidden" name="id" id="trainer_id">
-                <div class="mb-4">
-                    <label for="name" class="block text-gray-700 font-medium mb-2">Name</label>
+                <div class="mb-5">
+                    <label for="name" class="block">Name</label>
                     <input type="text" name="name" id="name">
-                    <span class="text-red-500 text-sm error" id="name_error"></span>
+                    <span class="error" id="name_error"></span>
                 </div>
-                <div class="mb-4">
-                    <label for="email" class="block text-gray-700 font-medium mb-2">Email</label>
+                <div class="mb-5">
+                    <label for="email" class="block">Email</label>
                     <input type="email" name="email" id="email">
-                    <span class="text-red-500 text-sm error" id="email_error"></span>
+                    <span class="error" id="email_error"></span>
                 </div>
-                <div class="mb-4">
-                    <label for="phone" class="block text-gray-700 font-medium mb-2">Phone (Optional)</label>
+                <div class="mb-5">
+                    <label for="phone" class="block">Phone (Optional)</label>
                     <input type="text" name="phone" id="phone">
-                    <span class="text-red-500 text-sm error" id="phone_error"></span>
+                    <span class="error" id="phone_error"></span>
                 </div>
-                <div class="flex justify-end space-x-2">
-                    <button type="button" class="modal-close bg-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-400">Cancel</button>
-                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">Save</button>
+                <div class="flex justify-end space-x-3">
+                    <button type="button" class="modal-close bg-gray-200 text-gray-700 px-5 py-2.5 rounded-md hover:bg-gray-300 transition duration-200">Cancel</button>
+                    <button type="submit" class="bg-blue-600 text-white px-5 py-2.5 rounded-md hover:bg-blue-700 transition duration-200">Save</button>
                 </div>
             </form>
         </div>
