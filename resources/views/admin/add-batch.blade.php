@@ -183,18 +183,33 @@
                                 @enderror
                             </div>
                             <!-- Discounted Price -->
-<div class="relative">
-    <label class="block text-sm font-medium text-gray-700 mb-2">
-        <i class="fas fa-tag mr-2 text-blue-400"></i>Discounted Price (₹)
-    </label>
-    <input type="text" name="discounted_price" id="discounted_price" readonly 
-           class="w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-100" 
-           placeholder="Discounted Price" value="0">
-</div>
+        <div class="relative">
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+                <i class="fas fa-tag mr-2 text-blue-400"></i>Discounted Price (₹)
+            </label>
+            <input type="text" name="discounted_price" id="discounted_price" readonly 
+                   class="w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-100" 
+                   placeholder="Discounted Price" value="0">
+        </div>
+        
+            <!--EMI Price -->
+                            <div class="relative">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    <i class="fas fa-rupee-sign mr-2 text-blue-400"></i>EMI Price (₹)
+                                </label>
+                                <input type="number" name="emi_price" id="emi_price"  
+                                       class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
+                                       placeholder="e.g., 40014"
+                                       value="{{ old('emi_price') }}">
+                                @error('emi_price')
+                                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+
 
                         </div>
 
-                        <!-- EMI Options -->
+                       
                         <!-- EMI Options -->
                         <div class="mt-6">
     <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -277,6 +292,9 @@
 const emiPlansSection = document.getElementById('emiPlans');
 emiAvailableCheckbox.addEventListener('change', function () {
     emiPlansSection.classList.toggle('hidden', !this.checked);
+    document.querySelectorAll('.emi-plan input[name$="[installments]"], .emi-plan input[name$="[interval_months]"]').forEach(input => {
+            input.required = this.checked;
+        });
     updateEmiAmounts(); // Update amounts when EMI is toggled
 });
 
@@ -299,6 +317,9 @@ document.getElementById('addEmiPlan').addEventListener('click', function () {
     const newIntervalMonthsInput = planDiv.querySelector('input[name$="[interval_months]"]');
     newInstallmentsInput.addEventListener('input', updateEmiAmounts);
     newIntervalMonthsInput.addEventListener('input', updateEmiAmounts);
+    // Set required attribute based on emiAvailableCheckbox state
+    newInstallmentsInput.required = emiAvailableCheckbox.checked;
+    newIntervalMonthsInput.required = emiAvailableCheckbox.checked;
     updateEmiAmounts(); // Update amounts for the new plan
 });
 
@@ -317,6 +338,7 @@ function updateEmiAmounts() {
     const discount = parseFloat(document.getElementById('discount').value) || 0;
     const finalPrice = price - (price * (discount / 100)); // Calculate final price after discount
     document.getElementById('discounted_price').value = finalPrice.toFixed(2);
+    const emiPrice = parseFloat(document.getElementById('emi_price').value) || 0;
 
     // Update EMI amounts for each plan
     document.querySelectorAll('.emi-plan').forEach(plan => {
@@ -327,7 +349,7 @@ function updateEmiAmounts() {
         const intervalMonths = parseInt(intervalMonthsInput.value) || 1;
 
         // Calculate amount per installment
-        const amountPerInstallment = installments > 0 ? (finalPrice / installments).toFixed(2) : 0;
+        const amountPerInstallment = installments > 0 ? (emiPrice / installments).toFixed(2) : 0;
         amountInput.value = amountPerInstallment;
 
         // Optional: Validate interval_months (e.g., ensure it's reasonable)
@@ -379,6 +401,11 @@ document.getElementById('batchForm').addEventListener('submit', function (e) {
         }
     }
 });
+
+// Initialize EMI amounts and required attributes on page load
+    document.querySelectorAll('.emi-plan input[name$="[installments]"], .emi-plan input[name$="[interval_months]"]').forEach(input => {
+        input.required = emiAvailableCheckbox.checked;
+    });
 
 // Initialize EMI amounts on page load
 updateEmiAmounts();

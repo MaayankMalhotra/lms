@@ -106,16 +106,17 @@ class BatchController extends Controller
             'duration' => 'required|string',
             'time_slot' => 'required|string',
             'price' => 'required|numeric|min:0',
+            'emi_price' => 'nullable|numeric|min:0',
             'discount_info' => 'nullable|string',
             'slots_available' => 'required|numeric|min:1',
             'slots_filled' => 'required|numeric|min:0',
             'course_id' => 'required|exists:courses,id',
             'teacher_id' => 'required|exists:users,id',
             'emi_available' => 'nullable|in:on,1,0,true,false',
-            'emi_plans' => 'required_if:emi_available,on|array',
-            'emi_plans.*.installments' => 'required_if:emi_available,on|integer|min:2',
-            'emi_plans.*.amount' => 'required_if:emi_available,on|numeric|min:0',
-            'emi_plans.*.interval_months' => 'required_if:emi_available,on|integer|min:1',
+            'emi_plans' => 'nullable:emi_available,on|array',
+            'emi_plans.*.installments' => 'nullable:emi_available,on|integer|min:2',
+            'emi_plans.*.amount' => 'nullable:emi_available,on|numeric|min:0',
+            'emi_plans.*.interval_months' => 'nullable:emi_available,on|integer|min:1',
         ]);
 
         $batchData = $validated;
@@ -137,19 +138,19 @@ class BatchController extends Controller
        // Validate total EMI amount matches discounted price with a tolerance of 0.01
        foreach ($batchData['emi_plans'] as $index => $plan) {
         $total = round($plan['installments'] * $plan['amount'], 2);
-        $discountedPrice = round($batchData['discounted_price'], 2);
+        $emiPrice = round($batchData['emi_price'], 2);
         
-        if (abs($total - $discountedPrice) > 0.5) { // Increased tolerance
+        if (abs($total - $emiPrice) > 0.5) { // Increased tolerance
             Log::warning('EMI plan validation failed:', [
                 'plan_index' => $index,
                 'total' => $total,
-                'discounted_price' => $discountedPrice,
-                'difference' => abs($total - $discountedPrice),
+                'emi_price' => $emiPrice,
+                'difference' => abs($total - $emiPrice),
                 'installments' => $plan['installments'],
                 'amount' => $plan['amount'],
             ]);
             return back()->withErrors([
-                'emi_plans' => "Total EMI amount for plan " . ($index + 1) . " (₹{$total}) does not match the discounted price (₹{$discountedPrice}).",
+                'emi_plans' => "Total EMI amount for plan " . ($index + 1) . " (₹{$total}) does not match the EMI price (₹{$emiPrice}).",
             ]);
         }
     }
@@ -158,7 +159,7 @@ class BatchController extends Controller
         $batchData['emi_plans'] = null;
     }
     // Remove discounted_price from batchData as it's a generated column
-    unset($batchData['discounted_price']);
+    // unset($batchData['discounted_price']);
 
         Log::info('Batch data before creation:', $batchData);
 
@@ -417,14 +418,15 @@ public function show(Request $request)
     // Calculate prices
     $originalPrice = $batch->price;
     $discountedPrice = $originalPrice * (1 - $discountPercentage/100);
+    $emiPrice= $batch->emi_price;
     // dd($discountedPrice);
 
     // Adjust EMI plans based on discounted price
     $emiPlans = $batch->emi_plans ?? [];
     if (!empty($emiPlans)) {
-        $emiPlans = array_map(function ($plan) use ($discountedPrice) {
+        $emiPlans = array_map(function ($plan) use ($emiPrice) {
             $totalInstallments = $plan['installments'];
-            $newEmiAmount = $discountedPrice / $totalInstallments;
+            $newEmiAmount = $emiPrice / $totalInstallments;
             return [
                 'installments' => $plan['installments'],
                 'amount' => round($newEmiAmount, 2),
@@ -444,6 +446,7 @@ public function show(Request $request)
         'emi_available' => $batch->emi_available,
         'course_name' => $batch->course->name,
         'price' => $discountedPrice,
+        'emi_price' => $emiPrice,
         'original_price' => $originalPrice,
         'discount_percentage' => $discountPercentage,
         'emi_plans' => $emiPlans,
