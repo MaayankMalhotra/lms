@@ -23,7 +23,11 @@ class CourseDetail extends Model
         'key_points',
         'instructor_ids',
         'faqs',
-        'demo_syllabus'
+        'demo_syllabus',
+        'key_features',
+        'certifications',
+        'certificate_image',
+        'certificate_description',
     ];
 
     protected $casts = [
@@ -33,5 +37,9 @@ class CourseDetail extends Model
         'instructor_ids' => 'array',
         'faqs' => 'array',
         'demo_syllabus' => 'array',
+        'key_features' => 'array',
+        'certifications' => 'array',
+        'certificate_description' => 'array',
+        
     ];
 }

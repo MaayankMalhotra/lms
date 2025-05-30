@@ -555,6 +555,121 @@
                     </div>
                 </div>
 
+                <!-- Key Features Section -->
+                <div class="collapsible-section full-width" style="background-color: #fefcbf;">
+                    <div class="collapsible-header" onclick="toggleSection(this)">
+                        <span>Key Features</span>
+                        <svg class="chevron w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-width="2" d="M19 9l-7 7-7-7">
+                        </svg>
+                    </div>
+                    <div class="collapsible-content">
+                        <div class="field-container">
+                            <div id="key-features-container" class="dynamic-section">
+                                <div class="dynamic-field">
+                                    <div class="form-grid">
+                                        <div class="field-container">
+                                            <label>Icon (e.g., 📅 or fas fa-calendar)</label>
+                                            <input type="text" name="key_features[0][icon]" required value="{{ old('key_features.0.icon') }}">
+                                            @error('key_features.0.icon')
+                                                <div class="error">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                        <div class="field-container">
+                                            <label>Topic (e.g., Self-paced Learning)</label>
+                                            <input type="text" name="key_features[0][topic]" required value="{{ old('key_features.0.topic') }}">
+                                            @error('key_features.0.topic')
+                                                <div class="error">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                        <div class="field-container full-width">
+                                            <label>Description</label>
+                                            <textarea name="key_features[0][description]" required>{{ old('key_features.0.description') }}</textarea>
+                                            @error('key_features.0.description')
+                                                <div class="error">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <button type="button" class="button remove-button mt-2" onclick="removeKeyFeature(this)">Remove Feature</button>
+                                </div>
+                            </div>
+                            <button type="button" class="button add-button mt-2" onclick="addKeyFeature()">Add Key Feature</button>
+                            @error('key_features')
+                                <div class="error">{{ $message }}</div>
+                            @enderror
+                            @error('key_features.*')
+                                <div class="error">{{ $message }}</div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Certifications Section -->
+                <div class="collapsible-section full-width" style="background-color: #fefcbf;">
+                    <div class="collapsible-header" onclick="toggleSection(this)">
+                        <span>Course Certificates</span>
+                        <svg class="chevron w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
+                    <div class="collapsible-content">
+                        <div class="field-container">
+                            <!-- Certificate Image -->
+                            <div class="field-container">
+                                <label for="certificate_image">Certificate Image</label>
+                                <input type="file" name="certificate_image" id="certificate_image" accept="image/*" value="{{ old('certificate_image') }}">
+                                @error('certificate_image')
+                                    <div class="error">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <!-- Certifications -->
+                            <div id="certifications-container" class="dynamic-section">
+                                <div class="dynamic-field">
+                                    <div class="form-grid">
+                                        <div class="field-container full-width">
+                                            <label>Certification Name (e.g., CCBA – Certification of Competency in Business Analysis)</label>
+                                            <input type="text" name="certifications[0][name]" required value="{{ old('certifications.0.name') }}" placeholder="Enter certification name">
+                                            @error('certifications.0.name')
+                                                <div class="error">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <button type="button" class="button remove-button mt-2" onclick="removeCertification(this)">Remove Certification</button>
+                                </div>
+                            </div>
+                            <button type="button" class="button add-button mt-2" onclick="addCertification()">Add Certification</button>
+                            @error('certifications')
+                                <div class="error">{{ $message }}</div>
+                            @enderror
+                            @error('certifications.*')
+                                <div class="error">{{ $message }}</div>
+                            @enderror
+                            <!-- Certificate Descriptions -->
+                            <div id="certificate-descriptions-container" class="dynamic-section">
+                                <div class="dynamic-field">
+                                    <div class="form-grid">
+                                        <div class="field-container full-width">
+                                            <label>Certificate Description (e.g., Our business analyst Master’s program...)</label>
+                                            <textarea name="certificate_description[0][text]" required placeholder="Enter certificate description">{{ old('certificate_description.0.text') }}</textarea>
+                                            @error('certificate_description.0.text')
+                                                <div class="error">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <button type="button" class="button remove-button mt-2" onclick="removeCertificateDescription(this)">Remove Description</button>
+                                </div>
+                            </div>
+                            <button type="button" class="button add-button mt-2" onclick="addCertificateDescription()">Add Certificate Description</button>
+                            @error('certificate_description')
+                                <div class="error">{{ $message }}</div>
+                            @enderror
+                            @error('certificate_description.*')
+                                <div class="error">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Submit Button -->
                 <div class="field-container">
                     <button type="submit" class="button submit-button">Add Course Detail</button>
@@ -569,6 +684,9 @@
         let faqCount = 1;
         let topicCounts = { 0: 1 }; // Track topic counts for each module
         let demoTopicCounts = { 0: 1 }; // Track topic counts for demo syllabus modules
+        let keyFeatureCount = 1;
+        let certificationCount = 1;
+        let certificateDescriptionCount = 1;
 
 
         function toggleSection(element) {
@@ -833,5 +951,107 @@
                 alert('At least one FAQ is required.');
             }
         }
+
+        function addKeyFeature() {
+                const container = document.getElementById('key-features-container');
+                const div = document.createElement('div');
+                div.className = 'dynamic-field';
+                div.innerHTML = `
+                    <div class="form-grid">
+                        <div class="field-container">
+                            <label>Icon (e.g., (📅 .or fas faq fa-calendar)</label>
+                            <input type="text" name="key_features[${keyFeatureCount}][icon]" required>
+                            </div>
+                        </div class="field-container">
+                            <label>Topic</label>
+                            <input type="text" name="key_features[${keyFeatureCount}][topic]" required>
+                            </div>
+                            </div>
+                        <div class="field-container full-width">
+                            <label>Description</label>
+                            <textarea name="key_features[${keyFeatureCount}][description]" required></textarea>
+                        </div>
+                    </div>
+                    </div>
+                    <button type="button" class="button remove-button mt-2" onclick="removeKeyFeature(this)">Remove Feature</button>
+                `;
+                container.appendChild(div);
+                keyFeatureCount++;
+            }
+
+            function removeKeyFeature(button) {
+                const fields = document.querySelectorAll('#key-features-container .dynamic-field');
+                if (fields.length > 1) {
+                    button.parentElement.remove();
+                    keyFeatureCount--;
+                } else {
+                    alert('At least one key feature is required.');
+                }
+            }
+
+            function addCertification() {
+        const container = document.getElementById('certifications-container');
+        if (!container) {
+            console.error('Certifications container not found!');
+            alert('Error: Could not find certifications container.');
+            return;
+        }
+        const div = document.createElement('div');
+        div.className = 'dynamic-field';
+        div.innerHTML = `
+            <div class="form-grid">
+                <div class="field-container full-width">
+                    <label>Certification Name (e.g., CCBA – Certification of Competency in Business Analysis)</label>
+                    <input type="text" name="certifications[${certificationCount}][name]" required placeholder="Enter certification name">
+                </div>
+            </div>
+            <button type="button" class="button remove-button mt-2" onclick="removeCertification(this)">Remove Certification</button>
+        `;
+        container.appendChild(div);
+        certificationCount++;
+    }
+
+    function removeCertification(button) {
+        const fields = document.querySelectorAll('#certifications-container .dynamic-field');
+        if (fields.length > 1) {
+            button.parentElement.remove();
+            certificationCount = Math.max(1, certificationCount - 1);
+        } else {
+            alert('At least one certification is required.');
+        }
+    }
+
+    function addCertificateDescription() {
+        const container = document.getElementById('certificate-descriptions-container');
+        if (!container) {
+            console.error('Certificate descriptions container not found!');
+            alert('Error: Could not find certificate descriptions container.');
+            return;
+        }
+        const div = document.createElement('div');
+        div.className = 'dynamic-field';
+        div.innerHTML = `
+            <div class="form-grid">
+                <div class="field-container full-width">
+                    <label>Certificate Description (e.g., Our business analyst Master’s program...)</label>
+                    <textarea name="certificate_description[${certificateDescriptionCount}][text]" required placeholder="Enter certificate description"></textarea>
+                </div>
+            </div>
+            <button type="button" class="button remove-button mt-2" onclick="removeCertificateDescription(this)">Remove Description</button>
+        `;
+        container.appendChild(div);
+        certificateDescriptionCount++;
+    }
+
+    function removeCertificateDescription(button) {
+        const fields = document.querySelectorAll('#certificate-descriptions-container .dynamic-field');
+        if (fields.length > 1) {
+            button.parentElement.remove();
+            certificateDescriptionCount = Math.max(1, certificateDescriptionCount - 1);
+        } else {
+            alert('At least one certificate description is required.');
+        }
+    }
+        
     </script>
     @endsection

@@ -191,26 +191,25 @@
 <div class="container mx-auto px-5 py-10 max-w-7xl bg-white">
     <h2 class="text-3xl font-bold mb-6 text-gray-900">Key Features</h2>
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div class="bg-white p-6 rounded-lg shadow-md text-center border border-gray-200">
-            <div class="text-3xl mb-4 text-gray-400">📅</div>
-            <h4 class="text-lg font-semibold text-gray-800 mb-2">Calendar Icon</h4>
-            <p class="text-gray-600">Self-paced learning</p>
-        </div>
-        <div class="bg-white p-6 rounded-lg shadow-md text-center border border-gray-200">
-            <div class="text-3xl mb-4 text-gray-400">🎓</div>
-            <h4 class="text-lg font-semibold text-gray-800 mb-2">Graduate Icon</h4>
-            <p class="text-gray-600">Access to recorded lectures</p>
-        </div>
-        <div class="bg-white p-6 rounded-lg shadow-md text-center border border-gray-200">
-            <div class="text-3xl mb-4 text-gray-400">👩‍🏫</div>
-            <h4 class="text-lg font-semibold text-gray-800 mb-2">Mentor Icon</h4>
-            <p class="text-gray-600">One-to-one mentorship</p>
-        </div>
-        <div class="bg-white p-6 rounded-lg shadow-md text-center border border-gray-200">
-            <div class="text-3xl mb-4 text-gray-400">🏆</div>
-            <h4 class="text-lg font-semibold text-gray-800 mb-2">Certificate Icon</h4>
-            <p class="text-gray-600">Earn a certificate</p>
-        </div>
+        @if($course_details && is_array($course_details->key_features) && count($course_details->key_features) > 0)
+            @foreach($course_details->key_features as $feature)
+                <div class="bg-white p-6 rounded-lg shadow-md text-center border border-gray-200">
+                    <div class="text-3xl mb-4 text-gray-400">
+                        @if(!empty($feature['icon']) && preg_match('/^(fas|far|fal|fad|fab) fa-/', $feature['icon']))
+                            <i class="{{ $feature['icon'] }}"></i>
+                        @elseif(!empty($feature['icon']))
+                            {!! $feature['icon'] !!}
+                        @else
+                            <i class="fas fa-question"></i>
+                        @endif
+                    </div>
+                    <h4 class="text-lg font-semibold text-gray-800 mb-2">{{ $feature['topic'] ?? 'No Topic' }}</h4>
+                    <p class="text-gray-600">{{ $feature['description'] ?? 'No Description' }}</p>
+                </div>
+            @endforeach
+        @else
+            <p class="text-gray-600 text-center col-span-full">No key features available for this course.</p>
+        @endif
     </div>
 </div>
 
@@ -438,7 +437,7 @@
     </div>
 </div>
 
-<!-- Course Certificates Section -->
+{{-- <!-- Course Certificates Section -->
 <div class="container mx-auto px-5 py-10 max-w-7xl">
     <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-5">
         Course <span class="text-orange-500">Certificates</span>
@@ -468,6 +467,89 @@
         </div>
         <div class="flex-1">
             <img src="https://media.licdn.com/dms/image/v2/D5622AQGoUBZSCAP82g/feedshare-shrink_2048_1536/feedshare-shrink_2048_1536/0/1731245943907?e=2147483647&v=beta&t=55eBVsL3PaAH74TFdAM3qEz8RBRcwxX_ZHYYpst400I" alt="Certificate" class="w-full rounded-lg shadow-md">
+        </div>
+    </div>
+</div> --}}
+
+<!-- Course Certificates Section -->
+{{-- <div class="container mx-auto px-5 py-10 max-w-7xl">
+    <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-5">
+        Course <span class="text-orange-500">Certificates</span>
+    </h2>
+    <div class="flex flex-col md:flex-row gap-6">
+        <div class="flex-1">
+            @forelse ($course_details->certificate_description as $description)
+                <p class="text-gray-600 mb-4">
+                    {{ $description['text'] }}
+                </p>
+            @empty
+                <p class="text-gray-600 mb-4">
+                    No certificate descriptions available for this course.
+                </p>
+            @endforelse
+            <ul class="space-y-2">
+                @forelse ($courseDetail->certifications as $certification)
+                    <li class="flex items-center gap-2 text-gray-600">
+                        <i class="fas fa-check text-green-500"></i>
+                        {{ $certification['name'] }}
+                    </li>
+                @empty
+                    <li class="flex items-center gap-2 text-gray-600">
+                        <i class="fas fa-check text-green-500"></i>
+                        No certifications listed for this course.
+                    </li>
+                @endforelse
+            </ul>
+        </div>
+        <div class="flex-1">
+            @if ($courseDetail->certificate_image)
+                <img src="{{ asset('storage/' . $courseDetail->certificate_image) }}" alt="Certificate" class="w-full rounded-lg shadow-md">
+            @else
+                <img src="https://via.placeholder.com/600x400?text=No+Certificate+Image" alt="No Certificate" class="w-full rounded-lg shadow-md">
+            @endif
+        </div>
+    </div>
+</div> --}}
+
+<!-- Course Certificates Section -->
+<div class="container mx-auto px-5 py-10 max-w-7xl">
+    <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-5">
+        Course <span class="text-orange-500">Certificates</span>
+    </h2>
+    <div class="flex flex-col md:flex-row gap-6">
+        <div class="flex-1">
+            @if($course_details && is_array($course_details->certificate_description) && count($course_details->certificate_description) > 0)
+                @foreach($course_details->certificate_description as $description)
+                    <p class="text-gray-600 mb-4">
+                        {{ $description['text'] ?? 'No description available' }}
+                    </p>
+                @endforeach
+            @else
+                <p class="text-gray-600 mb-4">
+                    No certificate descriptions available for this course.
+                </p>
+            @endif
+            @if($course_details && is_array($course_details->certifications) && count($course_details->certifications) > 0)
+                <ul class="space-y-2">
+                    @foreach($course_details->certifications as $certification)
+                        <li class="flex items-center gap-2 text-gray-600">
+                            <i class="fas fa-check text-green-500"></i>
+                            {{ $certification['name'] ?? 'No certification name' }}
+                        </li>
+                    @endforeach
+                </ul>
+            @else
+                <p class="text-gray-600">
+                    No certifications listed for this course.
+                </p>
+            @endif
+        </div>
+        <div class="flex-1">
+            @if($course_details && $course_details->certificate_image)
+                <img src="{{ asset('storage/' . $course_details->certificate_image) }}" alt="Certificate" class="w-full rounded-lg shadow-md">
+            @else
+                <img src="https://via.placeholder.com/600x400?text=No+Certificate+Image" alt="No Certificate" class="w-full rounded-lg shadow-md">
+            @endif
         </div>
     </div>
 </div>

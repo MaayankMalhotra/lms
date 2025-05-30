@@ -36,12 +36,26 @@ class CourseDetailsController extends Controller
             'demo_syllabus.*.topics' => 'nullable|array',
             'demo_syllabus.*.topics.*.category' => 'required|string',
             'demo_syllabus.*.topics.*.subtopics' => 'required|string',
+            'key_features' => 'nullable|array',
+            'key_features.*.icon' => 'required|string|max:255',
+            'key_features.*.topic' => 'required|string|max:255',
+            'key_features.*.description' => 'required|string',
+            'certifications' => 'nullable|array',
+            'certifications.*.name' => 'required|string|max:255',
+            'certificate_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'certificate_description' => 'nullable|array',
+            'certificate_description.*.text' => 'required|string',
         ]);
 
         // Handle file upload
         $bannerPath = null;
         if ($request->hasFile('course_banner')) {
             $bannerPath = $request->file('course_banner')->store('banners', 'public');
+        }
+
+        $certificateImagePath = null;
+        if ($request->hasFile('certificate_image')) {
+            $certificateImagePath = $request->file('certificate_image')->store('certificates', 'public');
         }
 
         // Process topics: Convert subtopics textarea into an array
@@ -83,8 +97,13 @@ class CourseDetailsController extends Controller
             'course_curriculum' => $validated['course_curriculum'] ?? [],
             'demo_syllabus' => $validated['demo_syllabus'] ?? [],
             'instructor_ids' => $request->instructor_ids,
-            'faqs' => $request->faqs
+            'faqs' => $request->faqs,
+            'key_features' => $validated['key_features'] ?? [],
+            'certifications' => $validated['certifications'] ?? [],
+            'certificate_image' => $certificateImagePath,
+            'certificate_description' => $validated['certificate_description'] ?? [],
         ]);
+        // dd($courses);
 
         return redirect()->back()->with('success', 'Course details saved successfully!');
     }
