@@ -196,8 +196,8 @@ Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('/trainer-management', [AdminController::class, 'trainer_management'])->name('trainer-management');
 
-// Route::get('admin/student/{id}/edit', [AdminController::class, 'editStudent'])->name('admin.student.edit');
-// Route::delete('admin/student/{id}/delete', [AdminController::class, 'deleteStudent'])->name('admin.student.delete');
+Route::get('admin/student/{id}/edit', [AdminController::class, 'editStudent'])->name('admin.student.edit');
+Route::delete('admin/student/{id}/delete', [AdminController::class, 'deleteStudent'])->name('admin.student.delete');
 
 
 Route::get('admin/trainer/{id}/edit', [AdminController::class, 'editTrainer'])->name('admin.trainer.edit');

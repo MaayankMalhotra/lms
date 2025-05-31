@@ -495,22 +495,22 @@
                         </svg>
                     </div>
                     <div class="collapsible-content">
-                        <div class="field-container">
-                            <label for="instructor_ids">Select Instructors</label>
-                            <select name="instructor_ids[]" id="instructor_ids" multiple required>
-                                <option value="">Select Instructor</option>
-                                @foreach($instructors as $instructor)
-                                    <option value="{{ $instructor->id }}">{{ $instructor->name }}</option>
-                                @endforeach
-                            </select>
-                            @error('instructor_ids')
-                                <div class="error">{{ $message }}</div>
-                            @enderror
-                            @error('instructor_ids.*')
-                                <div class="error">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
+    <div class="field-container">
+        <label for="instructor_ids">Select Instructors</label>
+        <select name="instructor_ids[]" id="instructor_ids" multiple required>
+            <option value="">Select Instructor</option>
+            @foreach($instructors as $instructor)
+                <option value="{{ $instructor->id }}">{{ $instructor->name }}</option>
+            @endforeach
+        </select>
+        @error('instructor_ids')
+            <div class="error">{{ $message }}</div>
+        @enderror
+        @error('instructor_ids.*')
+            <div class="error">{{ $message }}</div>
+        @enderror
+    </div>
+</div>
                 </div>
 
                 <!-- FAQs Section -->
@@ -1052,6 +1052,17 @@
             alert('At least one certificate description is required.');
         }
     }
-        
+
+   
+         document.addEventListener('DOMContentLoaded', function() {
+        // Initialize Tom Select on the instructor select field
+            new TomSelect("#instructor_ids", {
+            placeholder: "Select Instructor",
+            maxItems: null,  // Allows selecting multiple items
+            create: false,   // Prevents creating new options (optional)
+            sortField: 'text', // Sort options alphabetically by text
+            closeAfterSelect: false // Keeps dropdown open after selection (optional)
+        });
+    });
     </script>
     @endsection
