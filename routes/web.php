@@ -194,8 +194,8 @@ Route::get('/student-management', [AdminController::class, 'student_management']
 
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
-Route::get('/trainer-management', [AdminController::class, 'trainer_management'])->name('trainer-management');
-
+Route::get('trainer-management', [AdminController::class, 'trainer_management'])->name('trainer-management');
+Route::post('admin/trainers', [AdminController::class, 'store'])->name('admin.trainer.store');
 Route::get('admin/student/{id}/edit', [AdminController::class, 'editStudent'])->name('admin.student.edit');
 Route::delete('admin/student/{id}/delete', [AdminController::class, 'deleteStudent'])->name('admin.student.delete');
 

@@ -71,7 +71,7 @@
     <!-- Card Section -->
     <div class="bg-white shadow-lg rounded-lg overflow-hidden">
         <div class="bg-gradient-to-r from-indigo-900 to-purple-800 text-white px-6 py-4 border-b-2 border-orange-500">
-            <h4 class="text-xl font-bold">Trainer List</h4>
+            <h4 class="text-xl font-bold">Student List</h4>
         </div>
         <div class="p-6">
             <!-- Alerts -->
@@ -100,6 +100,8 @@
                             <th class="px-4 py-3 font-semibold">Name</th>
                             <th class="px-4 py-3 font-semibold">Email</th>
                             <th class="px-4 py-3 font-semibold">Phone</th>
+                            <th class="px-4 py-3 font-semibold">Experience</th>
+                            <th class="px-4 py-3 font-semibold">Teaching Hours</th>
                             <th class="px-4 py-3 font-semibold">Registered At</th>
                             <th class="px-4 py-3 font-semibold">Actions</th>
                         </tr>

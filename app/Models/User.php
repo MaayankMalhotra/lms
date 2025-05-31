@@ -69,4 +69,9 @@ public function batches()
     {
         return $this->hasMany(Message::class, 'receiver_id');
     }
+
+    public function trainerDetail()
+    {
+        return $this->hasOne(TrainerDetail::class, 'user_id');
+    }
 }

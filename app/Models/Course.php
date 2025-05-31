@@ -28,4 +28,8 @@ class Course extends Model
     {
         return $this->hasMany(Batch::class);
     }
+    public function trainers()
+    {
+        return TrainerDetail::whereJsonContains('course_ids', $this->id)->get();
+    }
 }
