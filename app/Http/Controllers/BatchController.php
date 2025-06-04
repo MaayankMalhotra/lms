@@ -15,6 +15,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Razorpay\Api\Api;
+use Illuminate\Support\Facades\Auth;
 
 class BatchController extends Controller
 {
