@@ -94,96 +94,9 @@ class BatchController extends Controller
     //     }
     // }
 
-//     public function store(Request $request)
-// {
-//     Log::info('Batch store request:', $request->all());
-
-//     try {
-//         $validated = $request->validate([
-//             'batch_name' => 'required|string|max:255',
-//             'start_date' => 'required|date',
-//             'status' => 'required|in:Batch Started,Upcoming,Soon',
-//             'days' => 'required',
-//             'duration' => 'required|string',
-//             'time_slot' => 'required|string',
-//             'price' => 'required|numeric|min:0',
-//             'emi_price' => 'nullable|numeric|min:0',
-//             'discount_info' => 'nullable|string',
-//             'slots_available' => 'required|numeric|min:1',
-//             'slots_filled' => 'required|numeric|min:0',
-//             'course_id' => 'required|exists:courses,id',
-//             'teacher_id' => 'required|exists:users,id',
-//             'emi_available' => 'nullable|in:on,1,0,true,false',
-//             'emi_plans' => 'nullable:emi_available,on|array',
-//             'emi_plans.*.installments' => 'nullable:emi_available,on|integer|min:2',
-//             'emi_plans.*.amount' => 'nullable:emi_available,on|numeric|min:0',
-//             'emi_plans.*.interval_months' => 'nullable:emi_available,on|integer|min:1',
-//         ]);
-
-//         $batchData = $validated;
-//         $batchData['emi_available'] = in_array($request->emi_available, ['on', '1', 'true'], true);
-//         $batchData['discount_info'] = $request->discount ?? 0;
-//         $batchData['discounted_price'] = $batchData['price'] - ($batchData['price'] * ($batchData['discount_info'] / 100));
-
-//       // Handle EMI plans
-//       if ($batchData['emi_available'] && !empty($validated['emi_plans'])) {
-//         $batchData['emi_plans'] = array_map(function ($plan) {
-//             return [
-//                 'installments' => (int) $plan['installments'],
-//                 'amount' => round((float) $plan['amount'], 2),
-//                 'interval_months' => (int) $plan['interval_months'],
-//             ];
-//         }, $validated['emi_plans']);
-
-//         // Validate total EMI amount matches discounted price
-//        // Validate total EMI amount matches discounted price with a tolerance of 0.01
-//        foreach ($batchData['emi_plans'] as $index => $plan) {
-//         $total = round($plan['installments'] * $plan['amount'], 2);
-//         $emiPrice = round($batchData['emi_price'], 2);
-        
-//         if (abs($total - $emiPrice) > 0.5) { // Increased tolerance
-//             Log::warning('EMI plan validation failed:', [
-//                 'plan_index' => $index,
-//                 'total' => $total,
-//                 'emi_price' => $emiPrice,
-//                 'difference' => abs($total - $emiPrice),
-//                 'installments' => $plan['installments'],
-//                 'amount' => $plan['amount'],
-//             ]);
-//             return back()->withErrors([
-//                 'emi_plans' => "Total EMI amount for plan " . ($index + 1) . " (₹{$total}) does not match the EMI price (₹{$emiPrice}).",
-//             ]);
-//         }
-//     }
-
-//     } else {
-//         $batchData['emi_plans'] = null;
-//     }
-//     // Remove discounted_price from batchData as it's a generated column
-//     // unset($batchData['discounted_price']);
-
-//         Log::info('Batch data before creation:', $batchData);
-
-//         $batch = Batch::create($batchData);
-
-//         Log::info('Batch created:', [
-//             'id' => $batch->id,
-//             'emi_available' => $batch->emi_available,
-//             'emi_plans' => $batch->emi_plans,
-//         ]);
-
-//         return redirect()->route('admin.batches.add')->with('success', 'Batch added successfully!');
-//     } catch (\Exception $e) {
-//         Log::error('Failed to create batch:', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
-//         return back()->withErrors(['error' => 'Failed to create batch: ' . $e->getMessage()]);
-//     }
-// }
-public function store(Request $request)
+    public function store(Request $request)
 {
     Log::info('Batch store request:', $request->all());
-
-    // Debug 1: Inspect the incoming request data
-    dd($request->all()); // Check what data is being sent, especially emi_available and emi_plans
 
     try {
         $validated = $request->validate([
@@ -201,66 +114,57 @@ public function store(Request $request)
             'course_id' => 'required|exists:courses,id',
             'teacher_id' => 'required|exists:users,id',
             'emi_available' => 'nullable|in:on,1,0,true,false',
-            // Relax EMI plans validation to be nullable
-            'emi_plans' => 'nullable|array',
-            'emi_plans.*.installments' => 'nullable|integer|min:2',
-            'emi_plans.*.amount' => 'nullable|numeric|min:0',
-            'emi_plans.*.interval_months' => 'nullable|integer|min:1',
+            'emi_plans' => 'nullable:emi_available,on|array',
+            'emi_plans.*.installments' => 'nullable:emi_available,on|integer|min:2',
+            'emi_plans.*.amount' => 'nullable:emi_available,on|numeric|min:0',
+            'emi_plans.*.interval_months' => 'nullable:emi_available,on|integer|min:1',
         ]);
-
-        // Debug 2: Check validated data
-        dd($validated); // Ensure all fields, including emi_plans, are as expected
-
+dd($validated);
         $batchData = $validated;
         $batchData['emi_available'] = in_array($request->emi_available, ['on', '1', 'true'], true);
         $batchData['discount_info'] = $request->discount ?? 0;
         $batchData['discounted_price'] = $batchData['price'] - ($batchData['price'] * ($batchData['discount_info'] / 100));
 
-        // Handle EMI plans
-        if ($batchData['emi_available'] && !empty($validated['emi_plans'])) {
-            $batchData['emi_plans'] = array_map(function ($plan) {
-                return [
-                    'installments' => (int) ($plan['installments'] ?? 0),
-                    'amount' => round((float) ($plan['amount'] ?? 0), 2),
-                    'interval_months' => (int) ($plan['interval_months'] ?? 1),
-                ];
-            }, $validated['emi_plans']);
+      // Handle EMI plans
+      if ($batchData['emi_available'] && !empty($validated['emi_plans'])) {
+        $batchData['emi_plans'] = array_map(function ($plan) {
+            return [
+                'installments' => (int) $plan['installments'],
+                'amount' => round((float) $plan['amount'], 2),
+                'interval_months' => (int) $plan['interval_months'],
+            ];
+        }, $validated['emi_plans']);
 
-            // Debug 3: Check EMI plans data
-            dd($batchData['emi_plans']); // Verify the processed EMI plans
-
-            // Validate total EMI amount matches discounted price with a tolerance of 0.01
-            foreach ($batchData['emi_plans'] as $index => $plan) {
-                $total = round($plan['installments'] * $plan['amount'], 2);
-                $emiPrice = round($batchData['emi_price'] ?? 0, 2);
-
-                if (abs($total - $emiPrice) > 0.5) { // Increased tolerance
-                    Log::warning('EMI plan validation failed:', [
-                        'plan_index' => $index,
-                        'total' => $total,
-                        'emi_price' => $emiPrice,
-                        'difference' => abs($total - $emiPrice),
-                        'installments' => $plan['installments'],
-                        'amount' => $plan['amount'],
-                    ]);
-                    return back()->withErrors([
-                        'emi_plans' => "Total EMI amount for plan " . ($index + 1) . " (₹{$total}) does not match the EMI price (₹{$emiPrice}).",
-                    ]);
-                }
-            }
-        } else {
-            $batchData['emi_plans'] = null;
+        // Validate total EMI amount matches discounted price
+       // Validate total EMI amount matches discounted price with a tolerance of 0.01
+       foreach ($batchData['emi_plans'] as $index => $plan) {
+        $total = round($plan['installments'] * $plan['amount'], 2);
+        $emiPrice = round($batchData['emi_price'], 2);
+        
+        if (abs($total - $emiPrice) > 0.5) { // Increased tolerance
+            Log::warning('EMI plan validation failed:', [
+                'plan_index' => $index,
+                'total' => $total,
+                'emi_price' => $emiPrice,
+                'difference' => abs($total - $emiPrice),
+                'installments' => $plan['installments'],
+                'amount' => $plan['amount'],
+            ]);
+            return back()->withErrors([
+                'emi_plans' => "Total EMI amount for plan " . ($index + 1) . " (₹{$total}) does not match the EMI price (₹{$emiPrice}).",
+            ]);
         }
+    }
 
-        // Debug 4: Check final batch data before creation
-        dd($batchData); // Confirm all data, including emi_plans, is correct
+    } else {
+        $batchData['emi_plans'] = null;
+    }
+    // Remove discounted_price from batchData as it's a generated column
+    // unset($batchData['discounted_price']);
 
         Log::info('Batch data before creation:', $batchData);
 
         $batch = Batch::create($batchData);
-
-        // Debug 5: Confirm batch creation
-        dd($batch); // Verify the created batch object
 
         Log::info('Batch created:', [
             'id' => $batch->id,
@@ -274,6 +178,7 @@ public function store(Request $request)
         return back()->withErrors(['error' => 'Failed to create batch: ' . $e->getMessage()]);
     }
 }
+
     public function destroy($id)
     {
         $batch = Batch::findOrFail($id);
