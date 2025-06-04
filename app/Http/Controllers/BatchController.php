@@ -907,7 +907,7 @@ public function storeBatchData(Request $request)
 public function profile(Request $request)
 {
     $user = Auth::user();
-    return view('profile', compact('user'));
+    return view('admin.profile', compact('user'));
 }
 }
 
