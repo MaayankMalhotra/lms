@@ -46,7 +46,7 @@
     
     <ul class="text-gray-800">
         <li>
-            <a href="" class="flex items-center px-5 py-3 hover:bg-gray-100 transition-all">
+            <a href="{{ route('profile')  }}" class="flex items-center px-5 py-3 hover:bg-gray-100 transition-all">
                 <i class="fas fa-user text-indigo-500 mr-4 text-lg"></i> Profile
             </a>
         </li>

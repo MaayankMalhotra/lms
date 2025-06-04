@@ -59,7 +59,17 @@
                 <img src="https://cdn-icons-png.flaticon.com/128/2921/2921222.png" alt="Role" class="w-10 h-10 mr-4">
                 <div>
                     <h4 class="text-base font-semibold text-gray-800">Role</h4>
-                    <p class="text-sm text-gray-600">{{ $user->role }}</p>
+                    <p class="text-sm text-gray-600">
+                        @if ($user->role == 1)
+                            admin
+                        @elseif ($user->role == 2)
+                            teacher
+                        @elseif ($user->role == 3)
+                            student
+                        @else
+                            unknown
+                        @endif
+                    </p>
                 </div>
             </div>
 
