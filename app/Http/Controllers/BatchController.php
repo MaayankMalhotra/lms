@@ -214,7 +214,7 @@ class BatchController extends Controller
         if ($request->hasFile('profile_image')) {
             $profileImagePath = $request->file('profile_image')->store('profile_images', 'public');
         }
-
+dd($request->all());
         // Create a new user
         $user = User::create([
             'name' => $validated['name'],
