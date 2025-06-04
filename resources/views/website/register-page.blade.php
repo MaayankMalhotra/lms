@@ -64,7 +64,7 @@
       <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Register</h2>
 
       <!-- Register Form -->
-      <form id="register-form" action="{{ route('register.submit') }}" method="POST" enctype="multipart/form-data">
+      <form id="register-form" action="{{ route('register.submit.teacher') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="mb-4">
           <label for="profile_image" class="block text-gray-700 dark:text-gray-200 font-semibold mb-2">Profile Image</label>

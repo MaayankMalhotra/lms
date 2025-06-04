@@ -194,10 +194,10 @@ Route::get('/student-management', [AdminController::class, 'student_management']
 
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
-Route::get('trainer-management', [AdminController::class, 'trainer_management'])->name('trainer-management');
-Route::post('admin/trainers', [AdminController::class, 'store'])->name('admin.trainer.store');
-Route::get('admin/student/{id}/edit', [AdminController::class, 'editStudent'])->name('admin.student.edit');
-Route::delete('admin/student/{id}/delete', [AdminController::class, 'deleteStudent'])->name('admin.student.delete');
+Route::get('/trainer-management', [AdminController::class, 'trainer_management'])->name('trainer-management');
+
+// Route::get('admin/student/{id}/edit', [AdminController::class, 'editStudent'])->name('admin.student.edit');
+// Route::delete('admin/student/{id}/delete', [AdminController::class, 'deleteStudent'])->name('admin.student.delete');
 
 
 Route::get('admin/trainer/{id}/edit', [AdminController::class, 'editTrainer'])->name('admin.trainer.edit');
@@ -491,7 +491,7 @@ Route::get('/register-website', function () {
     return view('website.register-page');
 })->name('website-register-page');
 
-
+Route::post('/register-teacher', [BatchController::class, 'register_teacher'])->name('register.submit.teacher');
 // Route::post('/register', [LoginController::class, 'register'])->name('register.submit');
 
 Route::get('/career-highlights',[CareerHighlightController::class, 'show'])->name('career_hightlight_show');
