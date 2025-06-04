@@ -198,40 +198,22 @@ class BatchController extends Controller
     }
     public function register_teacher(Request $request)
     {
-        // Validate the incoming request data
-        dd($request->all());
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'phone' => 'required|string|regex:/^[0-9]{10}$/',
-            'college_company' => 'required|string|max:255',
-            'qualification' => 'required|string|max:255',
-            'password' => 'required|string|min:5|confirmed',
-            //'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
-
-        // Handle profile image upload if provided
-        $profileImagePath = null;
-        if ($request->hasFile('profile_image')) {
-            $profileImagePath = $request->file('profile_image')->store('profile_images', 'public');
-        }
-
-        // Create a new user
-        $user = User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'phone' => $validated['phone'],
-            'college_company' => $validated['college_company'],
-            'qualification' => $validated['qualification'],
-            'password' => Hash::make($validated['password']),
-            'profile_image' => $profileImagePath,
-            'role' => '2', // Default role
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-
-        // Redirect to login page with success message
-        return redirect()->route('website-login-page')->with('success', 'Registration successful! Please log in.');
+               // Directly create a new user with the provided data
+               $user = User::create([
+                'name' => $request->input('name'),
+                'email' => $request->input('email'),
+                'phone' => $request->input('phone'),
+                'college_company' => $request->input('college_company'),
+                'qualification' => $request->input('qualification'),
+                'password' => Hash::make($request->input('password')),
+                'profile_image' => null, // No profile image provided
+                'role' => 'user', // Default role
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+    
+            // Redirect to login page with success message
+            return redirect()->route('/login')->with('success', 'Registration successful! Please log in.');
     }
     public function update(Request $request, $id)
     {
