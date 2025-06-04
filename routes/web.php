@@ -173,7 +173,7 @@ Route::get('/internship_details', function () {
 
 // Route::get('/course_details', [CourseController::class, 'courseDetails'])->name('website.course_details');
 
-
+Route::get('/profile', [BatchController::class, 'profile'])->name('profile');
 Route::get('/login', function () {
 
     if (Auth::user() && Auth::user()->role == 1) {

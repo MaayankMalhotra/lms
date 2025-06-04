@@ -902,6 +902,12 @@ public function storeBatchData(Request $request)
 
     return response()->json(['success' => true]);
 }
+
+public function profile(Request $request)
+{
+    $user = Auth::user();
+    return view('website.profile-page', compact('user'));
+}
 }
 
 
