@@ -275,7 +275,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/index-create-cd', [CourseDetailsController::class, 'index'])->name('course-details-index');
 });
 
-
+Route::get('/course-details/{id}/edit', [CourseDetailsController::class, 'edit'])->name('course.edit');
+Route::put('/course-details/{id}', [CourseDetailsController::class, 'update'])->name('course.update');
 
 // // Enrollment Management Routes
 // Route::get('/admin/enrollments', [EnrollmentController::class, 'index'])->name('admin.enrollment.index');
