@@ -213,7 +213,7 @@ class BatchController extends Controller
             ]);
     
             // Redirect to login page with success message
-            return redirect()->route('/login')->with('success', 'Registration successful! Please log in.');
+            return redirect()->route('login')->with('success', 'Registration successful! Please log in.');
     }
     public function update(Request $request, $id)
     {
