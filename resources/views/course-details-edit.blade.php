@@ -188,9 +188,9 @@
                             <!-- Course Name -->
                             <div class="field-container">
                                 <label for="course_name">Course Name</label>
-                                <select name="course_name" id="course_name">
+                                <select name="course_id" id="course_id">
                                     @foreach($course_name as $course)
-                                        <option value="{{ $course->name }}" {{ $courseDetail->course_name == $course->name ? 'selected' : '' }}>{{ $course->name }}</option>
+                                        <option value="{{ $course->id }}" {{ $courseDetail->course_name == $course->name ? 'selected' : '' }}>{{ $course->name }}</option>
                                     @endforeach
                                 </select>
                                 @error('course_name')

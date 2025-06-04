@@ -117,7 +117,7 @@ class CourseDetailsController extends Controller
         $courseDetail = CourseDetail::findOrFail($id);
 
         $validated = $request->validate([
-            'course_name' => 'required|string',
+            'course_id' => 'required',
             'course_description' => 'nullable|string',
             'course_rating' => 'nullable|numeric|min:0|max:5',
             'course_rating_student_number' => 'nullable|string',
