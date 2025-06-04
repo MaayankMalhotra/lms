@@ -60,7 +60,7 @@ class AttendanceController extends Controller
             ->orderBy('leaves.created_at', 'desc')
             ->paginate(10); // Add pagination
             // ->get();
-            // dd($leaves);
+             dd($leaves);
 
         return view('admin.leave.leave', compact('leaves')); // Corrected view path
     }
