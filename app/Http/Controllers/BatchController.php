@@ -119,14 +119,14 @@ class BatchController extends Controller
             'emi_plans.*.amount' => 'nullable:emi_available,on|numeric|min:0',
             'emi_plans.*.interval_months' => 'nullable:emi_available,on|integer|min:1',
         ]);
-dd($validated);
+
         $batchData = $validated;
         $batchData['emi_available'] = in_array($request->emi_available, ['on', '1', 'true'], true);
         $batchData['discount_info'] = $request->discount ?? 0;
         $batchData['discounted_price'] = $batchData['price'] - ($batchData['price'] * ($batchData['discount_info'] / 100));
 
       // Handle EMI plans
-      if ($batchData['emi_available'] && !empty($validated['emi_plans'])) {
+      if ($batchData['emi_available']) {
         $batchData['emi_plans'] = array_map(function ($plan) {
             return [
                 'installments' => (int) $plan['installments'],
