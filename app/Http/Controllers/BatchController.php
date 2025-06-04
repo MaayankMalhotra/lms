@@ -199,6 +199,7 @@ class BatchController extends Controller
     public function register_teacher(Request $request)
     {
         // Validate the incoming request data
+        dd($request->all());
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
@@ -214,7 +215,7 @@ class BatchController extends Controller
         if ($request->hasFile('profile_image')) {
             $profileImagePath = $request->file('profile_image')->store('profile_images', 'public');
         }
-dd($request->all());
+
         // Create a new user
         $user = User::create([
             'name' => $validated['name'],
