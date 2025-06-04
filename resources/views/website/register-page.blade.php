@@ -61,7 +61,7 @@
   <!-- Register Card -->
   <main class="relative bg-white dark:bg-gray-800 rounded-xl shadow-lg w-[500px] h-[600px] border  z-10 overflow-y-scroll scrollbar-hidden card">
     <div class="p-8">
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Register</h2>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Teacher Registeration</h2>
 
       <!-- Register Form -->
       <form id="register-form" action="{{ route('register.submit.teacher') }}" method="POST" enctype="multipart/form-data">
