@@ -148,8 +148,6 @@
     </div>
 </div>
 
-<!-- Edit Course Modal (keep the same HTML structure) -->
-
 <!-- Delete Confirmation Modal -->
 <div id="deleteModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 overflow-y-auto">
     <div class="relative min-h-screen flex items-center justify-center p-4">
@@ -208,19 +206,17 @@ $(document).ready(function() {
                 // Handle logo preview
                 const logoPreview = $('#logoPreview');
                 const currentLogo = $('#currentLogo');
-  if (data.logo) {
-    const imageUrl = "{{ asset('') }}" + data.logo; // Ensure correct asset path
-    logoPreview.html(`<img src="${imageUrl}" class="h-28 object-contain p-2" alt="Course logo">`);
-    currentLogo.text('Upload new file to change');
-} else {
-    logoPreview.html(`
-        <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
-        <p class="text-sm text-gray-500">Drag & drop or click to upload</p>
-    `);
-    currentLogo.text('No logo uploaded');
-}
-            
-
+                if (data.logo) {
+                    const imageUrl = "{{ asset('') }}" + data.logo; // Ensure correct asset path
+                    logoPreview.html(`<img src="${imageUrl}" class="h-28 object-contain p-2" alt="Course logo">`);
+                    currentLogo.text('Upload new file to change');
+                } else {
+                    logoPreview.html(`
+                        <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
+                        <p class="text-sm text-gray-500">Drag & drop or click to upload</p>
+                    `);
+                    currentLogo.text('No logo uploaded');
+                }
 
                 // Update form action using named route
                 $('#editCourseForm').attr('action', updateRoute.replace(':id', data.id));
@@ -266,10 +262,8 @@ $(document).ready(function() {
             }
         });
     });
-    
 });
 </script>
-
 
 <div class="min-h-screen bg-gradient-to-r from-gray-50 to-gray-100 p-8">
     <div class="max-w-7xl mx-auto">
@@ -293,7 +287,7 @@ $(document).ready(function() {
                 <thead class="bg-gray-50">
                     <tr>
                         <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Logo</th>
-                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Course Name</th>
+                        <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Course Name</th>
                         <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Course Slug</th>
                         <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Code</th>
                         <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Duration</th>
@@ -306,7 +300,7 @@ $(document).ready(function() {
                     <tr class="hover:bg-gray-50 transition-colors">
                         <td class="px-6 py-4">
                             @if($course->logo)
-                            <img src="{{ asset( $course->logo) }}"
+                            <img src="{{ asset($course->logo) }}"
                                 class="w-12 h-12 rounded-lg object-cover shadow-sm"
                                 alt="{{ $course->name }} logo">
                             @else
@@ -327,19 +321,24 @@ $(document).ready(function() {
                             ₹{{ number_format($course->price, 2) }}
                         </td>
                         <td class="px-6 py-4">
-    <div class="flex space-x-4">
-        <button onclick="openEditModal(`{{ route('admin.course.edit', $course->id) }}`)" 
-                class="text-blue-500 hover:text-blue-600">
-            <i class="fas fa-edit"></i>
-        </button>
-
-        <button type="button"
-                onclick="openDeleteModal(`{{ route('admin.course.delete', $course->id) }}`)" 
-                class="text-red-500 hover:text-red-600">
-            <i class="fas fa-trash"></i>
-        </button>
-    </div>
-</td>
+                            <div class="flex space-x-4">
+                                <button onclick="openEditModal(`{{ route('admin.course.edit', $course->id) }}`)" 
+                                        class="text-blue-500 hover:text-blue-600" title="Edit Course">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                @if($course->course_details_id)
+                                    <a href="{{ route('course.edit', $course->course_details_id) }}" 
+                                       class="text-green-500 hover:text-green-600" title="Edit Course Detail">
+                                        <i class="fas fa-book-open"></i>
+                                    </a>
+                                @endif
+                                <button type="button"
+                                        onclick="openDeleteModal(`{{ route('admin.course.delete', $course->id) }}`)" 
+                                        class="text-red-500 hover:text-red-600" title="Delete Course">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
                     </tr>
                     @endforeach
                 </tbody>

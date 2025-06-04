@@ -49,12 +49,19 @@ class CourseController extends Controller
         return redirect()->route('admin.course.add')->with('success', 'Course created successfully!');
     }
 
-    public function courseList()
+//     public function courseList()
+// {
+//     $courses = Course::latest()->paginate(10);
+//     return view('admin.courses-list', compact('courses'));
+// }
+public function courseList()
 {
-    $courses = Course::latest()->paginate(10);
+    $courses = Course::select('courses.*', 'course_details.id as course_details_id')
+        ->leftJoin('course_details', 'course_details.course_id', '=', 'courses.id')
+        ->latest('courses.created_at')
+        ->paginate(10);
     return view('admin.courses-list', compact('courses'));
 }
-
 public function edit($id)
     {
         $course = Course::findOrFail($id);
