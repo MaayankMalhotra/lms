@@ -11,6 +11,12 @@
                 </h1>
                 <p class="text-gray-500 text-sm sm:text-base">Fill in the details to add a new batch program</p>
             </div>
+            <!-- Success Message -->
+        @if (session('success'))
+        <div class="mb-6 p-4 bg-green-100 text-green-700 rounded-lg">
+            <i class="fas fa-check-circle mr-2"></i>{{ session('success') }}
+        </div>
+    @endif
 
             <form id="batchForm" action="{{ route('admin.batches.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
