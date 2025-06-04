@@ -28,6 +28,7 @@ class CourseDetail extends Model
         'certifications',
         'certificate_image',
         'certificate_description',
+        'course_id'
     ];
 
     protected $casts = [
