@@ -199,15 +199,15 @@ class BatchController extends Controller
     public function register_teacher(Request $request)
     {
         // Validate the incoming request data
-        // $validated = $request->validate([
-        //     'name' => 'required|string|max:255',
-        //     'email' => 'required|string|email|max:255|unique:users',
-        //     'phone' => 'required|string|regex:/^[0-9]{10}$/',
-        //     'college_company' => 'required|string|max:255',
-        //     'qualification' => 'required|string|max:255',
-        //     'password' => 'required|string|min:5|confirmed',
-        //     'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        // ]);
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'phone' => 'required|string|regex:/^[0-9]{10}$/',
+            'college_company' => 'required|string|max:255',
+            'qualification' => 'required|string|max:255',
+            'password' => 'required|string|min:5|confirmed',
+            //'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
 
         // Handle profile image upload if provided
         $profileImagePath = null;
