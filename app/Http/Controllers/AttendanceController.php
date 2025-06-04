@@ -55,10 +55,13 @@ class AttendanceController extends Controller
     public function adminLeaves(Request $request)
     {
         $leaves = DB::table('leaves')
-            ->join('users', 'leaves.user_id', '=', 'users.id') // Join with users table
-            ->select('leaves.*', 'users.*') // Include student name
-            ->orderBy('leaves.created_at', 'desc')
-            ->paginate(10); // Add pagination
+        ->join('users', 'leaves.user_id', '=', 'users.id') // Join with users table
+        ->join('enrollments', 'leaves.user_id', '=', 'enrollments.user_id') // Join with enrollments table
+        ->join('batches', 'enrollments.batch_id', '=', 'batches.id') // Join with batches table
+        ->where('batches.teacher_id', auth()->user()->id) // Filter for batches where the authenticated user is the teacher
+        ->select('leaves.*', 'users.*') // Include student details
+        ->orderBy('leaves.created_at', 'desc')
+        ->paginate(10); // Add pagination
             // ->get();
              dd($leaves);
 
