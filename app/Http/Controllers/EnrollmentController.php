@@ -123,7 +123,7 @@ class EnrollmentController extends Controller
 
     public function index(Request $request)
     {
-        var_dump($request->all());
+        dd($request->all());
         try {
             // Fetch filter options
             $students = User::where('role', 3)
