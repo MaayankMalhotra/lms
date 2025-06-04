@@ -207,7 +207,7 @@ class BatchController extends Controller
                 'qualification' => $request->input('qualification'),
                 'password' => Hash::make($request->input('password')),
                 'profile_image' => null, // No profile image provided
-                'role' => 'user', // Default role
+                'role' => 2, // Default role
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
