@@ -914,7 +914,7 @@ public function profile(Request $request)
 public function editProfile()
 {
     $user = Auth::user();
-    return view('website.edit-profile', compact('user'));
+    return view('admin.edit-profile', compact('user'));
 }
 
 // Update Profile method
