@@ -5,7 +5,7 @@
         <!-- Header -->
         <div class="flex justify-between items-center mb-4">
             <h3 class="text-lg font-bold text-gray-700">Profile Details</h3>
-            <a href="#" class="text-orange-500 text-sm font-semibold hover:underline">Edit Profile</a>
+            <a href="{{ route('edit-profile') }}" class="text-orange-500 text-sm font-semibold hover:underline">Edit Profile</a>
         </div>
         <!-- User Details List -->
         <div class="space-y-4">

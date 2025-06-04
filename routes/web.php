@@ -172,7 +172,11 @@ Route::get('/internship_details', function () {
 
 
 // Route::get('/course_details', [CourseController::class, 'courseDetails'])->name('website.course_details');
+// Edit Profile route
+Route::get('/edit-profile', [BatchController::class, 'editProfile'])->name('edit-profile');
 
+// Update Profile route
+Route::put('/update-profile', [BatchController::class, 'updateProfile'])->name('update-profile');
 Route::get('/profile', [BatchController::class, 'profile'])->name('profile');
 Route::get('/login', function () {
 

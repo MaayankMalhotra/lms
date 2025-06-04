@@ -909,6 +909,41 @@ public function profile(Request $request)
     $user = Auth::user();
     return view('admin.profile', compact('user'));
 }
+
+// Edit Profile method
+public function editProfile()
+{
+    $user = Auth::user();
+    return view('website.edit-profile', compact('user'));
+}
+
+// Update Profile method
+public function updateProfile(Request $request)
+{
+    $user = Auth::user();
+
+    // Validate the incoming request data
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+        'phone' => 'required|string|regex:/^[0-9]{10}$/',
+        'college_company' => 'required|string|max:255',
+        'qualification' => 'required|string|max:255',
+    ]);
+
+    // Update the user data
+    $user->update([
+        'name' => $validated['name'],
+        'email' => $validated['email'],
+        'phone' => $validated['phone'],
+        'college_company' => $validated['college_company'],
+        'qualification' => $validated['qualification'],
+        'updated_at' => now(),
+    ]);
+
+    // Redirect back to the profile page with a success message
+    return redirect()->route('profile')->with('success', 'Profile updated successfully!');
+}
 }
 
 
