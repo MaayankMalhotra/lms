@@ -92,18 +92,18 @@
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">From</label>
                     <input type="date" name="from_date" value="{{ request('from_date') }}"
-                           class="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                           class="w-full border border-gray-300 rounded-md p-2 rounded-md p-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                            placeholder="YYYY-MM-DD">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">To</label>
                     <input type="date" name="to_date" value="{{ request('to_date') }}"
-                           class="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                           class="w-full border border-gray-300 rounded-md p-2 rounded-md p-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                            placeholder="YYYY-MM-DD">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Payment Status</label>
-                    <select name="payment_status" class="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <select name="payment_status" class="w-full border border-gray-300 rounded-md p-2 rounded-md p-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                         <option value="">Select options</option>
                         <option value="completed" {{ request('payment_status') == 'completed' ? 'selected' : '' }}>Completed</option>
                         <option value="pending" {{ request('payment_status') == 'pending' ? 'selected' : '' }}>Pending</option>
@@ -118,7 +118,7 @@
     </div>
 
     <!-- Table Container -->
-    <div class="bg-white shadow-lg rounded-lg p-2">
+    <div class="bg-white shadow-lg rounded-lg p-6">
         <div class="relative">
             <table id="enrollmentsTable" class="w-full text-sm text-gray-800 table-fixed">
                 <thead class="bg-gray-100 text-xs text-gray-600 uppercase tracking-wider sticky top-0 z-10">
@@ -141,7 +141,7 @@
                         <th class="px-4 py-3 text-left font-semibold min-w-[120px]">Status</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-200">
+                <tbody>
                     @if (is_iterable($enrollments) && count($enrollments) > 0)
                         @foreach ($enrollments as $enrollment)
                             <tr class="hover:bg-gray-50 transition duration-150">
@@ -150,9 +150,7 @@
                                 <td class="px-4 py-3 truncate">{{ $enrollment->student_email ?? 'N/A' }}</td>
                                 <td class="px-4 py-3 truncate">{{ $enrollment->phone ?? 'N/A' }}</td>
                                 <td class="px-4 py-3 truncate">{{ $enrollment->payment_id ?? 'N/A' }}</td>
-                                <td class="px-4 py-3 truncate">
-                                    ₹{{ number_format($enrollment->amount ?? 0, 2) }}
-                                </td>
+                                <td class="px-4 py-3 truncate">₹{{ number_format($enrollment->amount ?? 0, 2) }}</td>
                                 <td class="px-4 py-3">
                                     <span class="px-2 py-1 rounded-full text-xs font-medium {{ $enrollment->payment_status === 'completed' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
                                         {{ ucfirst($enrollment->payment_status ?? 'N/A') }}
@@ -164,53 +162,13 @@
                                             $totalEmis = count($enrollment->emi_schedule_array);
                                             $nextEmi = $enrollment->next_emi;
                                         @endphp
-
-                                        <button class="text-white hover:bg-green-700 py-1 px-2 bg-green-600 rounded text-xs"
+                                        <button class="text-white hover:bg-green-700 py-1 px-2 rounded text-sm bg-green-600"
                                                 onclick="openEMIModal('emiModal{{ $enrollment->enrollment_id }}')">
                                             View EMI Details
                                         </button>
-
                                         <div class="mt-2 text-xs">
                                             <p><strong>Total EMIs:</strong> {{ $totalEmis }}</p>
-                                            @if ($nextEmi)
-                                                <p><strong>Next EMI:</strong> ₹{{ number_format($nextEmi['amount'] ?? 0, 2) }} due on {{ $nextEmi['due_date'] ?? 'N/A' }}</p>
-                                            @else
-                                                <p><strong>Next EMI:</strong> None</p>
-                                            @endif
-                                        </div>
-
-                                        <!-- EMI Modal -->
-                                        <div id="emiModal{{ $enrollment->enrollment_id }}"
-                                             class="fixed inset-0 z-50 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
-                                            <div class="bg-white rounded-lg p-6 w-full max-w-lg h-[60vh] overflow-auto">
-                                                <h2 class="text-lg font-bold mb-4">EMI Schedule</h2>
-                                                @if (is_array($enrollment->emi_schedule_array) && !empty($enrollment->emi_schedule_array))
-                                                    <table class="w-full text-sm">
-                                                        <thead>
-                                                            <tr>
-                                                                <th class="text-left py-2">Installment</th>
-                                                                <th class="text-left py-2">Amount</th>
-                                                                <th class="text-left py-2">Date</th>
-                                                                <th class="text-left py-2">Status</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            @foreach ($enrollment->emi_schedule_array as $emi)
-                                                                <tr>
-                                                                    <td class="py-2">{{ $emi['installment_number'] ?? 'N/A' }}</td>
-                                                                    <td class="py-2">₹{{ number_format($emi['amount'] ?? 0, 2) }}</td>
-                                                                    <td class="py-2">{{ $emi['paid_date'] ?? ($emi['due_date'] ?? 'N/A') }}</td>
-                                                                    <td class="py-2">{{ ucfirst($emi['status'] ?? 'N/A') }}</td>
-                                                                </tr>
-                                                            @endforeach
-                                                        </tbody>
-                                                    </table>
-                                                @else
-                                                    <p class="text-gray-500">No EMI schedule available.</p>
-                                                @endif
-                                                <button class="mt-4 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
-                                                        onclick="closeEMIModal('emiModal{{ $enrollment->enrollment_id }}')">Close</button>
-                                            </div>
+                                            <p><strong>Next EMI:</strong> {{ $nextEmi ? '₹' . number_format($nextEmi['amount'] ?? 0, 2) . ' due on ' . ($nextEmi['due_date'] ?? 'N/A') : 'None' }}</p>
                                         </div>
                                     @else
                                         <span class="text-gray-500">No EMI</span>
@@ -221,12 +179,8 @@
                                     {{ $enrollment->start_date ? \Carbon\Carbon::parse($enrollment->start_date)->format('Y-m-d') : 'N/A' }}
                                 </td>
                                 <td class="px-4 py-3 truncate">{{ $enrollment->time_slot ?? 'N/A' }}</td>
-                                <td class="px-4 py-3 truncate">
-                                    ₹{{ number_format($enrollment->batch_price ?? 0, 2) }}
-                                </td>
-                                <td class="px-4 py-3 truncate">
-                                    {{ $enrollment->slots_available ?? 0 }} / {{ $enrollment->slots_filled ?? 0 }}
-                                </td>
+                                <td class="px-4 py-3 truncate">₹{{ number_format($enrollment->batch_price ?? 0, 2) }}</td>
+                                <td class="px-4 py-3 truncate">{{ $enrollment->slots_available ?? 0 }} / {{ $enrollment->slots_filled ?? 0 }}</td>
                                 <td class="px-4 py-3 truncate">{{ $enrollment->instructor_name ?? 'N/A' }}</td>
                                 <td class="px-4 py-3 truncate">
                                     {{ $enrollment->enrollment_created_at ? \Carbon\Carbon::parse($enrollment->enrollment_created_at)->format('Y-m-d H:i') : 'N/A' }}
@@ -247,6 +201,48 @@
             </table>
         </div>
     </div>
+
+    <!-- EMI Modals -->
+    @if (is_iterable($enrollments) && count($enrollments) > 0)
+        @foreach ($enrollments as $enrollment)
+            @if ($enrollment->payment_method === 'emi' && !empty($enrollment->emi_schedule_array))
+                <div id="emiModal{{ $enrollment->enrollment_id }}"
+                     class="fixed inset-0 z-50 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
+                    <div class="bg-white rounded-lg p-6 w-full max-w-lg h-[60vh] overflow-auto">
+                        <h2 class="text-lg font-bold text-gray-700 mb-4">EMI Schedule</h2>
+                        @if (is_array($enrollment->emi_schedule_array) && !empty($enrollment->emi_schedule_array))
+                            <table class="w-full text-sm">
+                                <thead>
+                                    <tr>
+                                        <th class="text-left py-2">Installment</th>
+                                        <th class="text-left py-2">Amount</th>
+                                        <th class="text-left py-2">Date</th>
+                                        <th class="text-left py-2">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($enrollment->emi_schedule_array as $emi)
+                                        <tr>
+                                            <td class="py-2">{{ $emi['installment_number'] ?? 'N/A' }}</td>
+                                            <td class="py-2">₹{{ number_format($emi['amount'] ?? 0, 2) }}</td>
+                                            <td class="py-2">{{ $emi['paid_date'] ?? ($emi['due_date'] ?? 'N/A') }}</td>
+                                            <td class="py-2">{{ ucfirst($emi['status'] ?? 'N/A') }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        @else
+                            <p class="text-gray-500">No EMI schedule available.</p>
+                        @endif
+                        <button type="button" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+                                onclick="closeEditModal('emiModal{{ $enrollment->enrollment_id }}')">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            @endif
+        @endforeach
+    @endif
 
     <!-- Include jQuery and DataTables JS -->
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
@@ -278,7 +274,7 @@
                     },
                     dom: 'Bfrtip',
                     initComplete: function() {
-                        console.log('DataTable initialized successfully');
+                        console.log('DataTable initialized successfully with ' + this.api().columns().count() + ' columns');
                     }
                 });
             } catch (error) {
@@ -287,12 +283,12 @@
             }
         });
 
-        // Modal functions
         function openEMIModal(modalId) {
             try {
                 const modal = document.getElementById(modalId);
                 if (modal) {
                     modal.classList.remove('hidden');
+                    console.log('Opened modal:', modalId);
                 } else {
                     console.error('Modal not found:', modalId);
                     alert('Unable to open EMI details modal.');
@@ -303,11 +299,12 @@
             }
         }
 
-        function closeEMIModal(modalId) {
+        function closeEditModal(modalId) {
             try {
                 const modal = document.getElementById(modalId);
                 if (modal) {
                     modal.classList.add('hidden');
+                    console.log('Closed modal:', modalId);
                 } else {
                     console.error('Modal not found:', modalId);
                 }
