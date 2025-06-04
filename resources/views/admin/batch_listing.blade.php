@@ -342,6 +342,7 @@
                         successDiv.textContent = 'Batch updated successfully!';
                         document.querySelector('.p-6.sm\\:p-8').prepend(successDiv);
                     } else {
+                        console.log(data);
                         alert('Error updating batch: ' + (data.message || 'Unknown error'));
                     }
                 })
