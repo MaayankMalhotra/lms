@@ -86,7 +86,8 @@ class CourseDetailsController extends Controller
         }
 
         CourseDetail::create([
-            'course_name' => $request->course_name,
+           // 'course_name' => $request->course_name,
+            'course_name' => $request->course_id,
             'course_description' => $request->course_description,
             'course_rating' => $request->course_rating,
             'course_rating_student_number' => $request->course_rating_student_number,
