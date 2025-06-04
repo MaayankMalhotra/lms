@@ -123,7 +123,7 @@ class EnrollmentController extends Controller
 
     public function index(Request $request)
     {
-        dd($request->all());
+       
         try {
             // Fetch filter options
             $students = User::where('role', 3)
@@ -173,6 +173,7 @@ class EnrollmentController extends Controller
                 ->leftJoin('users as teachers', 'batches.teacher_id', '=', 'teachers.id')
                 ->where('users.role', 3)
                 ->orderBy('enrollments.created_at', 'desc');
+        
 
             // Apply filters
             if ($request->filled('student_name')) {
@@ -203,7 +204,8 @@ class EnrollmentController extends Controller
             if ($request->filled('payment_status')) {
                 $query->where('payments.status', $request->payment_status);
             }
-
+            $enrollments = $query->get();
+        dd($enrollments);
             // Fetch enrollments
             $enrollments = $query->get()->map(function ($enrollment) {
                 try {
