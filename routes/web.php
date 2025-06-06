@@ -8,6 +8,7 @@ use App\Http\Controllers\AdminInternshipClassCreateController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ImageUploadController;
 use App\Http\Controllers\InternshipController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\BatchController;
 use App\Http\Controllers\StudentQuizController;
 use App\Http\Controllers\EnrollmentController;
