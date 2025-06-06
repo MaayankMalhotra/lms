@@ -444,7 +444,7 @@ public function student_management()
             $request->is_active ?? 1,
         ]);
 
-        return redirect()->route('admin-home')->with('success', 'Internship added successfully.');
+        return redirect()->route('admin.home')->with('success', 'Internship added successfully.');
     }
 
     public function updateInternship(Request $request, $request_id)
@@ -476,13 +476,13 @@ public function student_management()
             $request_id,
         ]);
 
-        return redirect()->route('admin-home')->with('success', 'Internship updated successfully.');
+        return redirect()->route('admin.home')->with('success', 'Internship updated successfully.');
     }
 
     public function deleteInternship($id)
     {
         DB::delete("DELETE FROM home_internships WHERE id = ?", [$id]);
-        return redirect()->route('admin-home')->with('success', 'Internship deleted successfully.');
+        return redirect()->route('admin.home')->with('success', 'Internship deleted successfully.');
     }
 
     // Instructors
@@ -513,7 +513,7 @@ public function student_management()
             $request->is_active ?? 1,
         ]);
 
-        return redirect()->route('admin-home')->with('success', 'Instructor added successfully!');
+        return redirect()->route('admin.home')->with('success', 'Instructor added successfully!');
     }
 
     public function updateInstructor(Request $request, $request_id)
@@ -530,7 +530,7 @@ public function student_management()
 
         $instructor = DB::select("SELECT * FROM home_instructors WHERE id = ?", [$request_id])[0] ?? null;
         if (!$instructor) {
-            return redirect()->route('admin-home')->with('error', 'Instructor not found.');
+            return redirect()->route('admin.home')->with('error', 'Instructor not found.');
         }
 
         $imagePath = $instructor->image;
@@ -554,7 +554,7 @@ public function student_management()
             $request_id,
         ]);
 
-        return redirect()->route('admin-home')->with('success', 'Instructor updated successfully.');
+        return redirect()->route('admin.home')->with('success', 'Instructor updated successfully.');
     }
 
     public function deleteInstructor($id)
@@ -594,7 +594,7 @@ public function student_management()
             $request->is_active ?? 1,
         ]);
 
-        return redirect()->route('admin-home')->with('success', 'Testimonial added successfully.');
+        return redirect()->route('admin.home')->with('success', 'Testimonial added successfully.');
     }
 
     public function updateTestimonial(Request $request, $request_id)
@@ -610,7 +610,7 @@ public function student_management()
 
         $testimonial = DB::select("SELECT * FROM home_testimonials WHERE id = ?", [$request_id])[0] ?? null;
         if (!$testimonial) {
-            return redirect()->route('admin-home')->with('error', 'Testimonial not found.');
+            return redirect()->route('admin.home')->with('error', 'Testimonial not found.');
         }
 
         $imagePath = $testimonial->image;
@@ -633,7 +633,7 @@ public function student_management()
             $request_id,
         ]);
 
-        return redirect()->route('admin-home')->with('success', 'Testimonial updated successfully.');
+        return redirect()->route('admin.home')->with('success', 'Testimonial updated successfully.');
     }
 
     public function deleteTestimonial($id)
@@ -642,9 +642,9 @@ public function student_management()
         if ($testimonial) {
             Storage::disk('public')->delete($testimonial->image);
             DB::delete("DELETE FROM home_testimonials WHERE id = ?", [$id]);
-            return redirect()->route('admin-home')->with('success', 'Testimonial deleted successfully.');
+            return redirect()->route('admin.home')->with('success', 'Testimonial deleted successfully.');
         }
-        return redirect()->route('admin-home')->with('error', 'Testimonial not found.');
+        return redirect()->route('admin.home')->with('error', 'Testimonial not found.');
     }
 
     // FAQs
@@ -665,7 +665,7 @@ public function student_management()
             $request->is_active ?? 1,
         ]);
 
-        return redirect()->route('admin-home')->with('success', 'FAQ added successfully.');
+        return redirect()->route('admin.home')->with('success', 'FAQ added successfully.');
     }
 
     public function updateFaq(Request $request, $request_id)
@@ -687,12 +687,12 @@ public function student_management()
             $request_id,
         ]);
 
-        return redirect()->route('admin-home')->with('success', 'FAQ updated successfully.');
+        return redirect()->route('admin.home')->with('success', 'FAQ updated successfully.');
     }
 
     public function deleteFaq($id)
     {
         DB::delete("DELETE FROM home_faqs WHERE id = ?", [$id]);
-        return redirect()->route('admin-home')->with('success', 'FAQ deleted successfully.');
+        return redirect()->route('admin.home')->with('success', 'FAQ deleted successfully.');
     }
 }
