@@ -213,6 +213,7 @@ public function student_management()
     // Placements
     public function storePlacement(Request $request)
     {
+        dd($request->all());
         $request->validate([
             'name' => 'required|string|max:255',
             'qualification' => 'required|string|max:255',
