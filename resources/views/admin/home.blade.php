@@ -627,8 +627,8 @@
             <div class="overflow-x-auto">
                 <table class="w-full bg-white rounded-xl shadow-lg text-left">
                     <thead>
-                        <tr class="bg-blue-600 text-white">
-                            <th class="p-40">Actions</th>
+                        <tr class="bg-[#2c0b57] text-white">
+                            <th class="p-4 w-40 text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
