@@ -26,7 +26,7 @@
         <!-- Placements -->
         <div id="tab-placements" class="tab-pane">
             <h2 class="text-2xl font-bold text-[#2c0b57] mb-4">Add Placement</h2>
-            <form action="{{ route('admin.placements.store') }}" method="POST" enctype="multipart/form-data" class="bg-white p-6 rounded-xl shadow-lg card mb-8">
+            <form action="{{ route('admin.placements.store') }}" method="POST" class="bg-white p-6 rounded-xl shadow-lg card mb-8">
                 @csrf
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
@@ -38,8 +38,8 @@
                         <input type="text" name="qualification" required class="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-blue-500 transition">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700">Image</label>
-                        <input type="file" name="image" accept="image/*" required class="w-full mt-1 p-3 border border-gray-300 rounded-lg">
+                        <label class="block text-sm font-medium text-gray-700">Image URL</label>
+                        <input type="text" name="image" required class="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-blue-500 transition">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Tags (comma-separated)</label>
@@ -74,7 +74,7 @@
                             <tr class="card hover:bg-gray-50">
                                 <td class="p-4 text-center">
                                     <button x-data="{ open{{ $placement->id }}: false }" @click="open{{ $placement->id }} = !open{{ $placement->id }}" class="text-blue-500 hover:text-blue-700 text-sm mr-2">Edit</button>
-                                    <form x-show="open{{ $placement->id }}" action="{{ route('admin.placements.update', $placement->id) }}" method="POST" enctype="multipart/form-data" class="mt-2">
+                                    <form x-show="open{{ $placement->id }}" action="{{ route('admin.placements.update', $placement->id) }}" method="POST" class="mt-2">
                                         @csrf
                                         @method('PUT')
                                         <div class="grid grid-cols-1 gap-2">
@@ -87,8 +87,8 @@
                                                 <input type="text" name="qualification" value="{{ $placement->qualification }}" required class="w-full p-2 border rounded-lg text-sm">
                                             </div>
                                             <div>
-                                                <label class="block text-sm font-medium text-gray-700">Image</label>
-                                                <input type="file" name="image" accept="image/*" class="w-full p-2 border rounded-lg text-sm">
+                                                <label class="block text-sm font-medium text-gray-700">Image URL</label>
+                                                <input type="text" name="image" value="{{ $placement->image }}" required class="w-full p-2 border rounded-lg text-sm">
                                             </div>
                                             <div>
                                                 <label class="block text-sm font-medium text-gray-700">Tags (comma-separated)</label>
@@ -414,7 +414,7 @@
         <!-- Instructors -->
         <div id="tab-instructors" class="tab-pane hidden">
             <h2 class="text-2xl font-bold text-[#2c0b57] mb-4">Add Instructor</h2>
-            <form action="{{ route('admin.instructors.store') }}" method="POST" enctype="multipart/form-data" class="bg-white p-6 rounded-xl shadow-lg card mb-8">
+            <form action="{{ route('admin.instructors.store') }}" method="POST" class="bg-white p-6 rounded-xl shadow-lg card mb-8">
                 @csrf
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
@@ -422,8 +422,8 @@
                         <input type="text" name="name" required class="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-blue-500 transition">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700">Image</label>
-                        <input type="file" name="image" accept="image/*" required class="w-full mt-1 p-3 border border-gray-300 rounded-lg">
+                        <label class="block text-sm font-medium text-gray-700">Image URL</label>
+                        <input type="text" name="image" required class="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-blue-500 transition">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Teaching Hours</label>
@@ -462,7 +462,7 @@
                             <tr class="card hover:bg-gray-50">
                                 <td class="p-4 text-center">
                                     <button x-data="{ open{{ $instructor->id }}: false }" @click="open{{ $instructor->id }} = !open{{ $instructor->id }}" class="text-blue-500 hover:text-blue-700 text-sm mr-2">Edit</button>
-                                    <form x-show="open{{ $instructor->id }}" action="{{ route('admin.instructors.update', $instructor->id) }}" method="POST" enctype="multipart/form-data" class="mt-2">
+                                    <form x-show="open{{ $instructor->id }}" action="{{ route('admin.instructors.update', $instructor->id) }}" method="POST" class="mt-2">
                                         @csrf
                                         @method('PUT')
                                         <div class="grid grid-cols-1 gap-2">
@@ -471,8 +471,8 @@
                                                 <input type="text" name="name" value="{{ $instructor->name }}" required class="w-full p-2 border rounded-lg text-sm">
                                             </div>
                                             <div>
-                                                <label class="block text-sm font-medium text-gray-700">Image</label>
-                                                <input type="file" name="image" accept="image/*" class="w-full p-2 border rounded-lg text-sm">
+                                                <label class="block text-sm font-medium text-gray-700">Image URL</label>
+                                                <input type="text" name="image" value="{{ $instructor->image }}" required class="w-full p-2 border rounded-lg text-sm">
                                             </div>
                                             <div>
                                                 <label class="block text-sm font-medium text-gray-700">Teaching Hours</label>
@@ -513,7 +513,7 @@
         <!-- Testimonials -->
         <div id="tab-testimonials" class="tab-pane hidden">
             <h2 class="text-2xl font-bold text-[#2c0b57] mb-4">Add Testimonial</h2>
-            <form action="{{ route('admin.testimonials.store') }}" method="POST" enctype="multipart/form-data" class="bg-white p-6 rounded-xl shadow-lg card mb-8">
+            <form action="{{ route('admin.testimonials.store') }}" method="POST" class="bg-white p-6 rounded-xl shadow-lg card mb-8">
                 @csrf
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
@@ -521,8 +521,8 @@
                         <input type="text" name="name" required class="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-blue-500 transition">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700">Image</label>
-                        <input type="file" name="image" accept="image/*" required class="w-full mt-1 p-3 border border-gray-300 rounded-lg">
+                        <label class="block text-sm font-medium text-gray-700">Image URL</label>
+                        <input type="text" name="image" required class="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-blue-500 transition">
                     </div>
                     <div class="col-span-2">
                         <label class="block text-sm font-medium text-gray-700">Content</label>
@@ -557,7 +557,7 @@
                             <tr class="card hover:bg-gray-50">
                                 <td class="p-4 text-center">
                                     <button x-data="{ open{{ $testimonial->id }}: false }" @click="open{{ $testimonial->id }} = !open{{ $testimonial->id }}" class="text-blue-500 hover:text-blue-700 text-sm mr-2">Edit</button>
-                                    <form x-show="open{{ $testimonial->id }}" action="{{ route('admin.testimonials.update', $testimonial->id) }}" method="POST" enctype="multipart/form-data" class="mt-2">
+                                    <form x-show="open{{ $testimonial->id }}" action="{{ route('admin.testimonials.update', $testimonial->id) }}" method="POST" class="mt-2">
                                         @csrf
                                         @method('PUT')
                                         <div class="grid grid-cols-1 gap-2">
@@ -566,8 +566,8 @@
                                                 <input type="text" name="name" value="{{ $testimonial->name }}" required class="w-full p-2 border rounded-lg text-sm">
                                             </div>
                                             <div>
-                                                <label class="block text-sm font-medium text-gray-700">Image</label>
-                                                <input type="file" name="image" accept="image/*" class="w-full p-2 border rounded-lg text-sm">
+                                                <label class="block text-sm font-medium text-gray-700">Image URL</label>
+                                                <input type="text" name="image" value="{{ $testimonial->image }}" required class="w-full p-2 border rounded-lg text-sm">
                                             </div>
                                             <div>
                                                 <label class="block text-sm font-medium text-gray-700">Content</label>
@@ -620,15 +620,15 @@
                         <label class="ml-2 text-sm font-medium text-gray-700">Active</label>
                     </div>
                 </div>
-                <button type="submit" class="mt-4 w-full bg-gradient-to-r from-[#ff7300] to-[#ff4500] text-white py-3 rounded-lg font-bold hover:shadow-lg transition-all">Add FAQ</button>
+                <button type="submit" class="mt-4 w-full bg-gradient-to-r from-[#ff7300] to-[#ff4500] text-white py-3 rounded-lg font-bold">Add FAQ</button>
             </form>
 
             <h2 class="text-2xl font-bold text-[#2c0b57] mb-4">Existing FAQs</h2>
             <div class="overflow-x-auto">
                 <table class="w-full bg-white rounded-xl shadow-lg text-left">
                     <thead>
-                        <tr class="bg-[#2c0b57] text-white">
-                            <th class="p-4 w-40 text-center">Actions</th>
+                        <tr class="bg-blue-600 text-white">
+                            <th class="p-40">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -694,7 +694,6 @@
             });
         });
 
-        // Activate first tab by default
         if (tabs.length > 0) {
             activateTab(tabs[0]);
         }
