@@ -107,9 +107,7 @@
                             class="block px-4 py-2 text-white hover:bg-orange-500 rounded-md transition-colors">Courses</a>
                         <a href="{{ route('website.internship_details') }}"
                             class="block px-4 py-2 text-white hover:bg-orange-500 rounded-md transition-colors">Internships</a>
-                        <a href="{{ route('website.course_details') }}"
-                            class="block px-4 py-2 text-white hover:bg-orange-500 rounded-md transition-colors">Course
-                            Details</a>
+                        
                     </div>
                 </div>
 
@@ -184,9 +182,7 @@
                             class="block px-4 py-2 text-white hover:bg-orange-500 rounded-md transition-colors">Courses</a>
                         <a href="{{ route('website.internship_details') }}"
                             class="block px-4 py-2 text-white hover:bg-orange-500 rounded-md transition-colors">Internships</a>
-                        <a href="{{ route('website.course_details') }}"
-                            class="block px-4 py-2 text-white hover:bg-orange-500 rounded-md transition-colors">Course
-                            Details</a>
+                        
                     </div>
                 </div>
 
