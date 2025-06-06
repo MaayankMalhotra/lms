@@ -24,7 +24,7 @@
     <!-- Tab Content -->
     <div class="mt-12">
         <!-- Placements -->
-        <div id="tab-placements" class="tab-pane {{ $loop->first ? '' : 'hidden' }}">
+        <div id="tab-placements" class="tab-pane">
             <h2 class="text-2xl font-bold text-[#2c0b57] mb-4">Add Placement</h2>
             <form action="{{ route('admin.placements.store') }}" method="POST" enctype="multipart/form-data" class="bg-white p-6 rounded-xl shadow-lg card mb-8">
                 @csrf
@@ -469,8 +469,8 @@
                                             <input type="text" name="specialization" value="{{ $instructor->specialization }}" required class="p-2 border rounded-lg">
                                             <input type="url" name="linkedin_url" value="{{ $instructor->linkedin_url }}" class="p-2 border rounded-lg">
                                             <input type="url" name="facebook_url" value="{{ $instructor->facebook_url }}" class="p-2 border rounded-lg">
-                                            <input type="checkbox" name="is_active" value="1" {{ $instructor->is_active ? 'checked' : '' }} class="h-4 w-4">
-                                            <button type="submit" class="gradient-btn text-white py-2 rounded-lg">Update</button>
+                                            <input type="checkbox" name="is_active" value="1" {{ $instructor->is_active ? 'checked' : '' }} class="h4 w-4">
+                                            <button type="gradient-btn text-white py-2 rounded-lg">Update</button">
                                         </div>
                                     </form>
                                     <form action="{{ route('admin.instructors.delete', $instructor->id) }}" method="POST" class="inline">
@@ -506,7 +506,7 @@
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Designation</label>
-                        <input type="text" name="designation" required class="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-blue-500 transition">
+                        <input type="text" name="designation" required class="w-full mt-1 p-3 p-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-blue-500 transition">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Rating (0-5)</label>
@@ -535,7 +535,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($testimonials as $testimonial)
+                        @foreach ($testimonials as $testimonial)
                             <tr class="card">
                                 <td class="p-4">{{ $testimonial->name }}</td>
                                 <td class="p-4">
