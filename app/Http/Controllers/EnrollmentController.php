@@ -171,7 +171,7 @@ class EnrollmentController extends Controller
                 ->join('payments', 'enrollments.id', '=', 'payments.enrollment_id')
                 ->join('batches', 'enrollments.batch_id', '=', 'batches.id')
                 ->join('courses', 'batches.course_id', '=', 'courses.id')
-               // ->leftJoin('users as teachers', 'batches.teacher_id', '=', 'teachers.id')
+                ->leftJoin('users as teachers', 'batches.teacher_id', '=', 'teachers.id')
                 ->where('users.role', 3)
                 ->orderBy('enrollments.created_at', 'desc');
                 dd($query->get());
