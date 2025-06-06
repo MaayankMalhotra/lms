@@ -14,6 +14,7 @@ use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\CodingQuestionController;
 use App\Http\Controllers\CodingTestController;
 use App\Models\Course;
+use Illuminate\Support\Facades\DB;
 use App\Models\Internship;
 use App\Models\Batch;
 use Illuminate\Support\Facades\Auth;
@@ -67,18 +68,51 @@ Route::put('/admin/quizzes/{id}/update', [QuizController::class, 'updateQuiz'])-
 Route::delete('/admin/quizzes/{id}', [QuizController::class, 'deleteQuiz'])->name('admin.quizzes.delete');
 
 
-Route::get('/', function () {
-    if (Auth::user() && Auth::user()->role == 1) {
-        return to_route('admin.dash');
-    } elseif (Auth::user() && Auth::user()->role == 2) {
-        return to_route('trainer.dashboard');
-    } elseif (Auth::user() && Auth::user()->role == 3) {
-        return to_route('student.dashboard');
+// Route::get('/', function () {
+//     if (Auth::user() && Auth::user()->role == 1) {
+//         return to_route('admin.dash');
+//     } elseif (Auth::user() && Auth::user()->role == 2) {
+//         return to_route('trainer.dashboard');
+//     } elseif (Auth::user() && Auth::user()->role == 3) {
+//         return to_route('student.dashboard');
+//     }
+
+//     return to_route('home-page');
+// })->name('home-page');
+
+// Route::get('/', [HomeController::class, 'index'])->name('home-page');
+
+
+public function index()
+{
+    if (Auth::check()) {
+        if (Auth::user()->role == 1) {
+            return to_route('admin.dash');
+        } elseif (Auth::user()->role == 2) {
+            return to_route('trainer.dashboard');
+        } elseif (Auth::user()->role == 3) {
+            return to_route('student.dashboard');
+        }
     }
 
-    return view('website.home');
-})->name('home-page');
+    $placements = DB::select("SELECT * FROM home_placements WHERE is_active = 1 LIMIT 2");
+    $courses = DB::select("SELECT * FROM home_courses WHERE is_active = 1 LIMIT 3");
+    $upcomingCourses = DB::select("SELECT * FROM home_upcoming_courses WHERE is_active = 1 LIMIT 3");
+    $internships = DB::select("SELECT * FROM home_internships WHERE is_active = 1 LIMIT 3");
+    $instructors = DB::select("SELECT * FROM home_instructors WHERE is_active = 1 LIMIT 4");
+    $testimonials = DB::select("SELECT * FROM home_testimonials WHERE is_active = 1 LIMIT 3");
+    $faqs = DB::select("SELECT * FROM home_faqs WHERE is_active = 1");
 
+    return view('website.home', compact(
+        'placements',
+        'courses',
+        'upcomingCourses',
+        'internships',
+        'instructors',
+        'testimonials',
+        'faqs'
+    ));
+}
 Route::get('/about', function () {
     if (Auth::user() && Auth::user()->role == 1) {
         return to_route('admin.dash');
