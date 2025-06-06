@@ -191,22 +191,21 @@ Route::get('/login', function () {
 })->name('login');
 
 
-Route::get('/login_check', [LoginController::class, 'login_check'])->name('logincheck');;
+Route::get('/login_check', [LoginController::class, 'login_check'])->name('logincheck');
 Route::get('/register-web', [LoginController::class, 'register']);
-
-Route::get('/student-management', [AdminController::class, 'student_management'])->name('student-management');
-
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
-Route::get('/trainer-management', [AdminController::class, 'trainer_management'])->name('trainer-management');
 
-// Route::get('admin/student/{id}/edit', [AdminController::class, 'editStudent'])->name('admin.student.edit');
-// Route::delete('admin/student/{id}/delete', [AdminController::class, 'deleteStudent'])->name('admin.student.delete');
+Route::get('trainer-management', [AdminController::class, 'trainer_management'])->name('trainer-management');
+Route::post('admin/trainers', [AdminController::class, 'store'])->name('admin.trainers.store');
+Route::get('admin/trainers/{id}/edit', [AdminController::class, 'edit'])->name('admin.trainers.edit');
+Route::put('admin/trainers/{id}', [AdminController::class, 'update'])->name('admin.trainers.update');
+Route::delete('admin/trainers/{id}/delete', [AdminController::class, 'destroy'])->name('admin.trainers.delete');
 
-
-Route::get('admin/trainer/{id}/edit', [AdminController::class, 'editTrainer'])->name('admin.trainer.edit');
-Route::put('admin/trainer/{id}', [AdminController::class, 'updateTrainer'])->name('admin.trainer.update');
-Route::delete('admin/trainer/{id}', [AdminController::class, 'deleteTrainer'])->name('admin.trainer.delete');
+Route::get('/student-management', [AdminController::class, 'student_management'])->name('student-management');
+Route::get('admin/student/{id}/edit', [AdminController::class, 'editStudent'])->name('admin.student.edit');
+Route::put('admin/student/{id}', [AdminController::class, 'updateStudent'])->name('admin.student.update');
+Route::delete('admin/student/{id}', [AdminController::class, 'deleteStudent'])->name('admin.student.delete');
 
 Route::get('/upload', [ImageUploadController::class, 'showUploadForm'])->name('upload.form');
 Route::post('/upload', [ImageUploadController::class, 'uploadImage'])->name('upload.image');

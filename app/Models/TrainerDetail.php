@@ -24,10 +24,18 @@ class TrainerDetail extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function courses()
+    public function getCourseNamesAttribute()
     {
-        return Course::whereIn('id', $this->course_ids ?? [])->get();
+    if (!$this->course_ids) 
+    {
+        return 'None';
     }
-    
-    
+    try {
+        $courseIds = json_decode($this->course_ids, true);
+        $courses = Course::whereIn('id', $courseIds)->pluck('name')->toArray();
+        return implode(', ', $courses) ?: 'None';
+    } catch (\Exception $e) {
+        return 'Error';
+    }
+}    
 }
