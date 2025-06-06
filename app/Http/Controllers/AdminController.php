@@ -217,7 +217,7 @@ public function student_management()
         $request->validate([
             'name' => 'required|string|max:255',
             'qualification' => 'required|string|max:255',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             'tags' => 'nullable|string',
             'company' => 'required|string|max:255',
             'package' => 'required|string|max:255',
