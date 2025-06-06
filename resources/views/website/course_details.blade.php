@@ -1,6 +1,6 @@
 @extends('website.layouts.app')
 
-@section('title', $course_details->course_name)
+@section('title', $course_details->course_name ?? 'Course Details')
 
 @section('content')
 <meta name="csrf-token" content="{{ csrf_token() }}">
