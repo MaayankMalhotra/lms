@@ -7,6 +7,7 @@ use App\Models\TrainerDetail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\User; 
+use Illuminate\Support\Facades\Storage; // Import Storage facade
 use Illuminate\Support\Facades\Log;
 class AdminController extends Controller
 {
