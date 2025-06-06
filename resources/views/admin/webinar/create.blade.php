@@ -34,7 +34,7 @@
 
                 <div>
                     <label class="block text-gray-700 font-medium mb-2">Entry Type</label>
-                    <input type="text" name="entry_type" value="{{ old('entry_type', 'Entry Free') }}"
+                    <input type="text" name="entry_type" value="{{ old('entry_type') }}"
                            class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-blue-400 focus:outline-none">
                 </div>
 
