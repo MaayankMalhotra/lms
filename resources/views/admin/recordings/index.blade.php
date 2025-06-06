@@ -36,7 +36,13 @@
         <tbody>
             @forelse($recordings as $recording)
                 <tr class="border-b">
-                    <td class="p-4">{{ $recording->course->name }}</td>
+                    <td class="p-4">
+                        @if ($recording->course)
+                            {{ $recording->course->name }}
+                        @else
+                            No Course
+                        @endif
+                    </td>
                     <td class="p-4">{{ $recording->topic }}</td>
                     <td class="p-4">
                         <a href="{{ $recording->video_url }}" target="_blank" class="text-blue-500 hover:underline truncate block max-w-xs">{{ $recording->video_url }}</a>
