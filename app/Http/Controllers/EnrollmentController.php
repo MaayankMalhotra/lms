@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\Course;
 use App\Models\Batch;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class EnrollmentController extends Controller
 {
