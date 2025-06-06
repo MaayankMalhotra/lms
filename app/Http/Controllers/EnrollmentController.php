@@ -167,7 +167,7 @@ class EnrollmentController extends Controller
                 'teachers.name as instructor_name',
             ])
                 ->join('users', 'enrollments.user_id', '=', 'users.id')
-              //  ->join('students', 'enrollments.user_id', '=', 'students.user_id')
+                ->join('students', 'enrollments.user_id', '=', 'students.user_id')
                 ->join('payments', 'enrollments.id', '=', 'payments.enrollment_id')
                 ->join('batches', 'enrollments.batch_id', '=', 'batches.id')
                 ->join('courses', 'batches.course_id', '=', 'courses.id')
