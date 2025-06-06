@@ -147,7 +147,7 @@ class EnrollmentController extends Controller
                 'enrollments.created_at as enrollment_created_at',
                 'users.name as student_name',
                 'users.email as student_email',
-              //  'students.phone',
+                'students.phone',
                 'payments.payment_id',
                 'payments.amount',
                 'payments.status as payment_status',
@@ -170,7 +170,7 @@ class EnrollmentController extends Controller
                 ->join('payments', 'enrollments.id', '=', 'payments.enrollment_id')
                 ->join('batches', 'enrollments.batch_id', '=', 'batches.id')
                 ->join('courses', 'batches.course_id', '=', 'courses.id')
-                ->leftJoin('users as teachers', 'batches.teacher_id', '=', 'teachers.id')
+               // ->leftJoin('users as teachers', 'batches.teacher_id', '=', 'teachers.id')
                 ->where('users.role', 3)
                 ->orderBy('enrollments.created_at', 'desc');
         
