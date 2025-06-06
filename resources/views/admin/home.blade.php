@@ -78,13 +78,34 @@
                                         @csrf
                                         @method('PUT')
                                         <div class="grid grid-cols-1 gap-2">
-                                            <input type="text" name="name" value="{{ $placement->name }}" required class="p-2 border rounded-lg text-sm">
-                                            <input type="text" name="qualification" value="{{ $placement->qualification }}" required class="p-2 border rounded-lg text-sm">
-                                            <input type="file" name="image" accept="image/*" class="p-2 border rounded-lg text-sm">
-                                            <input type="text" name="tags" value="{{ $placement->tags }}" class="p-2 border rounded-lg text-sm">
-                                            <input type="text" name="company" value="{{ $placement->company }}" required class="p-2 border rounded-lg text-sm">
-                                            <input type="text" name="package" value="{{ $placement->id }}" required class="p-2 border rounded-lg text-sm">
-                                            <input type="checkbox" name="is_active" value="1" {{ $placement->is_active ? 'checked' : '' }} class="h-4 w-4">
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700">Name</label>
+                                                <input type="text" name="name" value="{{ $placement->name }}" required class="w-full p-2 border rounded-lg text-sm">
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700">Qualification</label>
+                                                <input type="text" name="qualification" value="{{ $placement->qualification }}" required class="w-full p-2 border rounded-lg text-sm">
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700">Image</label>
+                                                <input type="file" name="image" accept="image/*" class="w-full p-2 border rounded-lg text-sm">
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700">Tags (comma-separated)</label>
+                                                <input type="text" name="tags" value="{{ $placement->tags }}" class="w-full p-2 border rounded-lg text-sm">
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700">Company</label>
+                                                <input type="text" name="company" value="{{ $placement->company }}" required class="w-full p-2 border rounded-lg text-sm">
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700">Package</label>
+                                                <input type="text" name="package" value="{{ $placement->package }}" required class="w-full p-2 border rounded-lg text-sm">
+                                            </div>
+                                            <div class="flex items-center">
+                                                <input type="checkbox" name="is_active" value="1" {{ $placement->is_active ? 'checked' : '' }} class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                                <label class="ml-2 text-sm font-medium text-gray-700">Active</label>
+                                            </div>
                                             <button type="submit" class="bg-gradient-to-r from-[#ff7300] to-[#ff4500] text-white py-1 px-3 rounded-lg text-sm">Update</button>
                                         </div>
                                     </form>
@@ -156,13 +177,34 @@
                                         @csrf
                                         @method('PUT')
                                         <div class="grid grid-cols-1 gap-2">
-                                            <input type="text" name="title" value="{{ $course->title }}" required class="p-2 border rounded-lg text-sm">
-                                            <input type="text" name="image" value="{{ $course->image }}" required class="p-2 border rounded-lg text-sm">
-                                            <input type="text" name="duration" value="{{ $course->duration }}" required class="p-2 border rounded-lg text-sm">
-                                            <input type="number" name="placed_count" value="{{ $course->placed_count }}" required min="0" class="p-2 border rounded-lg text-sm">
-                                            <input type="number" name="rating" value="{{ $course->rating }}" required min="0" max="5" step="0.1" class="p-2 border rounded-lg text-sm">
-                                            <input type="number" name="student_count" value="{{ $course->student_count }}" required min="0" class="p-2 border rounded-lg text-sm">
-                                            <input type="checkbox" name="is_active" value="1" {{ $course->is_active ? 'checked' : '' }} class="h-4 w-4">
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700">Title</label>
+                                                <input type="text" name="title" value="{{ $course->title }}" required class="w-full p-2 border rounded-lg text-sm">
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700">Image URL</label>
+                                                <input type="text" name="image" value="{{ $course->image }}" required class="w-full p-2 border rounded-lg text-sm">
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700">Duration</label>
+                                                <input type="text" name="duration" value="{{ $course->duration }}" required class="w-full p-2 border rounded-lg text-sm">
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700">Placed Count</label>
+                                                <input type="number" name="placed_count" value="{{ $course->placed_count }}" required min="0" class="w-full p-2 border rounded-lg text-sm">
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700">Rating (0-5)</label>
+                                                <input type="number" name="rating" value="{{ $course->rating }}" required min="0" max="5" step="0.1" class="w-full p-2 border rounded-lg text-sm">
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700">Student Count</label>
+                                                <input type="number" name="student_count" value="{{ $course->student_count }}" required min="0" class="w-full p-2 border rounded-lg text-sm">
+                                            </div>
+                                            <div class="flex items-center">
+                                                <input type="checkbox" name="is_active" value="1" {{ $course->is_active ? 'checked' : '' }} class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                                <label class="ml-2 text-sm font-medium text-gray-700">Active</label>
+                                            </div>
                                             <button type="submit" class="bg-gradient-to-r from-[#ff7300] to-[#ff4500] text-white py-1 px-3 rounded-lg text-sm">Update</button>
                                         </div>
                                     </form>
@@ -226,11 +268,26 @@
                                         @csrf
                                         @method('PUT')
                                         <div class="grid grid-cols-1 gap-2">
-                                            <input type="text" name="title" value="{{ $course->title }}" required class="p-2 border rounded-lg text-sm">
-                                            <input type="text" name="image" value="{{ $course->image }}" required class="p-2 border rounded-lg text-sm">
-                                            <input type="date" name="start_date" value="{{ $course->start_date }}" required class="p-2 border rounded-lg text-sm">
-                                            <input type="checkbox" name="slots_open" value="1" {{ $course->slots_open ? 'checked' : '' }} class="h-4 w-4">
-                                            <input type="checkbox" name="is_active" value="1" {{ $course->is_active ? 'checked' : '' }} class="h-4 w-4">
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700">Title</label>
+                                                <input type="text" name="title" value="{{ $course->title }}" required class="w-full p-2 border rounded-lg text-sm">
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700">Image URL</label>
+                                                <input type="text" name="image" value="{{ $course->image }}" required class="w-full p-2 border rounded-lg text-sm">
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700">Start Date</label>
+                                                <input type="date" name="start_date" value="{{ $course->start_date }}" required class="w-full p-2 border rounded-lg text-sm">
+                                            </div>
+                                            <div class="flex items-center">
+                                                <input type="checkbox" name="slots_open" value="1" {{ $course->slots_open ? 'checked' : '' }} class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                                <label class="ml-2 text-sm font-medium text-gray-700">Slots Open</label>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <input type="checkbox" name="is_active" value="1" {{ $course->is_active ? 'checked' : '' }} class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                                <label class="ml-2 text-sm font-medium text-gray-700">Active</label>
+                                            </div>
                                             <button type="submit" class="bg-gradient-to-r from-[#ff7300] to-[#ff4500] text-white py-1 px-3 rounded-lg text-sm">Update</button>
                                         </div>
                                     </form>
@@ -306,14 +363,38 @@
                                         @csrf
                                         @method('PUT')
                                         <div class="grid grid-cols-1 gap-2">
-                                            <input type="text" name="title" value="{{ $internship->title }}" required class="p-2 border rounded-lg text-sm">
-                                            <input type="text" name="image" value="{{ $internship->image }}" required class="p-2 border rounded-lg text-sm">
-                                            <input type="text" name="duration" value="{{ $internship->duration }}" required class="p-2 border rounded-lg text-sm">
-                                            <input type="number" name="project_count" value="{{ $internship->project_count }}" required min="0" class="p-2 border rounded-lg text-sm">
-                                            <input type="number" name="rating" value="{{ $internship->rating }}" required min="0" max="5" step="0.1" class="p-2 border rounded-lg text-sm">
-                                            <input type="number" name="applicant_count" value="{{ $internship->applicant_count }}" required min="0" class="p-2 border rounded-lg text-sm">
-                                            <input type="text" name="certification" value="{{ $internship->certification }}" required class="p-2 border rounded-lg text-sm">
-                                            <input type="checkbox" name="is_active" value="1" {{ $internship->is_active ? 'checked' : '' }} class="h-4 w-4">
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700">Title</label>
+                                                <input type="text" name="title" value="{{ $internship->title }}" required class="w-full p-2 border rounded-lg text-sm">
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700">Image URL</label>
+                                                <input type="text" name="image" value="{{ $internship->image }}" required class="w-full p-2 border rounded-lg text-sm">
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700">Duration</label>
+                                                <input type="text" name="duration" value="{{ $internship->duration }}" required class="w-full p-2 border rounded-lg text-sm">
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700">Project Count</label>
+                                                <input type="number" name="project_count" value="{{ $internship->project_count }}" required min="0" class="w-full p-2 border rounded-lg text-sm">
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700">Rating (0-5)</label>
+                                                <input type="number" name="rating" value="{{ $internship->rating }}" required min="0" max="5" step="0.1" class="w-full p-2 border rounded-lg text-sm">
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700">Applicant Count</label>
+                                                <input type="number" name="applicant_count" value="{{ $internship->applicant_count }}" required min="0" class="w-full p-2 border rounded-lg text-sm">
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700">Certification</label>
+                                                <input type="text" name="certification" value="{{ $internship->certification }}" required class="w-full p-2 border rounded-lg text-sm">
+                                            </div>
+                                            <div class="flex items-center">
+                                                <input type="checkbox" name="is_active" value="1" {{ $internship->is_active ? 'checked' : '' }} class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                                <label class="ml-2 text-sm font-medium text-gray-700">Active</label>
+                                            </div>
                                             <button type="submit" class="bg-gradient-to-r from-[#ff7300] to-[#ff4500] text-white py-1 px-3 rounded-lg text-sm">Update</button>
                                         </div>
                                     </form>
@@ -385,13 +466,34 @@
                                         @csrf
                                         @method('PUT')
                                         <div class="grid grid-cols-1 gap-2">
-                                            <input type="text" name="name" value="{{ $instructor->name }}" required class="p-2 border rounded-lg text-sm">
-                                            <input type="file" name="image" accept="image/*" class="p-2 border rounded-lg text-sm">
-                                            <input type="number" name="teaching_hours" value="{{ $instructor->teaching_hours }}" required min="0" class="p-2 border rounded-lg text-sm">
-                                            <input type="text" name="specialization" value="{{ $instructor->specialization }}" required class="p-2 border rounded-lg text-sm">
-                                            <input type="url" name="linkedin_url" value="{{ $instructor->linkedin_url }}" class="p-2 border rounded-lg text-sm">
-                                            <input type="url" name="facebook_url" value="{{ $instructor->facebook_url }}" class="p-2 border rounded-lg text-sm">
-                                            <input type="checkbox" name="is_active" value="1" {{ $instructor->is_active ? 'checked' : '' }} class="h-4 w-4">
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700">Name</label>
+                                                <input type="text" name="name" value="{{ $instructor->name }}" required class="w-full p-2 border rounded-lg text-sm">
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700">Image</label>
+                                                <input type="file" name="image" accept="image/*" class="w-full p-2 border rounded-lg text-sm">
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700">Teaching Hours</label>
+                                                <input type="number" name="teaching_hours" value="{{ $instructor->teaching_hours }}" required min="0" class="w-full p-2 border rounded-lg text-sm">
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700">Specialization</label>
+                                                <input type="text" name="specialization" value="{{ $instructor->specialization }}" required class="w-full p-2 border rounded-lg text-sm">
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700">LinkedIn URL</label>
+                                                <input type="url" name="linkedin_url" value="{{ $instructor->linkedin_url }}" class="w-full p-2 border rounded-lg text-sm">
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700">Facebook URL</label>
+                                                <input type="url" name="facebook_url" value="{{ $instructor->facebook_url }}" class="w-full p-2 border rounded-lg text-sm">
+                                            </div>
+                                            <div class="flex items-center">
+                                                <input type="checkbox" name="is_active" value="1" {{ $instructor->is_active ? 'checked' : '' }} class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                                <label class="ml-2 text-sm font-medium text-gray-700">Active</label>
+                                            </div>
                                             <button type="submit" class="bg-gradient-to-r from-[#ff7300] to-[#ff4500] text-white py-1 px-3 rounded-lg text-sm">Update</button>
                                         </div>
                                     </form>
@@ -459,12 +561,30 @@
                                         @csrf
                                         @method('PUT')
                                         <div class="grid grid-cols-1 gap-2">
-                                            <input type="text" name="name" value="{{ $testimonial->name }}" required class="p-2 border rounded-lg text-sm">
-                                            <input type="file" name="image" accept="image/*" class="p-2 border rounded-lg text-sm">
-                                            <textarea name="content" required class="p-2 border rounded-lg text-sm">{{ $testimonial->content }}</textarea>
-                                            <input type="text" name="designation" value="{{ $testimonial->designation }}" required class="p-2 border rounded-lg text-sm">
-                                            <input type="number" name="rating" value="{{ $testimonial->rating }}" required min="0" max="5" step="0.1" class="p-2 border rounded-lg text-sm">
-                                            <input type="checkbox" name="is_active" value="1" {{ $testimonial->is_active ? 'checked' : '' }} class="h-4 w-4">
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700">Name</label>
+                                                <input type="text" name="name" value="{{ $testimonial->name }}" required class="w-full p-2 border rounded-lg text-sm">
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700">Image</label>
+                                                <input type="file" name="image" accept="image/*" class="w-full p-2 border rounded-lg text-sm">
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700">Content</label>
+                                                <textarea name="content" required class="w-full p-2 border rounded-lg text-sm">{{ $testimonial->content }}</textarea>
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700">Designation</label>
+                                                <input type="text" name="designation" value="{{ $testimonial->designation }}" required class="w-full p-2 border rounded-lg text-sm">
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700">Rating (0-5)</label>
+                                                <input type="number" name="rating" value="{{ $testimonial->rating }}" required min="0" max="5" step="0.1" class="w-full p-2 border rounded-lg text-sm">
+                                            </div>
+                                            <div class="flex items-center">
+                                                <input type="checkbox" name="is_active" value="1" {{ $testimonial->is_active ? 'checked' : '' }} class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                                <label class="ml-2 text-sm font-medium text-gray-700">Active</label>
+                                            </div>
                                             <button type="submit" class="bg-gradient-to-r from-[#ff7300] to-[#ff4500] text-white py-1 px-3 rounded-lg text-sm">Update</button>
                                         </div>
                                     </form>
@@ -520,9 +640,18 @@
                                         @csrf
                                         @method('PUT')
                                         <div class="grid grid-cols-1 gap-2">
-                                            <input type="text" name="question" value="{{ $faq->question }}" required class="p-2 border rounded-lg text-sm">
-                                            <textarea name="answer" required class="p-2 border rounded-lg text-sm">{{ $faq->answer }}</textarea>
-                                            <input type="checkbox" name="is_active" value="1" {{ $faq->is_active ? 'checked' : '' }} class="h-4 w-4">
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700">Question</label>
+                                                <input type="text" name="question" value="{{ $faq->question }}" required class="w-full p-2 border rounded-lg text-sm">
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700">Answer</label>
+                                                <textarea name="answer" required class="w-full p-2 border rounded-lg text-sm">{{ $faq->answer }}</textarea>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <input type="checkbox" name="is_active" value="1" {{ $faq->is_active ? 'checked' : '' }} class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                                <label class="ml-2 text-sm font-medium text-gray-700">Active</label>
+                                            </div>
                                             <button type="submit" class="bg-gradient-to-r from-[#ff7300] to-[#ff4500] text-white py-1 px-3 rounded-lg text-sm">Update</button>
                                         </div>
                                     </form>
