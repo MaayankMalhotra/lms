@@ -224,8 +224,8 @@ public function student_management()
             'is_active' => 'boolean',
         ]);
 
-        $imagePath = $request->file('image')->store('images', 'public');
-
+        //$imagePath = $request->file('image')->store('images', 'public');
+        $imagePath='';
         DB::insert("
             INSERT INTO home_placements (name, qualification, image, tags, company, package, is_active, created_at, updated_at)
             VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
