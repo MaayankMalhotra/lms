@@ -58,12 +58,12 @@
                         <label class="ml-2 text-sm font-medium text-gray-700">Active</label>
                     </div>
                 </div>
-                <button type="submit" class="mt-4 w-full gradient-btn text-white py-3 rounded-lg font-bold hover:shadow-lg transition-all">Add Placement</button>
+                <button type="submit" class="mt-4 w-full bg-gradient-to-r from-[#ff7300] to-[#ff4500] text-white py-3 rounded-lg font-bold hover:shadow-lg transition-all">Add Placement</button>
             </form>
 
             <h2 class="text-2xl font-bold text-[#2c0b57] mb-4">Existing Placements</h2>
             <div class="overflow-x-auto">
-                <table class="w-full bg-white rounded-xl shadow-lg">
+                <table class="w-full bg-white rounded-xl shadow-lg text-left">
                     <thead>
                         <tr class="bg-[#2c0b57] text-white">
                             <th class="p-4">Name</th>
@@ -73,41 +73,41 @@
                             <th class="p-4">Company</th>
                             <th class="p-4">Package</th>
                             <th class="p-4">Active</th>
-                            <th class="p-4">Actions</th>
+                            <th class="p-4 w-40 text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($placements as $placement)
-                            <tr class="card">
+                            <tr class="card hover:bg-gray-50">
                                 <td class="p-4">{{ $placement->name }}</td>
                                 <td class="p-4">{{ $placement->qualification }}</td>
                                 <td class="p-4">
-                                    <img src="{{ asset('storage/' . $placement->image) }}" alt="{{ $placement->name }}" class="w-16 h-16 object-cover rounded-lg">
+                                    <img src="{{ asset('storage/' . $placement->image) }}" alt="{{ $placement->name }}" class="w-12 h-12 object-cover rounded-lg">
                                 </td>
                                 <td class="p-4">{{ $placement->tags }}</td>
                                 <td class="p-4">{{ $placement->company }}</td>
                                 <td class="p-4">{{ $placement->package }}</td>
                                 <td class="p-4">{{ $placement->is_active ? 'Yes' : 'No' }}</td>
-                                <td class="p-4">
-                                    <button x-data="{ open: false }" @click="open = !open" class="text-blue-500 hover:text-blue-700">Edit</button>
+                                <td class="p-4 text-center">
+                                    <button x-data="{ open: false }" @click="open = !open" class="text-blue-500 hover:text-blue-700 text-sm mr-2">Edit</button>
                                     <form x-show="open" action="{{ route('admin.placements.update', $placement->id) }}" method="POST" enctype="multipart/form-data" class="mt-2">
                                         @csrf
                                         @method('PUT')
                                         <div class="grid grid-cols-1 gap-2">
-                                            <input type="text" name="name" value="{{ $placement->name }}" required class="p-2 border rounded-lg">
-                                            <input type="text" name="qualification" value="{{ $placement->qualification }}" required class="p-2 border rounded-lg">
-                                            <input type="file" name="image" accept="image/*" class="p-2 border rounded-lg">
-                                            <input type="text" name="tags" value="{{ $placement->tags }}" class="p-2 border rounded-lg">
-                                            <input type="text" name="company" value="{{ $placement->company }}" required class="p-2 border rounded-lg">
-                                            <input type="text" name="package" value="{{ $placement->package }}" required class="p-2 border rounded-lg">
+                                            <input type="text" name="name" value="{{ $placement->name }}" required class="p-2 border rounded-lg text-sm">
+                                            <input type="text" name="qualification" value="{{ $placement->qualification }}" required class="p-2 border rounded-lg text-sm">
+                                            <input type="file" name="image" accept="image/*" class="p-2 border rounded-lg text-sm">
+                                            <input type="text" name="tags" value="{{ $placement->tags }}" class="p-2 border rounded-lg text-sm">
+                                            <input type="text" name="company" value="{{ $placement->company }}" required class="p-2 border rounded-lg text-sm">
+                                            <input type="text" name="package" value="{{ $placement->package }}" required class="p-2 border rounded-lg text-sm">
                                             <input type="checkbox" name="is_active" value="1" {{ $placement->is_active ? 'checked' : '' }} class="h-4 w-4">
-                                            <button type="submit" class="gradient-btn text-white py-2 rounded-lg">Update</button>
+                                            <button type="submit" class="bg-gradient-to-r from-[#ff7300] to-[#ff4500] text-white py-1 px-3 rounded-lg text-sm">Update</button>
                                         </div>
                                     </form>
                                     <form action="{{ route('admin.placements.delete', $placement->id) }}" method="POST" class="inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="text-red-500 hover:text-red-700 ml-2" onclick="return confirm('Are you sure?')">Delete</button>
+                                        <button type="submit" class="text-red-500 hover:text-red-700 text-sm" onclick="return confirm('Are you sure?')">Delete</button>
                                     </form>
                                 </td>
                             </tr>
@@ -152,12 +152,12 @@
                         <label class="ml-2 text-sm font-medium text-gray-700">Active</label>
                     </div>
                 </div>
-                <button type="submit" class="mt-4 w-full gradient-btn text-white py-3 rounded-lg font-bold hover:shadow-lg transition-all">Add Course</button>
+                <button type="submit" class="mt-4 w-full bg-gradient-to-r from-[#ff7300] to-[#ff4500] text-white py-3 rounded-lg font-bold hover:shadow-lg transition-all">Add Course</button>
             </form>
 
             <h2 class="text-2xl font-bold text-[#2c0b57] mb-4">Existing Courses</h2>
             <div class="overflow-x-auto">
-                <table class="w-full bg-white rounded-xl shadow-lg">
+                <table class="w-full bg-white rounded-xl shadow-lg text-left">
                     <thead>
                         <tr class="bg-[#2c0b57] text-white">
                             <th class="p-4">Title</th>
@@ -167,41 +167,41 @@
                             <th class="p-4">Rating</th>
                             <th class="p-4">Students</th>
                             <th class="p-4">Active</th>
-                            <th class="p-4">Actions</th>
+                            <th class="p-4 w-40 text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($courses as $course)
-                            <tr class="card">
+                            <tr class="card hover:bg-gray-50">
                                 <td class="p-4">{{ $course->title }}</td>
                                 <td class="p-4">
-                                    <img src="{{ $course->image }}" alt="{{ $course->title }}" class="w-16 h-16 object-cover rounded-lg">
+                                    <img src="{{ $course->image }}" alt="{{ $course->title }}" class="w-12 h-12 object-cover rounded-lg">
                                 </td>
                                 <td class="p-4">{{ $course->duration }}</td>
                                 <td class="p-4">{{ $course->placed_count }}</td>
                                 <td class="p-4">{{ $course->rating }}</td>
                                 <td class="p-4">{{ $course->student_count }}</td>
                                 <td class="p-4">{{ $course->is_active ? 'Yes' : 'No' }}</td>
-                                <td class="p-4">
-                                    <button x-data="{ open: false }" @click="open = !open" class="text-blue-500 hover:text-blue-700">Edit</button>
+                                <td class="p-4 text-center">
+                                    <button x-data="{ open: false }" @click="open = !open" class="text-blue-500 hover:text-blue-700 text-sm mr-2">Edit</button>
                                     <form x-show="open" action="{{ route('admin.courses.update', $course->id) }}" method="POST" class="mt-2">
                                         @csrf
                                         @method('PUT')
                                         <div class="grid grid-cols-1 gap-2">
-                                            <input type="text" name="title" value="{{ $course->title }}" required class="p-2 border rounded-lg">
-                                            <input type="text" name="image" value="{{ $course->image }}" required class="p-2 border rounded-lg">
-                                            <input type="text" name="duration" value="{{ $course->duration }}" required class="p-2 border rounded-lg">
-                                            <input type="number" name="placed_count" value="{{ $course->placed_count }}" required min="0" class="p-2 border rounded-lg">
-                                            <input type="number" name="rating" value="{{ $course->rating }}" required min="0" max="5" step="0.1" class="p-2 border rounded-lg">
-                                            <input type="number" name="student_count" value="{{ $course->student_count }}" required min="0" class="p-2 border rounded-lg">
+                                            <input type="text" name="title" value="{{ $course->title }}" required class="p-2 border rounded-lg text-sm">
+                                            <input type="text" name="image" value="{{ $course->image }}" required class="p-2 border rounded-lg text-sm">
+                                            <input type="text" name="duration" value="{{ $course->duration }}" required class="p-2 border rounded-lg text-sm">
+                                            <input type="number" name="placed_count" value="{{ $course->placed_count }}" required min="0" class="p-2 border rounded-lg text-sm">
+                                            <input type="number" name="rating" value="{{ $course->rating }}" required min="0" max="5" step="0.1" class="p-2 border rounded-lg text-sm">
+                                            <input type="number" name="student_count" value="{{ $course->student_count }}" required min="0" class="p-2 border rounded-lg text-sm">
                                             <input type="checkbox" name="is_active" value="1" {{ $course->is_active ? 'checked' : '' }} class="h-4 w-4">
-                                            <button type="submit" class="gradient-btn text-white py-2 rounded-lg">Update</button>
+                                            <button type="submit" class="bg-gradient-to-r from-[#ff7300] to-[#ff4500] text-white py-1 px-3 rounded-lg text-sm">Update</button>
                                         </div>
                                     </form>
                                     <form action="{{ route('admin.courses.delete', $course->id) }}" method="POST" class="inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="text-red-500 hover:text-red-700 ml-2" onclick="return confirm('Are you sure?')">Delete</button>
+                                        <button type="submit" class="text-red-500 hover:text-red-700 text-sm" onclick="return confirm('Are you sure?')">Delete</button>
                                     </form>
                                 </td>
                             </tr>
@@ -238,12 +238,12 @@
                         <label class="ml-2 text-sm font-medium text-gray-700">Active</label>
                     </div>
                 </div>
-                <button type="submit" class="mt-4 w-full gradient-btn text-white py-3 rounded-lg font-bold hover:shadow-lg transition-all">Add Upcoming Course</button>
+                <button type="submit" class="mt-4 w-full bg-gradient-to-r from-[#ff7300] to-[#ff4500] text-white py-3 rounded-lg font-bold hover:shadow-lg transition-all">Add Upcoming Course</button>
             </form>
 
             <h2 class="text-2xl font-bold text-[#2c0b57] mb-4">Existing Upcoming Courses</h2>
             <div class="overflow-x-auto">
-                <table class="w-full bg-white rounded-xl shadow-lg">
+                <table class="w-full bg-white rounded-xl shadow-lg text-left">
                     <thead>
                         <tr class="bg-[#2c0b57] text-white">
                             <th class="p-4">Title</th>
@@ -251,37 +251,37 @@
                             <th class="p-4">Start Date</th>
                             <th class="p-4">Slots Open</th>
                             <th class="p-4">Active</th>
-                            <th class="p-4">Actions</th>
+                            <th class="p-4 w-40 text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($upcomingCourses as $course)
-                            <tr class="card">
+                            <tr class="card hover:bg-gray-50">
                                 <td class="p-4">{{ $course->title }}</td>
                                 <td class="p-4">
-                                    <img src="{{ $course->image }}" alt="{{ $course->title }}" class="w-16 h-16 object-cover rounded-lg">
+                                    <img src="{{ $course->image }}" alt="{{ $course->title }}" class="w-12 h-12 object-cover rounded-lg">
                                 </td>
                                 <td class="p-4">{{ $course->start_date }}</td>
                                 <td class="p-4">{{ $course->slots_open ? 'Yes' : 'No' }}</td>
                                 <td class="p-4">{{ $course->is_active ? 'Yes' : 'No' }}</td>
-                                <td class="p-4">
-                                    <button x-data="{ open: false }" @click="open = !open" class="text-blue-500 hover:text-blue-700">Edit</button>
+                                <td class="p-4 text-center">
+                                    <button x-data="{ open: false }" @click="open = !open" class="text-blue-500 hover:text-blue-700 text-sm mr-2">Edit</button>
                                     <form x-show="open" action="{{ route('admin.upcoming_courses.update', $course->id) }}" method="POST" class="mt-2">
                                         @csrf
                                         @method('PUT')
                                         <div class="grid grid-cols-1 gap-2">
-                                            <input type="text" name="title" value="{{ $course->title }}" required class="p-2 border rounded-lg">
-                                            <input type="text" name="image" value="{{ $course->image }}" required class="p-2 border rounded-lg">
-                                            <input type="date" name="start_date" value="{{ $course->start_date }}" required class="p-2 border rounded-lg">
+                                            <input type="text" name="title" value="{{ $course->title }}" required class="p-2 border rounded-lg text-sm">
+                                            <input type="text" name="image" value="{{ $course->image }}" required class="p-2 border rounded-lg text-sm">
+                                            <input type="date" name="start_date" value="{{ $course->start_date }}" required class="p-2 border rounded-lg text-sm">
                                             <input type="checkbox" name="slots_open" value="1" {{ $course->slots_open ? 'checked' : '' }} class="h-4 w-4">
                                             <input type="checkbox" name="is_active" value="1" {{ $course->is_active ? 'checked' : '' }} class="h-4 w-4">
-                                            <button type="submit" class="gradient-btn text-white py-2 rounded-lg">Update</button>
+                                            <button type="submit" class="bg-gradient-to-r from-[#ff7300] to-[#ff4500] text-white py-1 px-3 rounded-lg text-sm">Update</button>
                                         </div>
                                     </form>
                                     <form action="{{ route('admin.upcoming_courses.delete', $course->id) }}" method="POST" class="inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="text-red-500 hover:text-red-700 ml-2" onclick="return confirm('Are you sure?')">Delete</button>
+                                        <button type="submit" class="text-red-500 hover:text-red-700 text-sm" onclick="return confirm('Are you sure?')">Delete</button>
                                     </form>
                                 </td>
                             </tr>
@@ -330,12 +330,12 @@
                         <label class="ml-2 text-sm font-medium text-gray-700">Active</label>
                     </div>
                 </div>
-                <button type="submit" class="mt-4 w-full gradient-btn text-white py-3 rounded-lg font-bold hover:shadow-lg transition-all">Add Internship</button>
+                <button type="submit" class="mt-4 w-full bg-gradient-to-r from-[#ff7300] to-[#ff4500] text-white py-3 rounded-lg font-bold hover:shadow-lg transition-all">Add Internship</button>
             </form>
 
             <h2 class="text-2xl font-bold text-[#2c0b57] mb-4">Existing Internships</h2>
             <div class="overflow-x-auto">
-                <table class="w-full bg-white rounded-xl shadow-lg">
+                <table class="w-full bg-white rounded-xl shadow-lg text-left">
                     <thead>
                         <tr class="bg-[#2c0b57] text-white">
                             <th class="p-4">Title</th>
@@ -346,15 +346,15 @@
                             <th class="p-4">Applicants</th>
                             <th class="p-4">Certification</th>
                             <th class="p-4">Active</th>
-                            <th class="p-4">Actions</th>
+                            <th class="p-4 w-40 text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($internships as $internship)
-                            <tr class="card">
+                            <tr class="card hover:bg-gray-50">
                                 <td class="p-4">{{ $internship->title }}</td>
                                 <td class="p-4">
-                                    <img src="{{ $internship->image }}" alt="{{ $internship->title }}" class="w-16 h-16 object-cover rounded-lg">
+                                    <img src="{{ $internship->image }}" alt="{{ $internship->title }}" class="w-12 h-12 object-cover rounded-lg">
                                 </td>
                                 <td class="p-4">{{ $internship->duration }}</td>
                                 <td class="p-4">{{ $internship->project_count }}</td>
@@ -362,27 +362,27 @@
                                 <td class="p-4">{{ $internship->applicant_count }}</td>
                                 <td class="p-4">{{ $internship->certification }}</td>
                                 <td class="p-4">{{ $internship->is_active ? 'Yes' : 'No' }}</td>
-                                <td class="p-4">
-                                    <button x-data="{ open: false }" @click="open = !open" class="text-blue-500 hover:text-blue-700">Edit</button>
+                                <td class="p-4 text-center">
+                                    <button x-data="{ open: false }" @click="open = !open" class="text-blue-500 hover:text-blue-700 text-sm mr-2">Edit</button>
                                     <form x-show="open" action="{{ route('admin.internships.update', $internship->id) }}" method="POST" class="mt-2">
                                         @csrf
                                         @method('PUT')
                                         <div class="grid grid-cols-1 gap-2">
-                                            <input type="text" name="title" value="{{ $internship->title }}" required class="p-2 border rounded-lg">
-                                            <input type="text" name="image" value="{{ $internship->image }}" required class="p-2 border rounded-lg">
-                                            <input type="text" name="duration" value="{{ $internship->duration }}" required class="p-2 border rounded-lg">
-                                            <input type="number" name="project_count" value="{{ $internship->project_count }}" required min="0" class="p-2 border rounded-lg">
-                                            <input type="number" name="rating" value="{{ $internship->rating }}" required min="0" max="5" step="0.1" class="p-2 border rounded-lg">
-                                            <input type="number" name="applicant_count" value="{{ $internship->applicant_count }}" required min="0" class="p-2 border rounded-lg">
-                                            <input type="text" name="certification" value="{{ $internship->certification }}" required class="p-2 border rounded-lg">
+                                            <input type="text" name="title" value="{{ $internship->title }}" required class="p-2 border rounded-lg text-sm">
+                                            <input type="text" name="image" value="{{ $internship->image }}" required class="p-2 border rounded-lg text-sm">
+                                            <input type="text" name="duration" value="{{ $internship->duration }}" required class="p-2 border rounded-lg text-sm">
+                                            <input type="number" name="project_count" value="{{ $internship->project_count }}" required min="0" class="p-2 border rounded-lg text-sm">
+                                            <input type="number" name="rating" value="{{ $internship->rating }}" required min="0" max="5" step="0.1" class="p-2 border rounded-lg text-sm">
+                                            <input type="number" name="applicant_count" value="{{ $internship->applicant_count }}" required min="0" class="p-2 border rounded-lg text-sm">
+                                            <input type="text" name="certification" value="{{ $internship->certification }}" required class="p-2 border rounded-lg text-sm">
                                             <input type="checkbox" name="is_active" value="1" {{ $internship->is_active ? 'checked' : '' }} class="h-4 w-4">
-                                            <button type="submit" class="gradient-btn text-white py-2 rounded-lg">Update</button>
+                                            <button type="submit" class="bg-gradient-to-r from-[#ff7300] to-[#ff4500] text-white py-1 px-3 rounded-lg text-sm">Update</button>
                                         </div>
                                     </form>
                                     <form action="{{ route('admin.internships.delete', $internship->id) }}" method="POST" class="inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="text-red-500 hover:text-red-700 ml-2" onclick="return confirm('Are you sure?')">Delete</button>
+                                        <button type="submit" class="text-red-500 hover:text-red-700 text-sm" onclick="return confirm('Are you sure?')">Delete</button>
                                     </form>
                                 </td>
                             </tr>
@@ -427,12 +427,12 @@
                         <label class="ml-2 text-sm font-medium text-gray-700">Active</label>
                     </div>
                 </div>
-                <button type="submit" class="mt-4 w-full gradient-btn text-white py-3 rounded-lg font-bold hover:shadow-lg transition-all">Add Instructor</button>
+                <button type="submit" class="mt-4 w-full bg-gradient-to-r from-[#ff7300] to-[#ff4500] text-white py-3 rounded-lg font-bold hover:shadow-lg transition-all">Add Instructor</button>
             </form>
 
             <h2 class="text-2xl font-bold text-[#2c0b57] mb-4">Existing Instructors</h2>
             <div class="overflow-x-auto">
-                <table class="w-full bg-white rounded-xl shadow-lg">
+                <table class="w-full bg-white rounded-xl shadow-lg text-left">
                     <thead>
                         <tr class="bg-[#2c0b57] text-white">
                             <th class="p-4">Name</th>
@@ -442,41 +442,41 @@
                             <th class="p-4">LinkedIn</th>
                             <th class="p-4">Facebook</th>
                             <th class="p-4">Active</th>
-                            <th class="p-4">Actions</th>
+                            <th class="p-4 w-40 text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($instructors as $instructor)
-                            <tr class="card">
+                            <tr class="card hover:bg-gray-50">
                                 <td class="p-4">{{ $instructor->name }}</td>
                                 <td class="p-4">
-                                    <img src="{{ asset('storage/' . $instructor->image) }}" alt="{{ $instructor->name }}" class="w-16 h-16 object-cover rounded-lg">
+                                    <img src="{{ asset('storage/' . $instructor->image) }}" alt="{{ $instructor->name }}" class="w-12 h-12 object-cover rounded-lg">
                                 </td>
                                 <td class="p-4">{{ $instructor->teaching_hours }}</td>
                                 <td class="p-4">{{ $instructor->specialization }}</td>
                                 <td class="p-4">{{ $instructor->linkedin_url }}</td>
                                 <td class="p-4">{{ $instructor->facebook_url }}</td>
                                 <td class="p-4">{{ $instructor->is_active ? 'Yes' : 'No' }}</td>
-                                <td class="p-4">
-                                    <button x-data="{ open: false }" @click="open = !open" class="text-blue-500 hover:text-blue-700">Edit</button>
+                                <td class="p-4 text-center">
+                                    <button x-data="{ open: false }" @click="open = !open" class="text-blue-500 hover:text-blue-700 text-sm mr-2">Edit</button>
                                     <form x-show="open" action="{{ route('admin.instructors.update', $instructor->id) }}" method="POST" enctype="multipart/form-data" class="mt-2">
                                         @csrf
                                         @method('PUT')
                                         <div class="grid grid-cols-1 gap-2">
-                                            <input type="text" name="name" value="{{ $instructor->name }}" required class="p-2 border rounded-lg">
-                                            <input type="file" name="image" accept="image/*" class="p-2 border rounded-lg">
-                                            <input type="number" name="teaching_hours" value="{{ $instructor->teaching_hours }}" required min="0" class="p-2 border rounded-lg">
-                                            <input type="text" name="specialization" value="{{ $instructor->specialization }}" required class="p-2 border rounded-lg">
-                                            <input type="url" name="linkedin_url" value="{{ $instructor->linkedin_url }}" class="p-2 border rounded-lg">
-                                            <input type="url" name="facebook_url" value="{{ $instructor->facebook_url }}" class="p-2 border rounded-lg">
-                                            <input type="checkbox" name="is_active" value="1" {{ $instructor->is_active ? 'checked' : '' }} class="h4 w-4">
-                                            <button type="gradient-btn text-white py-2 rounded-lg">Update</button">
+                                            <input type="text" name="name" value="{{ $instructor->name }}" required class="p-2 border rounded-lg text-sm">
+                                            <input type="file" name="image" accept="image/*" class="p-2 border rounded-lg text-sm">
+                                            <input type="number" name="teaching_hours" value="{{ $instructor->teaching_hours }}" required min="0" class="p-2 border rounded-lg text-sm">
+                                            <input type="text" name="specialization" value="{{ $instructor->specialization }}" required class="p-2 border rounded-lg text-sm">
+                                            <input type="url" name="linkedin_url" value="{{ $instructor->linkedin_url }}" class="p-2 border rounded-lg text-sm">
+                                            <input type="url" name="facebook_url" value="{{ $instructor->facebook_url }}" class="p-2 border rounded-lg text-sm">
+                                            <input type="checkbox" name="is_active" value="1" {{ $instructor->is_active ? 'checked' : '' }} class="h-4 w-4">
+                                            <button type="submit" class="bg-gradient-to-r from-[#ff7300] to-[#ff4500] text-white py-1 px-3 rounded-lg text-sm">Update</button>
                                         </div>
                                     </form>
                                     <form action="{{ route('admin.instructors.delete', $instructor->id) }}" method="POST" class="inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="text-red-500 hover:text-red-700 ml-2" onclick="return confirm('Are you sure?')">Delete</button>
+                                        <button type="submit" class="text-red-500 hover:text-red-700 text-sm" onclick="return confirm('Are you sure?')">Delete</button>
                                     </form>
                                 </td>
                             </tr>
@@ -506,7 +506,7 @@
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Designation</label>
-                        <input type="text" name="designation" required class="w-full mt-1 p-3 p-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-blue-500 transition">
+                        <input type="text" name="designation" required class="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-blue-500 transition">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Rating (0-5)</label>
@@ -517,12 +517,12 @@
                         <label class="ml-2 text-sm font-medium text-gray-700">Active</label>
                     </div>
                 </div>
-                <button type="submit" class="mt-4 w-full gradient-btn text-white py-3 rounded-lg font-bold hover:shadow-lg transition-all">Add Testimonial</button>
+                <button type="submit" class="mt-4 w-full bg-gradient-to-r from-[#ff7300] to-[#ff4500] text-white py-3 rounded-lg font-bold hover:shadow-lg transition-all">Add Testimonial</button>
             </form>
 
             <h2 class="text-2xl font-bold text-[#2c0b57] mb-4">Existing Testimonials</h2>
             <div class="overflow-x-auto">
-                <table class="w-full bg-white rounded-xl shadow-lg">
+                <table class="w-full bg-white rounded-xl shadow-lg text-left">
                     <thead>
                         <tr class="bg-[#2c0b57] text-white">
                             <th class="p-4">Name</th>
@@ -531,39 +531,39 @@
                             <th class="p-4">Designation</th>
                             <th class="p-4">Rating</th>
                             <th class="p-4">Active</th>
-                            <th class="p-4">Actions</th>
+                            <th class="p-4 w-40 text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($testimonials as $testimonial)
-                            <tr class="card">
+                        @foreach($testimonials as $testimonial)
+                            <tr class="card hover:bg-gray-50">
                                 <td class="p-4">{{ $testimonial->name }}</td>
                                 <td class="p-4">
-                                    <img src="{{ asset('storage/' . $testimonial->image) }}" alt="{{ $testimonial->name }}" class="w-16 h-16 object-cover rounded-lg">
+                                    <img src="{{ asset('storage/' . $testimonial->image) }}" alt="{{ $testimonial->name }}" class="w-12 h-12 object-cover rounded-lg">
                                 </td>
                                 <td class="p-4">{{ Str::limit($testimonial->content, 50) }}</td>
                                 <td class="p-4">{{ $testimonial->designation }}</td>
                                 <td class="p-4">{{ $testimonial->rating }}</td>
                                 <td class="p-4">{{ $testimonial->is_active ? 'Yes' : 'No' }}</td>
-                                <td class="p-4">
-                                    <button x-data="{ open: false }" @click="open = !open" class="text-blue-500 hover:text-blue-700">Edit</button>
+                                <td class="p-4 text-center">
+                                    <button x-data="{ open: false }" @click="open = !open" class="text-blue-500 hover:text-blue-700 text-sm mr-2">Edit</button>
                                     <form x-show="open" action="{{ route('admin.testimonials.update', $testimonial->id) }}" method="POST" enctype="multipart/form-data" class="mt-2">
                                         @csrf
                                         @method('PUT')
                                         <div class="grid grid-cols-1 gap-2">
-                                            <input type="text" name="name" value="{{ $testimonial->name }}" required class="p-2 border rounded-lg">
-                                            <input type="file" name="image" accept="image/*" class="p-2 border rounded-lg">
-                                            <textarea name="content" required class="p-2 border rounded-lg">{{ $testimonial->content }}</textarea>
-                                            <input type="text" name="designation" value="{{ $testimonial->designation }}" required class="p-2 border rounded-lg">
-                                            <input type="number" name="rating" value="{{ $testimonial->rating }}" required min="0" max="5" step="0.1" class="p-2 border rounded-lg">
+                                            <input type="text" name="name" value="{{ $testimonial->name }}" required class="p-2 border rounded-lg text-sm">
+                                            <input type="file" name="image" accept="image/*" class="p-2 border rounded-lg text-sm">
+                                            <textarea name="content" required class="p-2 border rounded-lg text-sm">{{ $testimonial->content }}</textarea>
+                                            <input type="text" name="designation" value="{{ $testimonial->designation }}" required class="p-2 border rounded-lg text-sm">
+                                            <input type="number" name="rating" value="{{ $testimonial->rating }}" required min="0" max="5" step="0.1" class="p-2 border rounded-lg text-sm">
                                             <input type="checkbox" name="is_active" value="1" {{ $testimonial->is_active ? 'checked' : '' }} class="h-4 w-4">
-                                            <button type="submit" class="gradient-btn text-white py-2 rounded-lg">Update</button>
+                                            <button type="submit" class="bg-gradient-to-r from-[#ff7300] to-[#ff4500] text-white py-1 px-3 rounded-lg text-sm">Update</button>
                                         </div>
                                     </form>
                                     <form action="{{ route('admin.testimonials.delete', $testimonial->id) }}" method="POST" class="inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="text-red-500 hover:text-red-700 ml-2" onclick="return confirm('Are you sure?')">Delete</button>
+                                        <button type="submit" class="text-red-500 hover:text-red-700 text-sm" onclick="return confirm('Are you sure?')">Delete</button>
                                     </form>
                                 </td>
                             </tr>
@@ -592,42 +592,42 @@
                         <label class="ml-2 text-sm font-medium text-gray-700">Active</label>
                     </div>
                 </div>
-                <button type="submit" class="mt-4 w-full gradient-btn text-white py-3 rounded-lg font-bold hover:shadow-lg transition-all">Add FAQ</button>
+                <button type="submit" class="mt-4 w-full bg-gradient-to-r from-[#ff7300] to-[#ff4500] text-white py-3 rounded-lg font-bold hover:shadow-lg transition-all">Add FAQ</button>
             </form>
 
             <h2 class="text-2xl font-bold text-[#2c0b57] mb-4">Existing FAQs</h2>
             <div class="overflow-x-auto">
-                <table class="w-full bg-white rounded-xl shadow-lg">
+                <table class="w-full bg-white rounded-xl shadow-lg text-left">
                     <thead>
                         <tr class="bg-[#2c0b57] text-white">
                             <th class="p-4">Question</th>
                             <th class="p-4">Answer</th>
                             <th class="p-4">Active</th>
-                            <th class="p-4">Actions</th>
+                            <th class="p-4 w-40 text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($faqs as $faq)
-                            <tr class="card">
+                            <tr class="card hover:bg-gray-50">
                                 <td class="p-4">{{ $faq->question }}</td>
                                 <td class="p-4">{{ Str::limit($faq->answer, 50) }}</td>
                                 <td class="p-4">{{ $faq->is_active ? 'Yes' : 'No' }}</td>
-                                <td class="p-4">
-                                    <button x-data="{ open: false }" @click="open = !open" class="text-blue-500 hover:text-blue-700">Edit</button>
+                                <td class="p-4 text-center">
+                                    <button x-data="{ open: false }" @click="open = !open" class="text-blue-500 hover:text-blue-700 text-sm mr-2">Edit</button>
                                     <form x-show="open" action="{{ route('admin.faqs.update', $faq->id) }}" method="POST" class="mt-2">
                                         @csrf
                                         @method('PUT')
                                         <div class="grid grid-cols-1 gap-2">
-                                            <input type="text" name="question" value="{{ $faq->question }}" required class="p-2 border rounded-lg">
-                                            <textarea name="answer" required class="p-2 border rounded-lg">{{ $faq->answer }}</textarea>
+                                            <input type="text" name="question" value="{{ $faq->question }}" required class="p-2 border rounded-lg text-sm">
+                                            <textarea name="answer" required class="p-2 border rounded-lg text-sm">{{ $faq->answer }}</textarea>
                                             <input type="checkbox" name="is_active" value="1" {{ $faq->is_active ? 'checked' : '' }} class="h-4 w-4">
-                                            <button type="submit" class="gradient-btn text-white py-2 rounded-lg">Update</button>
+                                            <button type="submit" class="bg-gradient-to-r from-[#ff7300] to-[#ff4500] text-white py-1 px-3 rounded-lg text-sm">Update</button>
                                         </div>
                                     </form>
                                     <form action="{{ route('admin.faqs.delete', $faq->id) }}" method="POST" class="inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="text-red-500 hover:text-red-700 ml-2" onclick="return confirm('Are you sure?')">Delete</button>
+                                        <button type="submit" class="text-red-500 hover:text-red-700 text-sm" onclick="return confirm('Are you sure?')">Delete</button>
                                     </form>
                                 </td>
                             </tr>
@@ -664,7 +664,9 @@
         });
 
         // Activate first tab by default
-        activateTab(tabs[0]);
+        if (tabs.length > 0) {
+            activateTab(tabs[0]);
+        }
     });
 </script>
 @endsection
