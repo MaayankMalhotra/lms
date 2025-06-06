@@ -66,31 +66,15 @@
                 <table class="w-full bg-white rounded-xl shadow-lg text-left">
                     <thead>
                         <tr class="bg-[#2c0b57] text-white">
-                            <th class="p-4">Name</th>
-                            <th class="p-4">Qualification</th>
-                            <th class="p-4">Image</th>
-                            <th class="p-4">Tags</th>
-                            <th class="p-4">Company</th>
-                            <th class="p-4">Package</th>
-                            <th class="p-4">Active</th>
                             <th class="p-4 w-40 text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($placements as $placement)
                             <tr class="card hover:bg-gray-50">
-                                <td class="p-4">{{ $placement->name }}</td>
-                                <td class="p-4">{{ $placement->qualification }}</td>
-                                <td class="p-4">
-                                    <img src="{{ asset('storage/' . $placement->image) }}" alt="{{ $placement->name }}" class="w-12 h-12 object-cover rounded-lg">
-                                </td>
-                                <td class="p-4">{{ $placement->tags }}</td>
-                                <td class="p-4">{{ $placement->company }}</td>
-                                <td class="p-4">{{ $placement->package }}</td>
-                                <td class="p-4">{{ $placement->is_active ? 'Yes' : 'No' }}</td>
                                 <td class="p-4 text-center">
-                                    <button x-data="{ open: false }" @click="open = !open" class="text-blue-500 hover:text-blue-700 text-sm mr-2">Edit</button>
-                                    <form x-show="open" action="{{ route('admin.placements.update', $placement->id) }}" method="POST" enctype="multipart/form-data" class="mt-2">
+                                    <button x-data="{ open{{ $placement->id }}: false }" @click="open{{ $placement->id }} = !open{{ $placement->id }}" class="text-blue-500 hover:text-blue-700 text-sm mr-2">Edit</button>
+                                    <form x-show="open{{ $placement->id }}" action="{{ route('admin.placements.update', $placement->id) }}" method="POST" enctype="multipart/form-data" class="mt-2">
                                         @csrf
                                         @method('PUT')
                                         <div class="grid grid-cols-1 gap-2">
@@ -99,7 +83,7 @@
                                             <input type="file" name="image" accept="image/*" class="p-2 border rounded-lg text-sm">
                                             <input type="text" name="tags" value="{{ $placement->tags }}" class="p-2 border rounded-lg text-sm">
                                             <input type="text" name="company" value="{{ $placement->company }}" required class="p-2 border rounded-lg text-sm">
-                                            <input type="text" name="package" value="{{ $placement->package }}" required class="p-2 border rounded-lg text-sm">
+                                            <input type="text" name="package" value="{{ $placement->id }}" required class="p-2 border rounded-lg text-sm">
                                             <input type="checkbox" name="is_active" value="1" {{ $placement->is_active ? 'checked' : '' }} class="h-4 w-4">
                                             <button type="submit" class="bg-gradient-to-r from-[#ff7300] to-[#ff4500] text-white py-1 px-3 rounded-lg text-sm">Update</button>
                                         </div>
@@ -160,31 +144,15 @@
                 <table class="w-full bg-white rounded-xl shadow-lg text-left">
                     <thead>
                         <tr class="bg-[#2c0b57] text-white">
-                            <th class="p-4">Title</th>
-                            <th class="p-4">Image</th>
-                            <th class="p-4">Duration</th>
-                            <th class="p-4">Placed</th>
-                            <th class="p-4">Rating</th>
-                            <th class="p-4">Students</th>
-                            <th class="p-4">Active</th>
                             <th class="p-4 w-40 text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($courses as $course)
                             <tr class="card hover:bg-gray-50">
-                                <td class="p-4">{{ $course->title }}</td>
-                                <td class="p-4">
-                                    <img src="{{ $course->image }}" alt="{{ $course->title }}" class="w-12 h-12 object-cover rounded-lg">
-                                </td>
-                                <td class="p-4">{{ $course->duration }}</td>
-                                <td class="p-4">{{ $course->placed_count }}</td>
-                                <td class="p-4">{{ $course->rating }}</td>
-                                <td class="p-4">{{ $course->student_count }}</td>
-                                <td class="p-4">{{ $course->is_active ? 'Yes' : 'No' }}</td>
                                 <td class="p-4 text-center">
-                                    <button x-data="{ open: false }" @click="open = !open" class="text-blue-500 hover:text-blue-700 text-sm mr-2">Edit</button>
-                                    <form x-show="open" action="{{ route('admin.courses.update', $course->id) }}" method="POST" class="mt-2">
+                                    <button x-data="{ open{{ $course->id }}: false }" @click="open{{ $course->id }} = !open{{ $course->id }}" class="text-blue-500 hover:text-blue-700 text-sm mr-2">Edit</button>
+                                    <form x-show="open{{ $course->id }}" action="{{ route('admin.courses.update', $course->id) }}" method="POST" class="mt-2">
                                         @csrf
                                         @method('PUT')
                                         <div class="grid grid-cols-1 gap-2">
@@ -246,27 +214,15 @@
                 <table class="w-full bg-white rounded-xl shadow-lg text-left">
                     <thead>
                         <tr class="bg-[#2c0b57] text-white">
-                            <th class="p-4">Title</th>
-                            <th class="p-4">Image</th>
-                            <th class="p-4">Start Date</th>
-                            <th class="p-4">Slots Open</th>
-                            <th class="p-4">Active</th>
                             <th class="p-4 w-40 text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($upcomingCourses as $course)
                             <tr class="card hover:bg-gray-50">
-                                <td class="p-4">{{ $course->title }}</td>
-                                <td class="p-4">
-                                    <img src="{{ $course->image }}" alt="{{ $course->title }}" class="w-12 h-12 object-cover rounded-lg">
-                                </td>
-                                <td class="p-4">{{ $course->start_date }}</td>
-                                <td class="p-4">{{ $course->slots_open ? 'Yes' : 'No' }}</td>
-                                <td class="p-4">{{ $course->is_active ? 'Yes' : 'No' }}</td>
                                 <td class="p-4 text-center">
-                                    <button x-data="{ open: false }" @click="open = !open" class="text-blue-500 hover:text-blue-700 text-sm mr-2">Edit</button>
-                                    <form x-show="open" action="{{ route('admin.upcoming_courses.update', $course->id) }}" method="POST" class="mt-2">
+                                    <button x-data="{ open{{ $course->id }}: false }" @click="open{{ $course->id }} = !open{{ $course->id }}" class="text-blue-500 hover:text-blue-700 text-sm mr-2">Edit</button>
+                                    <form x-show="open{{ $course->id }}" action="{{ route('admin.upcoming_courses.update', $course->id) }}" method="POST" class="mt-2">
                                         @csrf
                                         @method('PUT')
                                         <div class="grid grid-cols-1 gap-2">
@@ -338,33 +294,15 @@
                 <table class="w-full bg-white rounded-xl shadow-lg text-left">
                     <thead>
                         <tr class="bg-[#2c0b57] text-white">
-                            <th class="p-4">Title</th>
-                            <th class="p-4">Image</th>
-                            <th class="p-4">Duration</th>
-                            <th class="p-4">Projects</th>
-                            <th class="p-4">Rating</th>
-                            <th class="p-4">Applicants</th>
-                            <th class="p-4">Certification</th>
-                            <th class="p-4">Active</th>
                             <th class="p-4 w-40 text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($internships as $internship)
                             <tr class="card hover:bg-gray-50">
-                                <td class="p-4">{{ $internship->title }}</td>
-                                <td class="p-4">
-                                    <img src="{{ $internship->image }}" alt="{{ $internship->title }}" class="w-12 h-12 object-cover rounded-lg">
-                                </td>
-                                <td class="p-4">{{ $internship->duration }}</td>
-                                <td class="p-4">{{ $internship->project_count }}</td>
-                                <td class="p-4">{{ $internship->rating }}</td>
-                                <td class="p-4">{{ $internship->applicant_count }}</td>
-                                <td class="p-4">{{ $internship->certification }}</td>
-                                <td class="p-4">{{ $internship->is_active ? 'Yes' : 'No' }}</td>
                                 <td class="p-4 text-center">
-                                    <button x-data="{ open: false }" @click="open = !open" class="text-blue-500 hover:text-blue-700 text-sm mr-2">Edit</button>
-                                    <form x-show="open" action="{{ route('admin.internships.update', $internship->id) }}" method="POST" class="mt-2">
+                                    <button x-data="{ open{{ $internship->id }}: false }" @click="open{{ $internship->id }} = !open{{ $internship->id }}" class="text-blue-500 hover:text-blue-700 text-sm mr-2">Edit</button>
+                                    <form x-show="open{{ $internship->id }}" action="{{ route('admin.internships.update', $internship->id) }}" method="POST" class="mt-2">
                                         @csrf
                                         @method('PUT')
                                         <div class="grid grid-cols-1 gap-2">
@@ -435,31 +373,15 @@
                 <table class="w-full bg-white rounded-xl shadow-lg text-left">
                     <thead>
                         <tr class="bg-[#2c0b57] text-white">
-                            <th class="p-4">Name</th>
-                            <th class="p-4">Image</th>
-                            <th class="p-4">Hours</th>
-                            <th class="p-4">Specialization</th>
-                            <th class="p-4">LinkedIn</th>
-                            <th class="p-4">Facebook</th>
-                            <th class="p-4">Active</th>
                             <th class="p-4 w-40 text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($instructors as $instructor)
                             <tr class="card hover:bg-gray-50">
-                                <td class="p-4">{{ $instructor->name }}</td>
-                                <td class="p-4">
-                                    <img src="{{ asset('storage/' . $instructor->image) }}" alt="{{ $instructor->name }}" class="w-12 h-12 object-cover rounded-lg">
-                                </td>
-                                <td class="p-4">{{ $instructor->teaching_hours }}</td>
-                                <td class="p-4">{{ $instructor->specialization }}</td>
-                                <td class="p-4">{{ $instructor->linkedin_url }}</td>
-                                <td class="p-4">{{ $instructor->facebook_url }}</td>
-                                <td class="p-4">{{ $instructor->is_active ? 'Yes' : 'No' }}</td>
                                 <td class="p-4 text-center">
-                                    <button x-data="{ open: false }" @click="open = !open" class="text-blue-500 hover:text-blue-700 text-sm mr-2">Edit</button>
-                                    <form x-show="open" action="{{ route('admin.instructors.update', $instructor->id) }}" method="POST" enctype="multipart/form-data" class="mt-2">
+                                    <button x-data="{ open{{ $instructor->id }}: false }" @click="open{{ $instructor->id }} = !open{{ $instructor->id }}" class="text-blue-500 hover:text-blue-700 text-sm mr-2">Edit</button>
+                                    <form x-show="open{{ $instructor->id }}" action="{{ route('admin.instructors.update', $instructor->id) }}" method="POST" enctype="multipart/form-data" class="mt-2">
                                         @csrf
                                         @method('PUT')
                                         <div class="grid grid-cols-1 gap-2">
@@ -525,29 +447,15 @@
                 <table class="w-full bg-white rounded-xl shadow-lg text-left">
                     <thead>
                         <tr class="bg-[#2c0b57] text-white">
-                            <th class="p-4">Name</th>
-                            <th class="p-4">Image</th>
-                            <th class="p-4">Content</th>
-                            <th class="p-4">Designation</th>
-                            <th class="p-4">Rating</th>
-                            <th class="p-4">Active</th>
                             <th class="p-4 w-40 text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($testimonials as $testimonial)
                             <tr class="card hover:bg-gray-50">
-                                <td class="p-4">{{ $testimonial->name }}</td>
-                                <td class="p-4">
-                                    <img src="{{ asset('storage/' . $testimonial->image) }}" alt="{{ $testimonial->name }}" class="w-12 h-12 object-cover rounded-lg">
-                                </td>
-                                <td class="p-4">{{ Str::limit($testimonial->content, 50) }}</td>
-                                <td class="p-4">{{ $testimonial->designation }}</td>
-                                <td class="p-4">{{ $testimonial->rating }}</td>
-                                <td class="p-4">{{ $testimonial->is_active ? 'Yes' : 'No' }}</td>
                                 <td class="p-4 text-center">
-                                    <button x-data="{ open: false }" @click="open = !open" class="text-blue-500 hover:text-blue-700 text-sm mr-2">Edit</button>
-                                    <form x-show="open" action="{{ route('admin.testimonials.update', $testimonial->id) }}" method="POST" enctype="multipart/form-data" class="mt-2">
+                                    <button x-data="{ open{{ $testimonial->id }}: false }" @click="open{{ $testimonial->id }} = !open{{ $testimonial->id }}" class="text-blue-500 hover:text-blue-700 text-sm mr-2">Edit</button>
+                                    <form x-show="open{{ $testimonial->id }}" action="{{ route('admin.testimonials.update', $testimonial->id) }}" method="POST" enctype="multipart/form-data" class="mt-2">
                                         @csrf
                                         @method('PUT')
                                         <div class="grid grid-cols-1 gap-2">
@@ -600,21 +508,15 @@
                 <table class="w-full bg-white rounded-xl shadow-lg text-left">
                     <thead>
                         <tr class="bg-[#2c0b57] text-white">
-                            <th class="p-4">Question</th>
-                            <th class="p-4">Answer</th>
-                            <th class="p-4">Active</th>
                             <th class="p-4 w-40 text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($faqs as $faq)
                             <tr class="card hover:bg-gray-50">
-                                <td class="p-4">{{ $faq->question }}</td>
-                                <td class="p-4">{{ Str::limit($faq->answer, 50) }}</td>
-                                <td class="p-4">{{ $faq->is_active ? 'Yes' : 'No' }}</td>
                                 <td class="p-4 text-center">
-                                    <button x-data="{ open: false }" @click="open = !open" class="text-blue-500 hover:text-blue-700 text-sm mr-2">Edit</button>
-                                    <form x-show="open" action="{{ route('admin.faqs.update', $faq->id) }}" method="POST" class="mt-2">
+                                    <button x-data="{ open{{ $faq->id }}: false }" @click="open{{ $faq->id }} = !open{{ $faq->id }}" class="text-blue-500 hover:text-blue-700 text-sm mr-2">Edit</button>
+                                    <form x-show="open{{ $faq->id }}" action="{{ route('admin.faqs.update', $faq->id) }}" method="POST" class="mt-2">
                                         @csrf
                                         @method('PUT')
                                         <div class="grid grid-cols-1 gap-2">
