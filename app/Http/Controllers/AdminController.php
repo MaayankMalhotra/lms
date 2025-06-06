@@ -223,7 +223,7 @@ public function student_management()
         //     'package' => 'required|string|max:255',
         //     'is_active' => 'boolean',
         // ]);
-  dd($request->all());
+//   dd($request->all());
         //$imagePath = $request->file('image')->store('images', 'public');
         $imagePath='';
         DB::insert("
