@@ -315,7 +315,7 @@
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Rating (0-5)</label>
-                        <input type="number" name="rating" required min="0" max="5" step="0.1" class="w-full mt-1 p-3 border border-gray-300 rounded-lg">
+                        <input type="number" name="rating" required min="0" max="5" step="0.1" class="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-blue-500 transition">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Applicant Count</label>
@@ -375,7 +375,7 @@
                                             <input type="number" name="rating" value="{{ $internship->rating }}" required min="0" max="5" step="0.1" class="p-2 border rounded-lg">
                                             <input type="number" name="applicant_count" value="{{ $internship->applicant_count }}" required min="0" class="p-2 border rounded-lg">
                                             <input type="text" name="certification" value="{{ $internship->certification }}" required class="p-2 border rounded-lg">
-                                            <input type="checkbox" name="is_active" value="1" {{ $internship->is_active ? 'true' : '' }} class="h-4 w-4">
+                                            <input type="checkbox" name="is_active" value="1" {{ $internship->is_active ? 'checked' : '' }} class="h-4 w-4">
                                             <button type="submit" class="gradient-btn text-white py-2 rounded-lg">Update</button>
                                         </div>
                                     </form>
@@ -488,8 +488,8 @@
 
         <!-- Testimonials -->
         <div id="tab-testimonials" class="tab-pane hidden">
-            <h2 class="text-2xl font-bold text-[#2c2c44] mb-4">Add Testimonial</h2>
-            <form action="{{ route('admin.testimonials') }}" method="POST" enctype="multipart/form-data" class="bg-white p-6 rounded-xl shadow-lg card mb-8">
+            <h2 class="text-2xl font-bold text-[#2c0b57] mb-4">Add Testimonial</h2>
+            <form action="{{ route('admin.testimonials.store') }}" method="POST" enctype="multipart/form-data" class="bg-white p-6 rounded-xl shadow-lg card mb-8">
                 @csrf
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
@@ -510,7 +510,7 @@
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Rating (0-5)</label>
-                        <input type="number" name="rating" required min="0" max="5" step="0.1" class="w-full mt-1 p-3 border border-gray-300 rounded-lg">
+                        <input type="number" name="rating" required min="0" max="5" step="0.1" class="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-blue-500 transition">
                     </div>
                     <div class="flex items-center">
                         <input type="checkbox" name="is_active" value="1" checked class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
