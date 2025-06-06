@@ -64,7 +64,7 @@
     function redirectToCourseDetail(button) {
     const courseSlug = button.getAttribute('data-course-slug'); 
     const baseUrl = '{{ env('APP_URL', 'http://localhost:8000') }}';
-    window.location.href = `${baseUrl}/course-details/${courseSlug}`; 
+    window.location.href = `${baseUrl}course_details/${courseSlug}`; 
 }
 </script>
 @endsection
