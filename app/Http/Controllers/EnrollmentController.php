@@ -174,7 +174,7 @@ class EnrollmentController extends Controller
                // ->leftJoin('users as teachers', 'batches.teacher_id', '=', 'teachers.id')
                 ->where('users.role', 3)
                 ->orderBy('enrollments.created_at', 'desc');
-        
+                dd($query->get());
 
             // Apply filters
             if ($request->filled('student_name')) {
@@ -206,7 +206,7 @@ class EnrollmentController extends Controller
                 $query->where('payments.status', $request->payment_status);
             }
             $enrollments = $query->get();
-        dd($enrollments);
+       
             // Fetch enrollments
             $enrollments = $query->get()->map(function ($enrollment) {
                 try {
