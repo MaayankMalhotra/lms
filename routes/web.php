@@ -527,3 +527,28 @@ Route::get('/contactus', [ContactUsController::class, 'index'])->name('contact.i
 //     return view('website.webinar.webinar_detail');
 // });
 
+// Admin routes
+Route::prefix('admin')->group(function () {
+    Route::get('/home', [AdminController::class, 'home'])->name('admin.home');
+    Route::post('/home/placements', [AdminController::class, 'storePlacement'])->name('admin.placements.store');
+    Route::put('/home/placements/{id}', [AdminController::class, 'updatePlacement'])->name('admin.placements.update');
+    Route::delete('/home/placements/{id}', [AdminController::class, 'deletePlacement'])->name('admin.placements.delete');
+    Route::post('/home/courses', [AdminController::class, 'storeCourse'])->name('admin.courses.store');
+    Route::put('/home/courses/{id}', [AdminController::class, 'updateCourse'])->name('admin.courses.update');
+    Route::delete('/home/courses/{id}', [AdminController::class, 'deleteCourse'])->name('admin.courses.delete');
+    Route::post('/home/upcoming-courses', [AdminController::class, 'storeUpcomingCourse'])->name('admin.upcoming_courses.store');
+    Route::put('/home/upcoming-courses/{id}', [AdminController::class, 'updateUpcomingCourse'])->name('admin.upcoming_courses.update');
+    Route::delete('/home/upcoming-courses/{id}', [AdminController::class, 'deleteUpcomingCourse'])->name('admin.upcoming_courses.delete');
+    Route::post('/home/internships', [AdminController::class, 'storeInternship'])->name('admin.internships.store');
+    Route::put('/home/internships/{id}', [AdminController::class, 'updateInternship'])->name('admin.internships.update');
+    Route::delete('/home/internships/{id}', [AdminController::class, 'deleteInternship'])->name('admin.internships.delete');
+    Route::post('/home/instructors', [AdminController::class, 'storeInstructor'])->name('admin.instructors.store');
+    Route::put('/home/instructors/{id}', [AdminController::class, 'updateInstructor'])->name('admin.instructors.update');
+    Route::delete('/home/instructors/{id}', [AdminController::class, 'deleteInstructor'])->name('admin.instructors.delete');
+    Route::post('/home/testimonials', [AdminController::class, 'storeTestimonial'])->name('admin.testimonials.store');
+    Route::put('/home/testimonials/{id}', [AdminController::class, 'updateTestimonial'])->name('admin.testimonials.update');
+    Route::delete('/home/testimonials/{id}', [AdminController::class, 'deleteTestimonial'])->name('admin.testimonials.delete');
+    Route::post('/home/faqs', [AdminController::class, 'storeFaq'])->name('admin.faqs.store');
+    Route::put('/home/faqs/{id}', [AdminController::class, 'updateFaq'])->name('admin.faqs.update');
+    Route::delete('/home/faqs/{id}', [AdminController::class, 'deleteFaq'])->name('admin.faqs.delete');
+});

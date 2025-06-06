@@ -185,4 +185,513 @@ public function student_management()
             return response()->json(['message' => 'Failed to delete student'], 500);
         }
     }
+
+
+
+
+
+
+
+
+
+    public function home()
+    {
+        $placements = DB::select("SELECT * FROM home_placements");
+        $courses = DB::select("SELECT * FROM home_courses");
+        $upcomingCourses = DB::select("SELECT * FROM home_upcoming_courses");
+        $internships = DB::select("SELECT * FROM home_internships");
+        $instructors = DB::select("SELECT * FROM home_instructors");
+        $testimonials = DB::select("SELECT * FROM home_testimonials");
+        $faqs = DB::select("SELECT * FROM home_faqs");
+
+        return view('admin.home', compact(
+            'placements', 'courses', 'upcomingCourses', 'internships',
+            'instructors', 'testimonials', 'faqs'
+        ));
+    }
+
+    // Placements
+    public function storePlacement(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'qualification' => 'required|string|max:255',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'tags' => 'nullable|string',
+            'company' => 'required|string|max:255',
+            'package' => 'required|string|max:255',
+            'is_active' => 'boolean',
+        ]);
+
+        $imagePath = $request->file('image')->store('images', 'public');
+
+        DB::insert("
+            INSERT INTO home_placements (name, qualification, image, tags, company, package, is_active, created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
+        ", [
+            $request->name,
+            $request->qualification,
+            $imagePath,
+            $request->tags,
+            $request->company,
+            $request->package,
+            $request->is_active ?? 1,
+        ]);
+
+        return redirect()->route('admin.home')->with('success', 'Placement added successfully.');
+    }
+
+    public function updatePlacement(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'qualification' => 'required|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'tags' => 'nullable|string',
+            'company' => 'required|string|max:255',
+            'package' => 'required|string|max:255',
+            'is_active' => 'boolean',
+        ]);
+
+        $placement = DB::select("SELECT * FROM home_placements WHERE id = ?", [$id])[0] ?? null;
+        if (!$placement) {
+            return redirect()->route('admin.home')->with('error', 'Placement not found.');
+        }
+
+        $imagePath = $placement->image;
+        if ($request->hasFile('image')) {
+            Storage::disk('public')->delete($imagePath);
+            $imagePath = $request->file('image')->store('images', 'public');
+        }
+
+        DB::update("
+            UPDATE home_placements
+            SET name = ?, qualification = ?, image = ?, tags = ?, company = ?, package = ?, is_active = ?, updated_at = NOW()
+            WHERE id = ?
+        ", [
+            $request->name,
+            $request->qualification,
+            $imagePath,
+            $request->tags,
+            $request->company,
+            $request->package,
+            $request->is_active ?? 1,
+            $id,
+        ]);
+
+        return redirect()->route('admin.home')->with('success', 'Placement updated successfully.');
+    }
+
+    public function deletePlacement($id)
+    {
+        $placement = DB::select("SELECT * FROM home_placements WHERE id = ?", [$id])[0] ?? null;
+        if ($placement) {
+            Storage::disk('public')->delete($placement->image);
+            DB::delete("DELETE FROM home_placements WHERE id = ?", [$id]);
+            return redirect()->route('admin.home')->with('success', 'Placement deleted successfully.');
+        }
+        return redirect()->route('admin.home')->with('error', 'Placement not found.');
+    }
+
+    // Courses
+    public function storeCourse(Request $request)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'image' => 'required|string|max:255',
+            'duration' => 'required|string|max:255',
+            'placed_count' => 'required|integer|min:0',
+            'rating' => 'required|numeric|min:0|max:5',
+            'student_count' => 'required|integer|min:0',
+            'is_active' => 'boolean',
+        ]);
+
+        DB::insert("
+            INSERT INTO home_courses (title, image, duration, placed_count, rating, student_count, is_active, created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
+        ", [
+            $request->title,
+            $request->image,
+            $request->duration,
+            $request->placed_count,
+            $request->rating,
+            $request->student_count,
+            $request->is_active ?? 1,
+        ]);
+
+        return redirect()->route('admin.home')->with('success', 'Course added successfully.');
+    }
+
+    public function updateCourse(Request $request, $id)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'image' => 'required|string|max:255',
+            'duration' => 'required|string|max:255',
+            'placed_count' => 'required|integer|min:0',
+            'rating' => 'required|numeric|min:0|max:5',
+            'student_count' => 'required|integer|min:0',
+            'is_active' => 'boolean',
+        ]);
+
+        DB::update("
+            UPDATE home_courses
+            SET title = ?, image = ?, duration = ?, placed_count = ?, rating = ?, student_count = ?, is_active = ?, updated_at = NOW()
+            WHERE id = ?
+        ", [
+            $request->title,
+            $request->image,
+            $request->duration,
+            $request->placed_count,
+            $request->rating,
+            $request->student_count,
+            $request->is_active ?? 1,
+            $id,
+        ]);
+
+        return redirect()->route('admin.home')->with('success', 'Course updated successfully.');
+    }
+
+    public function deleteCourse($id)
+    {
+        DB::delete("DELETE FROM home_courses WHERE id = ?", [$id]);
+        return redirect()->route('admin.home')->with('success', 'Course deleted successfully.');
+    }
+
+    // Upcoming Courses
+    public function storeUpcomingCourse(Request $request)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'image' => 'required|string|max:255',
+            'start_date' => 'required|date',
+            'slots_open' => 'boolean',
+            'is_active' => 'boolean',
+        ]);
+
+        DB::insert("
+            INSERT INTO home_upcoming_courses (title, image, start_date, slots_open, is_active, created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, NOW(), NOW())
+        ", [
+            $request->title,
+            $request->image,
+            $request->start_date,
+            $request->slots_open ?? 1,
+            $request->is_active ?? 1,
+        ]);
+
+        return redirect()->route('admin.home')->with('success', 'Upcoming Course added successfully.');
+    }
+
+    public function updateUpcomingCourse(Request $request, $id)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'image' => 'required|string|max:255',
+            'start_date' => 'required|date',
+            'slots_open' => 'boolean',
+            'is_active' => 'boolean',
+        ]);
+
+        DB::update("
+            UPDATE home_upcoming_courses
+            SET title = ?, image = ?, start_date = ?, slots_open = ?, is_active = ?, updated_at = NOW()
+            WHERE id = ?
+        ", [
+            $request->title,
+            $request->image,
+            $request->start_date,
+            $request->slots_open ?? 1,
+            $request->is_active ?? 1,
+            $id,
+        ]);
+
+        return redirect()->route('admin.home')->with('success', 'Upcoming Course updated successfully.');
+    }
+
+    public function deleteUpcomingCourse($id)
+    {
+        DB::delete("DELETE FROM home_upcoming_courses WHERE id = ?", [$id]);
+        return redirect()->route('admin.home')->with('success', 'Upcoming Course deleted successfully.');
+    }
+
+    // Internships
+    public function storeInternship(Request $request)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'image' => 'required|string|max:255',
+            'duration' => 'required|string|max:255',
+            'project_count' => 'required|integer|min:0',
+            'rating' => 'required|numeric|min:0|max:5',
+            'applicant_count' => 'required|integer|min:0',
+            'certification' => 'required|string|max:255',
+            'is_active' => 'boolean',
+        ]);
+
+        DB::insert("
+            INSERT INTO home_internships (title, image, duration, project_count, rating, applicant_count, certification, is_active, created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
+        ", [
+            $request->title,
+            $request->image,
+            $request->duration,
+            $request->project_count,
+            $request->rating,
+            $request->applicant_count,
+            $request->certification,
+            $request->is_active ?? 1,
+        ]);
+
+        return redirect()->route('admin-home')->with('success', 'Internship added successfully.');
+    }
+
+    public function updateInternship(Request $request, $request_id)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'image' => 'required|string|max:255',
+            'duration' => 'required|string|max:255',
+            'project_count' => 'required|integer|min:0',
+            'rating' => 'required|numeric|min:0|max:5',
+            'applicant_count' => 'required|integer|min:0',
+            'certification' => 'required|string|max:255',
+            'is_active' => 'boolean',
+        ]);
+
+        DB::update("
+            UPDATE home_internships
+            SET title = ?, image = ?, duration = ?, project_count = ?, rating = ?, applicant_count = ?, certification = ?, is_active = ?, updated_at = NOW()
+            WHERE id = ?
+        ", [
+            $request->title,
+            $request->image,
+            $request->duration,
+            $request->project_count,
+            $request->rating,
+            $request->applicant_count,
+            $request->certification,
+            $request->is_active ?? 1,
+            $request_id,
+        ]);
+
+        return redirect()->route('admin-home')->with('success', 'Internship updated successfully.');
+    }
+
+    public function deleteInternship($id)
+    {
+        DB::delete("DELETE FROM home_internships WHERE id = ?", [$id]);
+        return redirect()->route('admin-home')->with('success', 'Internship deleted successfully.');
+    }
+
+    // Instructors
+    public function storeInstructor(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'teaching_hours' => 'required|integer|min:0',
+            'specialization' => 'required|string|max:255',
+            'linkedin_url' => 'nullable|url|max:255',
+            'facebook_url' => 'nullable|url|max:255',
+            'is_active' => 'boolean',
+        ]);
+
+        $imagePath = $request->file('image')->store('instructors', 'public');
+
+        DB::insert("
+            INSERT INTO home_instructors (name, image, teaching_hours, specialization, linkedin_url, facebook_url, is_active, created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
+        ", [
+            $request->name,
+            $imagePath,
+            $request->teaching_hours,
+            $request->specialization,
+            $request->linkedin_url,
+            $request->facebook_url,
+            $request->is_active ?? 1,
+        ]);
+
+        return redirect()->route('admin-home')->with('success', 'Instructor added successfully!');
+    }
+
+    public function updateInstructor(Request $request, $request_id)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'teaching_hours' => 'required|integer|min:0',
+            'specialization' => 'required|string|max:255',
+            'linkedin_url' => 'nullable|url|max:255',
+            'facebook_url' => 'nullable|url|max:255',
+            'is_active' => 'boolean',
+        ]);
+
+        $instructor = DB::select("SELECT * FROM home_instructors WHERE id = ?", [$request_id])[0] ?? null;
+        if (!$instructor) {
+            return redirect()->route('admin-home')->with('error', 'Instructor not found.');
+        }
+
+        $imagePath = $instructor->image;
+        if ($request->hasFile('image')) {
+            Storage::disk('public')->delete($imagePath);
+            $imagePath = $request->file('image')->store('instructors', 'public');
+        }
+
+        DB::update("
+            UPDATE home_instructors
+            SET name = ?, image = ?, teaching_hours = ?, specialization = ?, linkedin_url = ?, facebook_url = ?, is_active = ?, updated_at = NOW()
+            WHERE id = ?
+        ", [
+            $request->name,
+            $imagePath,
+            $request->teaching_hours,
+            $request->specialization,
+            $request->linkedin_url,
+            $request->facebook_url,
+            $request->is_active ?? 1,
+            $request_id,
+        ]);
+
+        return redirect()->route('admin-home')->with('success', 'Instructor updated successfully.');
+    }
+
+    public function deleteInstructor($id)
+    {
+        $instructor = DB::select("SELECT * FROM home_instructors WHERE id = ?", [$id])[0] ?? null;
+        if ($instructor) {
+            Storage::disk('public')->delete($instructor->image);
+            DB::delete("DELETE FROM home_instructors WHERE id = ?", [$id]);
+            return redirect()->home()->with('success', 'Instructor deleted successfully.');
+        }
+        return redirect()->home()->with('error', 'Instructor not found.');
+    }
+
+    // Testimonials
+    public function storeTestimonial(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'content' => 'required|string',
+            'designation' => 'required|string|max:255',
+            'rating' => 'required|numeric|min:0|max:5',
+            'is_active' => 'boolean',
+        ]);
+
+        $imagePath = $request->file('image')->store('testimonials', 'public');
+
+        DB::insert("
+            INSERT INTO home_testimonials (name, image, content, designation, rating, is_active, created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())
+        ", [
+            $request->name,
+            $imagePath,
+            $request->content,
+            $request->designation,
+            $request->rating,
+            $request->is_active ?? 1,
+        ]);
+
+        return redirect()->route('admin-home')->with('success', 'Testimonial added successfully.');
+    }
+
+    public function updateTestimonial(Request $request, $request_id)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'content' => 'required|string',
+            'designation' => 'required|string|max:255',
+            'rating' => 'required|numeric|min:0|max:5',
+            'is_active' => 'boolean',
+        ]);
+
+        $testimonial = DB::select("SELECT * FROM home_testimonials WHERE id = ?", [$request_id])[0] ?? null;
+        if (!$testimonial) {
+            return redirect()->route('admin-home')->with('error', 'Testimonial not found.');
+        }
+
+        $imagePath = $testimonial->image;
+        if ($request->hasFile('image')) {
+            Storage::disk('public')->delete($imagePath);
+            $imagePath = $request->file('image')->store('testimonials', 'public');
+        }
+
+        DB::update("
+            UPDATE home_testimonials
+            SET name = ?, image = ?, content = ?, designation = ?, rating = ?, is_active = ?, updated_at = NOW()
+            WHERE id = ?
+        ", [
+            $request->name,
+            $imagePath,
+            $request->content,
+            $request->designation,
+            $request->rating,
+            $request->is_active ?? 1,
+            $request_id,
+        ]);
+
+        return redirect()->route('admin-home')->with('success', 'Testimonial updated successfully.');
+    }
+
+    public function deleteTestimonial($id)
+    {
+        $testimonial = DB::select("SELECT * FROM home_testimonials WHERE id = ?", [$id])[0] ?? null;
+        if ($testimonial) {
+            Storage::disk('public')->delete($testimonial->image);
+            DB::delete("DELETE FROM home_testimonials WHERE id = ?", [$id]);
+            return redirect()->route('admin-home')->with('success', 'Testimonial deleted successfully.');
+        }
+        return redirect()->route('admin-home')->with('error', 'Testimonial not found.');
+    }
+
+    // FAQs
+    public function storeFaq(Request $request)
+    {
+        $request->validate([
+            'question' => 'required|string|max:255',
+            'answer' => 'required|string',
+            'is_active' => 'boolean',
+        ]);
+
+        DB::insert("
+            INSERT INTO home_faqs (question, answer, is_active, created_at, updated_at)
+            VALUES (?, ?, ?, NOW(), NOW())
+        ", [
+            $request->question,
+            $request->answer,
+            $request->is_active ?? 1,
+        ]);
+
+        return redirect()->route('admin-home')->with('success', 'FAQ added successfully.');
+    }
+
+    public function updateFaq(Request $request, $request_id)
+    {
+        $request->validate([
+            'question' => 'required|string|max:255',
+            'answer' => 'required|string',
+            'is_active' => 'boolean',
+        ]);
+
+        DB::update("
+            UPDATE home_faqs
+            SET question = ?, answer = ?, is_active = ?, updated_at = NOW()
+            WHERE id = ?
+        ", [
+            $request->question,
+            $request->answer,
+            $request->is_active ?? 1,
+            $request_id,
+        ]);
+
+        return redirect()->route('admin-home')->with('success', 'FAQ updated successfully.');
+    }
+
+    public function deleteFaq($id)
+    {
+        DB::delete("DELETE FROM home_faqs WHERE id = ?", [$id]);
+        return redirect()->route('admin-home')->with('success', 'FAQ deleted successfully.');
+    }
 }
