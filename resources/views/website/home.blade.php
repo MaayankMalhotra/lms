@@ -18,7 +18,7 @@
         <!-- Left Content -->
         <div class="md:w-1/2">
           <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 animate-fade-in-up">
-            Change the world <br>
+            Change the world Test <br>
             with <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500">Test</span>
           </h1>
           <p class="text-lg md:text-xl mb-8 opacity-0 animate-fade-in-up delay-100">
