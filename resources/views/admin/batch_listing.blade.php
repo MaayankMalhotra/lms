@@ -430,7 +430,7 @@
             }
 
             fetch(`/admin/batches/${batchId}`, {
-                method: 'POST',
+                method: 'PUT',
                 headers: {
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
                     'Accept': 'application/json',
@@ -483,6 +483,7 @@
                         setTimeout(() => successDiv.remove(), 5000);
                     } else {
                         showError('Error updating batch: ' + (data.error || 'Unknown error'));
+                        console.log('Update error data:', data.error);
                     }
                 })
                 .catch(error => {
