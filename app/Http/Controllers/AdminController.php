@@ -351,6 +351,7 @@ public function storePlacement(Request $request)
         //     'student_count' => 'required|integer|min:0',
         //     'is_active' => 'boolean',
         // ]);
+        dd($request->all());
         $imagePath = null;
         if ($request->hasFile('image') && $request->file('image')->isValid()) {
             $imagePath = $request->file('image')->store('images', 'public');
