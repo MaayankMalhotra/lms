@@ -82,7 +82,7 @@ $recordings = Recording::whereHas('liveClass', function ($query) use ($batchid) 
             ->with('assignments')
             ->orderBy('class_datetime', 'asc')
             ->get();
-             dd($liveClasses);
+            // dd($liveClasses);
            return view('student.assignment.assignment', compact('liveClasses'));
     }
 }
