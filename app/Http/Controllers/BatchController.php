@@ -224,7 +224,7 @@ class BatchController extends Controller
             'start_date' => 'required|date',
             'status' => 'required|in:Batch Started,Upcoming,Soon',
             'course_id' => 'required|exists:courses,id',
-            'teacher_id' => 'required|exists:teachers,id',
+            //'teacher_id' => 'required|exists:teachers,id',
             'days' => 'required|in:SAT - SUN,MON - FRI',
             'duration' => 'required|string|max:255',
             'time_slot' => 'required|string|max:255',
@@ -283,13 +283,13 @@ class BatchController extends Controller
 
             // Fetch course and teacher names for response
             $course = DB::table('courses')->where('id', $request->course_id)->first();
-            $teacher = DB::table('teachers')->where('id', $request->teacher_id)->first();
+            //$teacher = DB::table('teachers')->where('id', $request->teacher_id)->first();
 
             return response()->json([
                 'success' => true,
                 'message' => 'Batch updated successfully.',
                 'course_name' => $course->name ?? 'N/A',
-                'teacher_name' => $teacher->name ?? 'N/A',
+               // 'teacher_name' => $teacher->name ?? 'N/A',
             ]);
         } catch (\Exception $e) {
             return response()->json([
