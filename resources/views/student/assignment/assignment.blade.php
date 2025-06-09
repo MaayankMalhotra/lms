@@ -1,4 +1,3 @@
-
 @extends('admin.layouts.app')
 
 @section('content')
@@ -51,7 +50,15 @@
                                 </a>
                             @endif
                             
-                            @if (!$assignment->has_submission)
+                            @if ($assignment->has_submission && $assignment->submission_file_url)
+                                <a href="{{ $assignment->submission_file_url }}" target="_blank" 
+                                   class="inline-block bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors duration-200 text-sm font-medium w-full text-center">
+                                    <svg class="inline w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                                    </svg>
+                                    Download Submission
+                                </a>
+                            @elseif (!$assignment->has_submission)
                                 <form action="{{ route('student.assignment.submit', $assignment->id) }}" method="POST" enctype="multipart/form-data" class="flex flex-col space-y-2">
                                     @csrf
                                     <div class="flex items-center space-x-2">
@@ -65,7 +72,7 @@
                                     @enderror
                                 </form>
                             @else
-                                <span class="text-sm text-gray-600 font-medium text-center">Already Submitted</span>
+                                <span class="text-sm text-gray-600 font-medium text-center">No Submission Available</span>
                             @endif
                         </div>
                     </div>

@@ -19,7 +19,7 @@ class AssignmentController extends Controller
             return view('student.assignment.assignment', ['liveClasses' => []]);
         }
 
-        // Fetch live classes with assignments and submission status
+        // Fetch live classes with assignments and submission details for the authenticated user
         $liveClasses = DB::select("
             SELECT lc.id AS live_class_id, 
                    lc.batch_id, 
@@ -30,12 +30,11 @@ class AssignmentController extends Controller
                    a.description AS assignment_description, 
                    a.due_date AS assignment_due_date, 
                    a.file_path AS assignment_file_path,
-                   (SELECT COUNT(*) 
-                    FROM assignment_submissions asub 
-                    WHERE asub.assignment_id = a.id 
-                    AND asub.user_id = ?) AS has_submission
+                   asub.file_path AS submission_file_path,
+                   asub.id AS submission_id
             FROM live_classes lc
             LEFT JOIN assignments a ON lc.id = a.live_class_id
+            LEFT JOIN assignment_submissions asub ON a.id = asub.assignment_id AND asub.user_id = ?
             WHERE lc.batch_id = ?
             ORDER BY lc.class_datetime ASC
         ", [Auth::id(), $batch->batch_id]);
@@ -58,7 +57,9 @@ class AssignmentController extends Controller
                         'due_date' => $item->assignment_due_date,
                         'file_path' => $item->assignment_file_path,
                         'file_url' => $item->assignment_file_path ? Storage::url($item->assignment_file_path) : null,
-                        'has_submission' => $item->has_submission > 0,
+                        'submission_file_path' => $item->submission_file_path,
+                        'submission_file_url' => $item->submission_file_path ? Storage::url($item->submission_file_path) : null,
+                        'has_submission' => !is_null($item->submission_id),
                     ];
                 })->values(),
             ];
