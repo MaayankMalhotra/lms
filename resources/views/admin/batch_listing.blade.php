@@ -499,7 +499,7 @@
                         setTimeout(() => successDiv.remove(), 5000);
                     } else {
                         showError('Error updating batch: ' + (data.error || 'Unknown error'));
-                        console.log('Update error data:', data.error);
+                        console.log('Update error data:', data);
                     }
                 })
                 .catch(error => {
