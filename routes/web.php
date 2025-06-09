@@ -555,5 +555,7 @@ Route::prefix('admin')->group(function () {
 });
 
 
-    Route::get('/assignments', [AssignmentController::class, 'assignment'])->name('student.assignments');
+    Route::get('/assignment', [AssignmentController::class, 'assignment'])->name('student.assignments');
     Route::post('/assignment/{assignmentId}/submit', [AssignmentController::class, 'submitAssignment'])->name('student.assignment.submit');
+
+    Route::get('/assignments/{liveClassId}', [AssignmentController::class, 'viewClassAssignments'])->name('teacher.assignments.view');
