@@ -175,6 +175,7 @@ class BatchController extends Controller
 
         return redirect()->route('admin.batches.add')->with('success', 'Batch added successfully!');
     } catch (\Exception $e) {
+        dd($e);
         Log::error('Failed to create batch:', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
         return back()->withErrors(['error' => 'Failed to create batch: ' . $e->getMessage()]);
     }
