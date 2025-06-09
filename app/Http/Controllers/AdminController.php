@@ -351,7 +351,7 @@ public function storePlacement(Request $request)
         //     'student_count' => 'required|integer|min:0',
         //     'is_active' => 'boolean',
         // ]);
-dd($request->all());
+//dd($request->all());
         DB::insert("
             INSERT INTO home_courses (title, image, duration, placed_count, rating, student_count, is_active, created_at, updated_at)
             VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
