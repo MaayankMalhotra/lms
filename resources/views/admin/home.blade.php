@@ -133,8 +133,8 @@
                         <input type="text" name="title" required class="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-blue-500 transition">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700">Image URL</label>
-                        <input type="text" name="image" required class="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-blue-500 transition">
+                        <label class="block text-sm font-medium text-gray-700">Image</label>
+                        <input type="file" name="image" accept="image/*" required class="w-full mt-1 p-3 border border-gray-300 rounded-lg">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Duration</label>
@@ -232,8 +232,8 @@
                         <input type="text" name="title" required class="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-blue-500 transition">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700">Image URL</label>
-                        <input type="text" name="image" required class="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-blue-500 transition">
+                        <label class="block text-sm font-medium text-gray-700">Image</label>
+                        <input type="file" name="image" accept="image/*" required class="w-full mt-1 p-3 border border-gray-300 rounded-lg">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Start Date</label>
@@ -315,8 +315,8 @@
                         <input type="text" name="title" required class="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-blue-500 transition">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700">Image URL</label>
-                        <input type="text" name="image" required class="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-blue-500 transition">
+                        <label class="block text-sm font-medium text-gray-700">Image</label>
+                        <input type="file" name="image" accept="image/*" required class="w-full mt-1 p-3 border border-gray-300 rounded-lg">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Duration</label>
