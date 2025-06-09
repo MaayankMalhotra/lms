@@ -240,7 +240,7 @@ class BatchController extends Controller
                 'emi_plans.*.installments' => 'required_if:emi_available,on|integer|min:2',
                 'emi_plans.*.amount' => 'required_if:emi_available,on|numeric|min:0',
             ]);
-            return $validated;
+            // return $validated;
             $batchData = $validated;
             $batchData['emi_available'] = in_array($request->emi_available, ['on', '1', 'true'], true);
 
@@ -264,7 +264,8 @@ class BatchController extends Controller
 
             Log::info('Batch data before update:', $batchData);
 
-            $batch->update($batchData);
+            $t=$batch->update($batchData);
+            return $t;
 
             Log::info('Batch updated:', ['id' => $batch->id, 'emi_available' => $batch->emi_available, 'emi_plans' => $batch->emi_plans]);
 
