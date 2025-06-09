@@ -224,7 +224,7 @@ Route::get('/trainer-dashboard', function () {
     return view('website.trainerdashboard');
 })->name('trainer.dashboard');
 
-Route::middleware(['auth'])->group(function () {
+//Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {
         return view('admin.dashboard');
     })->name('admin.dash');
@@ -278,7 +278,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/leave/{leave}/approve', [AttendanceController::class, 'approveLeave'])->name('leave.approve');
 
     Route::get('/index-create-cd', [CourseDetailsController::class, 'index'])->name('course-details-index');
-});
+//});
 
 Route::get('/course-details/{id}/edit', [CourseDetailsController::class, 'edit'])->name('course.edit');
 Route::put('/course-details/{id}', [CourseDetailsController::class, 'update'])->name('course.update');
