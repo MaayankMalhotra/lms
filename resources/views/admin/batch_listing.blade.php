@@ -189,7 +189,7 @@
                                 </label>
                                 <input type="number" name="price" id="edit_price" required
                                     class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
-                                    placeholder="e.g., 40014">
+                                    placeholder="e.g., 40014" step="0.01">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -197,7 +197,7 @@
                                 </label>
                                 <input type="number" name="emi_price" id="edit_emi_price"
                                     class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
-                                    placeholder="e.g., 40014">
+                                    placeholder="e.g., 40014" step="0.01">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -220,7 +220,7 @@
                                 </label>
                                 <input type="number" name="slots_available" id="edit_slots_available" required
                                     class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
-                                    placeholder="e.g., 90">
+                                    placeholder="e.g., 90" min="1">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -228,7 +228,7 @@
                                 </label>
                                 <input type="number" name="slots_filled" id="edit_slots_filled" required
                                     class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
-                                    placeholder="e.g., 80">
+                                    placeholder="e.g., 80" min="0">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -368,6 +368,35 @@
             emiContainer.appendChild(planDiv);
         }
 
+        function validateEmiPlans(formData) {
+            const price = parseFloat(formData.get('price')) || 0;
+            const emiAvailable = formData.get('emi_available') === 'on';
+            if (!emiAvailable) return { valid: true };
+
+            let total = 0;
+            const emiPlans = [];
+            for (let [key, value] of formData.entries()) {
+                const match = key.match(/emi_plans\[(\d+)\]\[(\w+)\]/);
+                if (match) {
+                    const index = parseInt(match[1]);
+                    const field = match[2];
+                    if (!emiPlans[index]) emiPlans[index] = {};
+                    emiPlans[index][field] = parseFloat(value);
+                }
+            }
+
+            for (const plan of emiPlans) {
+                if (plan.installments && plan.amount) {
+                    total += plan.installments * plan.amount;
+                }
+            }
+
+            if (Math.abs(total - price) > 0.01) {
+                return { valid: false, message: `Total EMI amount (${total.toFixed(2)}) must equal the batch price (₹${price.toFixed(2)}).` };
+            }
+            return { valid: true };
+        }
+
         function showError(message) {
             const errorDiv = document.getElementById('error-message');
             errorDiv.textContent = message;
@@ -389,14 +418,16 @@
             // Log FormData for debugging
             const formDataObj = {};
             for (let [key, value] of formData.entries()) {
-                if (key.includes('emi_plans')) {
-                    if (!formDataObj[key]) formDataObj[key] = [];
-                    formDataObj[key].push(value);
-                } else {
-                    formDataObj[key] = value;
-                }
+                formDataObj[key] = value;
             }
             console.log('Submitting form data:', formDataObj);
+
+            // Client-side EMI validation
+            const emiValidation = validateEmiPlans(formData);
+            if (!emiValidation.valid) {
+                showError(emiValidation.message);
+                return;
+            }
 
             fetch(`/admin/batches/${batchId}`, {
                 method: 'POST',
@@ -415,7 +446,8 @@
                                 throw json;
                             } catch (e) {
                                 // Handle non-JSON response (e.g., HTML redirect)
-                                throw { error: 'Invalid response format. Ensure EMI total equals batch price.', raw: text };
+                                console.log('Raw response:', text);
+                                throw { error: 'Ensure EMI total equals batch price or check server response.', raw: text.substring(0, 200) };
                             }
                         });
                     }
