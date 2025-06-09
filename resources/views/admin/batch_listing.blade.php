@@ -1,97 +1,96 @@
 @extends('admin.layouts.app')
 
 @section('content')
-    <div class="">
-        <!-- Page Header -->
-        <div class="mb-8 text-center">
-            <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">
-                <i class="fas fa-list mr-2 text-blue-500"></i>Batch Listing
-            </h1>
-            <p class="text-gray-500 text-sm sm:text-base">View and manage all batch programs</p>
-        </div>
+<div class="p-4 sm:p-6">
+    <!-- Page Header -->
+    <div class="mb-8 text-center">
+        <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">
+            <i class="fas fa-list mr-2 text-blue-500"></i>Batch Listing
+        </h1>
+        <p class="text-gray-500 text-sm sm:text-base">View and manage all batch programs</p>
+    </div>
 
-        <!-- Success Message -->
-        @if (session('success'))
-            <div class="mb-6 p-4 bg-green-100 text-green-700 rounded-lg" id="success-message">
-                {{ session('success') }}
+    <!-- Success Message -->
+    @if (session('success'))
+        <div class="mb-6 p-4 bg-green-100 text-green-700 rounded-lg" id="success-message">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    <!-- Error Message -->
+    <div id="error-message" class="mb-6 p-4 bg-red-100 text-red-700 rounded-lg hidden"></div>
+
+    <!-- Add New Batch Button -->
+    <div class="mb-6 flex justify-end">
+        <a href="{{ route('admin.batches.add') }}"
+            class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition-all">
+            <i class="fas fa-plus-circle mr-2"></i>Add New Batch
+        </a>
+    </div>
+
+    <!-- Batch Table -->
+    <div class="bg-white p-6 rounded-lg shadow-sm" id="batch-table-container">
+        <h2 class="text-xl font-semibold mb-4 text-gray-700">
+            <i class="fas fa-table mr-2 text-blue-400"></i>All Batches
+        </h2>
+
+        @if ($batches->isEmpty())
+            <p class="text-gray-500">No batches found.</p>
+        @else
+            <div class="max-w-full overflow-x-auto">
+                <table class="w-full min-w-[1200px]" id="batchTable">
+                    <thead>
+                        <tr class="bg-gray-100">
+                            <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Start Date</th>
+                            <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Status</th>
+                            <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Days</th>
+                            <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Duration</th>
+                            <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Time Slot</th>
+                            <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Price (₹)</th>
+                            <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Discount Info</th>
+                            <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Slots (Available/Filled)</th>
+                            <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Course</th>
+                            <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Teacher</th>
+                            <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($batches as $batch)
+                            <tr class="border-b" data-id="{{ $batch->id }}">
+                                <td class="px-4 py-2 text-sm text-gray-600">{{ $batch->start_date }}</td>
+                                <td class="px-4 py-2 text-sm text-gray-600">{{ $batch->status }}</td>
+                                <td class="px-4 py-2 text-sm text-gray-600">{{ $batch->days }}</td>
+                                <td class="px-4 py-2 text-sm text-gray-600">{{ $batch->duration }}</td>
+                                <td class="px-4 py-2 text-sm text-gray-600">{{ $batch->time_slot }}</td>
+                                <td class="px-4 py-2 text-sm text-gray-600">₹{{ number_format($batch->price, 2) }}</td>
+                                <td class="px-4 py-2 text-sm text-gray-600">{{ $batch->discount_info ?? 'N/A' }}</td>
+                                <td class="px-4 py-2 text-sm text-gray-600">{{ $batch->slots_available }} / {{ $batch->slots_filled }}</td>
+                                <td class="px-4 py-2 text-sm text-gray-600">{{ $batch->course->name ?? 'N/A' }}</td>
+                                <td class="px-4 py-2 text-sm text-gray-600">{{ $batch->teacher->name ?? 'N/A' }}</td>
+                                <td class="px-4 py-2 text-sm text-gray-600">
+                                    <button onclick="openEditModal({{ $batch->id }})"
+                                        class="text-blue-500 hover:text-blue-700 mr-2" title="Edit Batch">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <form action="{{ route('admin.batches.destroy', $batch->id) }}" method="POST" class="inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-500 hover:text-red-700" title="Delete Batch"
+                                            onclick="return confirm('Are you sure you want to delete this batch?')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         @endif
-
-        <!-- Error Message -->
-        <div id="error-message" class="mb-6 p-4 bg-red-100 text-red-700 rounded-lg hidden"></div>
-
-        <!-- Add New Batch Button -->
-        <div class="mb-6 flex justify-end">
-            <a href="{{ route('admin.batches.add') }}"
-                class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition-all">
-                <i class="fas fa-plus-circle mr-2"></i>Add New Batch
-            </a>
-        </div>
-
-        <!-- Batch Table -->
-        <div class="bg-white p-6 rounded-lg shadow-sm" id="batch-table-container">
-            <h2 class="text-xl font-semibold mb-4 text-gray-700">
-                <i class="fas fa-table mr-2 text-blue-400"></i>All Batches
-            </h2>
-
-            @if ($batches->isEmpty())
-                <p class="text-gray-500">No batches found.</p>
-            @else
-                <div class="max-w-5xl overflow-x-scroll">
-                    <table class="w-full" id="batchTable">
-                        <thead>
-                            <tr class="bg-gray-100">
-                                <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Start Date</th>
-                                <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Status</th>
-                                <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Days</th>
-                                <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Duration</th>
-                                <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Time Slot</th>
-                                <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Price (₹)</th>
-                                <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Discount Info</th>
-                                <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Slots (Available/Filled)</th>
-                                <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Course</th>
-                                <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Teacher</th>
-                                <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($batches as $batch)
-                                <tr class="border-b" data-id="{{ $batch->id }}">
-                                    <td class="px-4 py-2 text-sm text-gray-600">{{ $batch->start_date }}</td>
-                                    <td class="px-4 py-2 text-sm text-gray-600">{{ $batch->status }}</td>
-                                    <td class="px-4 py-2 text-sm text-gray-600">{{ $batch->days }}</td>
-                                    <td class="px-4 py-2 text-sm text-gray-600">{{ $batch->duration }}</td>
-                                    <td class="px-4 py-2 text-sm text-gray-600">{{ $batch->time_slot }}</td>
-                                    <td class="px-4 py-2 text-sm text-gray-600">₹{{ number_format($batch->price, 2) }}</td>
-                                    <td class="px-4 py-2 text-sm text-gray-600">{{ $batch->discount_info ?? 'N/A' }}</td>
-                                    <td class="px-4 py-2 text-sm text-gray-600">{{ $batch->slots_available }} / {{ $batch->slots_filled }}</td>
-                                    <td class="px-4 py-2 text-sm text-gray-600">{{ $batch->course->name ?? 'N/A' }}</td>
-                                    <td class="px-4 py-2 text-sm text-gray-600">{{ $batch->teacher->name ?? 'N/A' }}</td>
-                                    <td class="px-4 py-2 text-sm text-gray-600">
-                                        <button onclick="openEditModal({{ $batch->id }})"
-                                            class="text-blue-500 hover:text-blue-700 mr-2" title="Edit Batch">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <form action="{{ route('admin.batches.destroy', $batch->id) }}" method="POST" class="inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="text-red-500 hover:text-red-700" title="Delete Batch"
-                                                onclick="return confirm('Are you sure you want to delete this batch?')">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            @endif
-        </div>
     </div>
 
     <!-- Edit Modal -->
-    <div id="editModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
+    <div id="editModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden z-50">
         <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-xl font-semibold text-gray-700">
@@ -102,8 +101,8 @@
                 </button>
             </div>
 
-            <form id="editBatchForm">
-                
+            <form id="editBatchForm" enctype="multipart/form-data">
+                @csrf
                 @method('PUT')
                 <input type="hidden" name="id" id="edit_batch_id">
 
@@ -120,6 +119,7 @@
                                 </label>
                                 <input type="date" name="start_date" id="edit_start_date" required
                                     class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all">
+                                <p id="error_start_date" class="text-red-500 text-sm mt-1 hidden"></p>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -131,6 +131,7 @@
                                     <option value="Upcoming">Upcoming</option>
                                     <option value="Soon">Soon</option>
                                 </select>
+                                <p id="error_status" class="text-red-500 text-sm mt-1 hidden"></p>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -139,6 +140,7 @@
                                 <select name="course_id" id="edit_course_id" required
                                     class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all">
                                 </select>
+                                <p id="error_course_id" class="text-red-500 text-sm mt-1 hidden"></p>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -147,6 +149,7 @@
                                 <select name="teacher_id" id="edit_teacher_id" required
                                     class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all">
                                 </select>
+                                <p id="error_teacher_id" class="text-red-500 text-sm mt-1 hidden"></p>
                             </div>
                         </div>
                     </div>
@@ -166,6 +169,7 @@
                                     <option value="SAT - SUN">SAT - SUN</option>
                                     <option value="MON - FRI">MON - FRI</option>
                                 </select>
+                                <p id="error_days" class="text-red-500 text-sm mt-1 hidden"></p>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -174,6 +178,7 @@
                                 <input type="text" name="duration" id="edit_duration" required
                                     class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
                                     placeholder="e.g., Weekend Class | 6 Months">
+                                <p id="error_duration" class="text-red-500 text-sm mt-1 hidden"></p>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -182,6 +187,7 @@
                                 <input type="text" name="time_slot" id="edit_time_slot" required
                                     class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
                                     placeholder="e.g., 08:00 PM IST to 11:00 PM IST (GMT +5:30)">
+                                <p id="error_time_slot" class="text-red-500 text-sm mt-1 hidden"></p>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -190,6 +196,7 @@
                                 <input type="number" name="price" id="edit_price" required
                                     class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
                                     placeholder="e.g., 40014" step="0.01">
+                                <p id="error_price" class="text-red-500 text-sm mt-1 hidden"></p>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -198,12 +205,13 @@
                                 <input type="number" name="emi_price" id="edit_emi_price"
                                     class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
                                     placeholder="e.g., 40014" step="0.01">
+                                <p id="error_emi_price" class="text-red-500 text-sm mt-1 hidden"></p>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">
                                     <i class="fas fa-check-circle mr-2 text-blue-400"></i>EMI Available
                                 </label>
-                                <input type="checkbox" name="emi_available" id="edit_emi_available" value="on">
+                                <input type="checkbox" name="emi_available" id="edit_emi_available" value="1">
                             </div>
                         </div>
                     </div>
@@ -221,6 +229,7 @@
                                 <input type="number" name="slots_available" id="edit_slots_available" required
                                     class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
                                     placeholder="e.g., 90" min="1">
+                                <p id="error_slots_available" class="text-red-500 text-sm mt-1 hidden"></p>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -229,6 +238,7 @@
                                 <input type="number" name="slots_filled" id="edit_slots_filled" required
                                     class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
                                     placeholder="e.g., 80" min="0">
+                                <p id="error_slots_filled" class="text-red-500 text-sm mt-1 hidden"></p>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -237,6 +247,7 @@
                                 <input type="text" name="discount_info" id="edit_discount_info"
                                     class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
                                     placeholder="e.g., 10% OFF expires in -43d -23h -18m -1s">
+                                <p id="error_discount_info" class="text-red-500 text-sm mt-1 hidden"></p>
                             </div>
                         </div>
                     </div>
@@ -251,6 +262,7 @@
                         </div>
                         <button type="button" onclick="addEmiPlan()"
                             class="mt-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-all">Add EMI Plan</button>
+                        <p id="error_emi_plans" class="text-red-500 text-sm mt-1 hidden"></p>
                     </div>
 
                     <!-- Submit Button -->
@@ -283,19 +295,22 @@
                 })
                 .then(data => {
                     console.log('Edit response data:', data);
+                    // Clear previous errors
+                    clearErrors();
+
                     // Populate form fields
                     document.getElementById('edit_batch_id').value = data.batch.id;
-                    document.getElementById('edit_start_date').value = data.batch.start_date;
-                    document.getElementById('edit_status').value = data.batch.status;
-                    document.getElementById('edit_days').value = data.batch.days;
-                    document.getElementById('edit_duration').value = data.batch.duration;
-                    document.getElementById('edit_time_slot').value = data.batch.time_slot;
-                    document.getElementById('edit_price').value = data.batch.price;
+                    document.getElementById('edit_start_date').value = data.batch.start_date || '';
+                    document.getElementById('edit_status').value = data.batch.status || 'Upcoming';
+                    document.getElementById('edit_days').value = data.batch.days || 'SAT - SUN';
+                    document.getElementById('edit_duration').value = data.batch.duration || '';
+                    document.getElementById('edit_time_slot').value = data.batch.time_slot || '';
+                    document.getElementById('edit_price').value = data.batch.price || '';
                     document.getElementById('edit_emi_price').value = data.batch.emi_price || '';
                     document.getElementById('edit_discount_info').value = data.batch.discount_info || '';
-                    document.getElementById('edit_slots_available').value = data.batch.slots_available;
-                    document.getElementById('edit_slots_filled').value = data.batch.slots_filled;
-                    document.getElementById('edit_emi_available').checked = data.batch.emi_available;
+                    document.getElementById('edit_slots_available').value = data.batch.slots_available || '';
+                    document.getElementById('edit_slots_filled').value = data.batch.slots_filled || '';
+                    document.getElementById('edit_emi_available').checked = !!data.batch.emi_available;
 
                     // Populate course dropdown
                     const courseSelect = document.getElementById('edit_course_id');
@@ -344,7 +359,7 @@
         function closeEditModal() {
             document.getElementById('editModal').classList.add('hidden');
             document.getElementById('emi-plans-container').innerHTML = '';
-            hideError();
+            clearErrors();
         }
 
         function addEmiPlan(plan = null) {
@@ -356,7 +371,7 @@
                 <div class="grid grid-cols-2 gap-2">
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Installments</label>
-                        <input type="number" name="emi_plans[${index}][installments]" value="${plan ? plan.installments || '' : ''}" min="2" class="w-full px-2 py-1 rounded border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all" required>
+                        <input type="number" name="emi_plans[${index}][installments]" value="${plan ? plan.installments || '' : ''}" min="1" class="w-full px-2 py-1 rounded border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all" required>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Amount (₹)</label>
@@ -370,7 +385,7 @@
 
         function validateEmiPlans(formData) {
             const price = parseFloat(formData.get('price')) || 0;
-            const emiAvailable = formData.get('emi_available') === 'on';
+            const emiAvailable = formData.get('emi_available') === '1';
             if (!emiAvailable) return { valid: true };
 
             let total = 0;
@@ -385,14 +400,14 @@
                 }
             }
 
-            for (const plan of emiPlans) {
+            for (const plan of emiPlans.filter(plan => plan)) {
                 if (plan.installments && plan.amount) {
                     total += plan.installments * plan.amount;
                 }
             }
 
             if (Math.abs(total - price) > 0.01) {
-                return { valid: false, message: `Total EMI amount (${total.toFixed(2)}) must equal the batch price (₹${price.toFixed(2)}).` };
+                return { valid: false, message: `Total EMI amount (₹${total.toFixed(2)}) must equal the batch price (₹${price.toFixed(2)}).` };
             }
             return { valid: true };
         }
@@ -402,6 +417,14 @@
             errorDiv.textContent = message;
             errorDiv.classList.remove('hidden');
             setTimeout(() => hideError(), 10000);
+        }
+
+        function clearErrors() {
+            document.querySelectorAll('[id^="error_"]').forEach(el => {
+                el.textContent = '';
+                el.classList.add('hidden');
+            });
+            hideError();
         }
 
         function hideError() {
@@ -430,7 +453,7 @@
             }
 
             fetch(`/admin/batches/${batchId}`, {
-                method: 'PUT',
+                method: 'POST', // Use POST with _method=PUT for Laravel
                 headers: {
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
                     'Accept': 'application/json',
@@ -440,15 +463,8 @@
                 .then(response => {
                     console.log('Update response status:', response.status);
                     if (!response.ok) {
-                        return response.text().then(text => {
-                            try {
-                                const json = JSON.parse(text);
-                                throw json;
-                            } catch (e) {
-                                // Handle non-JSON response (e.g., HTML redirect)
-                                console.log('Raw response:', text);
-                                throw { error: 'Ensure EMI total equals batch price or check server response.', raw: text.substring(0, 200) };
-                            }
+                        return response.json().catch(() => response.text()).then(data => {
+                            throw typeof data === 'object' ? data : { error: 'Ensure EMI total equals batch price or check server response.', raw: data };
                         });
                     }
                     return response.json();
@@ -490,9 +506,18 @@
                     console.error('Error updating batch:', error);
                     let errorMessage = 'Error updating batch';
                     if (error.errors) {
+                        // Display field-specific errors
+                        Object.keys(error.errors).forEach(field => {
+                            const errorEl = document.getElementById(`error_${field}`);
+                            if (errorEl) {
+                                errorEl.textContent = error.errors[field][0];
+                                errorEl.classList.remove('hidden');
+                            }
+                        });
                         errorMessage += ': ' + Object.values(error.errors).flat().join(', ');
                     } else if (error.error) {
                         errorMessage += ': ' + error.error;
+                        if (error.raw) console.log('Raw error:', error.raw);
                     } else if (error.message) {
                         errorMessage += ': ' + error.message;
                     }
@@ -500,4 +525,5 @@
                 });
         });
     </script>
+</div>
 @endsection

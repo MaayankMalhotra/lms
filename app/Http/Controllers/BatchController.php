@@ -218,68 +218,82 @@ class BatchController extends Controller
     }
     public function update(Request $request, $id)
     {
-       
-        Log::info('Batch update request:', $request->all());
+        // Validate the request
+        $validator = Validator::make($request->all(), [
+            'start_date' => 'required|date',
+            'status' => 'required|in:Batch Started,Upcoming,Soon',
+            'course_id' => 'required|exists:courses,id',
+            'teacher_id' => 'required|exists:teachers,id',
+            'days' => 'required|in:SAT - SUN,MON - FRI',
+            'duration' => 'required|string|max:255',
+            'time_slot' => 'required|string|max:255',
+            'price' => 'required|numeric|min:0',
+            'emi_price' => 'nullable|numeric|min:0',
+            'emi_available' => 'nullable|boolean',
+            'slots_available' => 'required|integer|min:1',
+            'slots_filled' => 'required|integer|min:0|lte:slots_available',
+            'discount_info' => 'nullable|string|max:255',
+            'emi_plans.*.installments' => 'nullable|integer|min:1',
+            'emi_plans.*.amount' => 'nullable|numeric|min:0',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'error' => 'Validation failed: ' . $validator->errors()->first(),
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        // Validate EMI total if EMI is available
+        if ($request->emi_available && $request->emi_plans) {
+            $emiTotal = 0;
+            foreach ($request->emi_plans as $plan) {
+                if (isset($plan['installments']) && isset($plan['amount'])) {
+                    $emiTotal += $plan['installments'] * $plan['amount'];
+                }
+            }
+            if (abs($emiTotal - $request->price) > 0.01) {
+                return response()->json([
+                    'error' => 'EMI total does not match batch price.',
+                    'errors' => ['emi_plans' => ['Total EMI amount must equal the batch price.']],
+                ], 422);
+            }
+        }
 
         try {
-            $batch = Batch::findOrFail($id);
-            $validated = $request->validate([
-                'start_date' => 'required|date',
-                'status' => 'required|in:Batch Started,Upcoming,Soon',
-                'days' => 'required',
-                'duration' => 'required|string',
-                'time_slot' => 'required|string',
-                'price' => 'required|numeric|min:0',
-                'discount_info' => 'nullable|string',
-                'slots_available' => 'required|numeric|min:1',
-                'slots_filled' => 'required|numeric|min:0',
-                'course_id' => 'required|exists:courses,id',
-                'teacher_id' => 'required|exists:users,id',
-                'emi_available' => 'nullable|in:on,1,0,true,false',
-                'emi_plans' => 'required_if:emi_available,on|array',
-                'emi_plans.*.installments' => 'required_if:emi_available,on|integer|min:2',
-                'emi_plans.*.amount' => 'required_if:emi_available,on|numeric|min:0',
+            // Update the batch
+            DB::table('batches')->where('id', $id)->update([
+                'start_date' => $request->start_date,
+                'status' => $request->status,
+                'course_id' => $request->course_id,
+                'teacher_id' => $request->teacher_id,
+                'days' => $request->days,
+                'duration' => $request->duration,
+                'time_slot' => $request->time_slot,
+                'price' => $request->price,
+                'emi_price' => $request->emi_price,
+                'emi_available' => $request->emi_available ? 1 : 0,
+                'slots_available' => $request->slots_available,
+                'slots_filled' => $request->slots_filled,
+                'discount_info' => $request->discount_info,
+                'emi_plans' => $request->emi_plans ? json_encode($request->emi_plans) : null,
+                'updated_at' => now(),
             ]);
-            // return $validated;
-            $batchData = $validated;
-            $batchData['emi_available'] = in_array($request->emi_available, ['on', '1', 'true'], true);
 
-            if ($batchData['emi_available'] && !empty($validated['emi_plans'])) {
-                $batchData['emi_plans'] = array_map(function ($plan) {
-                    return [
-                        'installments' => (int) $plan['installments'],
-                        'amount' => (float) $plan['amount'],
-                    ];
-                }, $validated['emi_plans']);
-
-                foreach ($batchData['emi_plans'] as $plan) {
-                    $total = $plan['installments'] * $plan['amount'];
-                    if (abs($total - $batchData['price']) > 0.01) {
-                        return back()->withErrors(['emi_plans' => 'Total EMI amount must equal the batch price (₹' . $batchData['price'] . ').']);
-                    }
-                }
-            } else {
-                $batchData['emi_plans'] = null;
-            }
-
-            Log::info('Batch data before update:', $batchData);
-
-            $t=$batch->update($batchData);
-          //  return $t;
-
-            Log::info('Batch updated:', ['id' => $batch->id, 'emi_available' => $batch->emi_available, 'emi_plans' => $batch->emi_plans]);
-
-            $course = Course::find($validated['course_id']);
-            $teacher = User::find($validated['teacher_id']);
+            // Fetch course and teacher names for response
+            $course = DB::table('courses')->where('id', $request->course_id)->first();
+            $teacher = DB::table('teachers')->where('id', $request->teacher_id)->first();
 
             return response()->json([
                 'success' => true,
-                'course_name' => $course->name,
-                'teacher_name' => $teacher->name,
+                'message' => 'Batch updated successfully.',
+                'course_name' => $course->name ?? 'N/A',
+                'teacher_name' => $teacher->name ?? 'N/A',
             ]);
         } catch (\Exception $e) {
-            Log::error('Failed to update batch:', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
-            return response()->json(['error' => 'Failed to update batch: ' . $e->getMessage()], 500);
+            return response()->json([
+                'error' => 'Failed to update batch: ' . $e->getMessage(),
+            ], 500);
         }
     }
 
