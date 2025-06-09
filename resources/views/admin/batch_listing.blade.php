@@ -449,6 +449,7 @@
             const emiValidation = validateEmiPlans(formData);
             if (!emiValidation.valid) {
                 showError(emiValidation.message);
+                alert(emiValidation.message);   
                 return;
             }
 
