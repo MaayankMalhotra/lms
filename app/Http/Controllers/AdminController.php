@@ -407,13 +407,13 @@ public function storePlacement(Request $request)
     // Upcoming Courses
     public function storeUpcomingCourse(Request $request)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'image' => 'required|string|max:255',
-            'start_date' => 'required|date',
-            'slots_open' => 'boolean',
-            'is_active' => 'boolean',
-        ]);
+        // $request->validate([
+        //     'title' => 'required|string|max:255',
+        //     'image' => 'required|string|max:255',
+        //     'start_date' => 'required|date',
+        //     'slots_open' => 'boolean',
+        //     'is_active' => 'boolean',
+        // ]);
 
         DB::insert("
             INSERT INTO home_upcoming_courses (title, image, start_date, slots_open, is_active, created_at, updated_at)
@@ -464,16 +464,16 @@ public function storePlacement(Request $request)
     // Internships
     public function storeInternship(Request $request)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'image' => 'required|string|max:255',
-            'duration' => 'required|string|max:255',
-            'project_count' => 'required|integer|min:0',
-            'rating' => 'required|numeric|min:0|max:5',
-            'applicant_count' => 'required|integer|min:0',
-            'certification' => 'required|string|max:255',
-            'is_active' => 'boolean',
-        ]);
+        // $request->validate([
+        //     'title' => 'required|string|max:255',
+        //     'image' => 'required|string|max:255',
+        //     'duration' => 'required|string|max:255',
+        //     'project_count' => 'required|integer|min:0',
+        //     'rating' => 'required|numeric|min:0|max:5',
+        //     'applicant_count' => 'required|integer|min:0',
+        //     'certification' => 'required|string|max:255',
+        //     'is_active' => 'boolean',
+        // ]);
 
         DB::insert("
             INSERT INTO home_internships (title, image, duration, project_count, rating, applicant_count, certification, is_active, created_at, updated_at)
@@ -616,14 +616,14 @@ public function storePlacement(Request $request)
     // Testimonials
     public function storeTestimonial(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'content' => 'required|string',
-            'designation' => 'required|string|max:255',
-            'rating' => 'required|numeric|min:0|max:5',
-            'is_active' => 'boolean',
-        ]);
+        // $request->validate([
+        //     'name' => 'required|string|max:255',
+        //     'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        //     'content' => 'required|string',
+        //     'designation' => 'required|string|max:255',
+        //     'rating' => 'required|numeric|min:0|max:5',
+        //     'is_active' => 'boolean',
+        // ]);
 
         $imagePath = $request->file('image')->store('testimonials', 'public');
 
@@ -695,11 +695,11 @@ public function storePlacement(Request $request)
     // FAQs
     public function storeFaq(Request $request)
     {
-        $request->validate([
-            'question' => 'required|string|max:255',
-            'answer' => 'required|string',
-            'is_active' => 'boolean',
-        ]);
+        // $request->validate([
+        //     'question' => 'required|string|max:255',
+        //     'answer' => 'required|string',
+        //     'is_active' => 'boolean',
+        // ]);
 
         DB::insert("
             INSERT INTO home_faqs (question, answer, is_active, created_at, updated_at)
