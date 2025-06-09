@@ -1,6 +1,6 @@
 @extends('website.layouts.app')
 
-@section('title', $course_details->course_name ?? 'Course Details')
+@section('title', $course_details->name ?? 'Course Details')
 
 @section('content')
 <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -30,7 +30,7 @@
                 FOR BEGINNER AND EXPERIENCED LEARNERS
             </p>
             <h1 class="text-4xl md:text-5xl font-bold text-gray-800 leading-tight mb-5">
-                {{ $course_details->course_name }}
+                {{ $course_details->name }}
             </h1>
             <p class="description text-base md:text-lg text-gray-600 leading-relaxed mb-5">
                 {{ $course_details->course_description }}
@@ -555,7 +555,7 @@
 </div>
 
 @php
-    $course_id_detail = \App\Models\Course::where('name',$course_details->course_name)->value('id');
+    $course_id_detail = \App\Models\Course::where('name',$course_details->name)->value('id');
 @endphp
 <!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>

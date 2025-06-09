@@ -150,9 +150,13 @@ public function courseDetails($slug)
     }
 
     // Slug se course ki row database se fetch karo
+    // $course = Course::where('slug', $slug)->first();
+    // $course_details = CourseDetail::where('course_id', $course->id)->first();
     $course = Course::where('slug', $slug)->first();
-    $course_details = CourseDetail::where('course_name', $course->name)->first();
-
+    $course_details = CourseDetail::where('course_id', $course->id)
+        ->join('courses', 'courses.id', '=', 'course_details.course_id')
+        ->select('course_details.*', 'courses.name')
+        ->first();
     if (!$course) {
         return view('website.course_details')->with('error', 'Course not found!');
     }
