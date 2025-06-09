@@ -38,7 +38,7 @@ class AssignmentController extends Controller
             WHERE lc.batch_id = ?
             ORDER BY lc.class_datetime ASC
         ", [Auth::id(), $batch->batch_id]);
-
+dd($liveClasses);
         // Group results to structure like Eloquent collections
         $liveClasses = collect($liveClasses)->groupBy('live_class_id')->map(function ($classes) {
             $first = $classes->first();
