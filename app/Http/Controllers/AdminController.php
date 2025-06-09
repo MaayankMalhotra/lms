@@ -212,21 +212,60 @@ public function student_management()
     }
 
     // Placements
-    public function storePlacement(Request $request)
-    {
-        dd($request->all());
-        // $request->validate([
-        //     'name' => 'required|string|max:255',
-        //     'qualification' => 'required|string|max:255',
-        //     'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-        //     'tags' => 'nullable|string',
-        //     'company' => 'required|string|max:255',
-        //     'package' => 'required|string|max:255',
-        //     'is_active' => 'boolean',
-        // ]);
-//   dd($request->all());
-        $imagePath = $request->file('image')->store('images', 'public');
-        $imagePath='';
+//     public function storePlacement(Request $request)
+//     {
+//         dd($request->all());
+//         // $request->validate([
+//         //     'name' => 'required|string|max:255',
+//         //     'qualification' => 'required|string|max:255',
+//         //     'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+//         //     'tags' => 'nullable|string',
+//         //     'company' => 'required|string|max:255',
+//         //     'package' => 'required|string|max:255',
+//         //     'is_active' => 'boolean',
+//         // ]);
+// //   dd($request->all());
+//         $imagePath = $request->file('image')->store('images', 'public');
+//         $imagePath='';
+//         DB::insert("
+//             INSERT INTO home_placements (name, qualification, image, tags, company, package, is_active, created_at, updated_at)
+//             VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
+//         ", [
+//             $request->name,
+//             $request->qualification,
+//             $imagePath,
+//             $request->tags,
+//             $request->company,
+//             $request->package,
+//             $request->is_active ?? 1,
+//         ]);
+
+//         return redirect()->route('admin.home')->with('success', 'Placement added successfully.');
+//     }
+
+public function storePlacement(Request $request)
+{
+    // Validate the request
+    // $request->validate([
+    //     'name' => 'required|string|max:255',
+    //     'qualification' => 'required|string|max:255',
+    //     'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+    //     'tags' => 'nullable|string',
+    //     'company' => 'required|string|max:255',
+    //     'package' => 'required|string|max:255',
+    //     'is_active' => 'boolean',
+    // ]);
+
+    try {
+        // Handle file upload
+        $imagePath = null;
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
+            $imagePath = $request->file('image')->store('images', 'public');
+        } else {
+            throw new \Exception('Image upload failed.');
+        }
+
+        // Insert into database
         DB::insert("
             INSERT INTO home_placements (name, qualification, image, tags, company, package, is_active, created_at, updated_at)
             VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
@@ -237,11 +276,16 @@ public function student_management()
             $request->tags,
             $request->company,
             $request->package,
-            $request->is_active ?? 1,
+            $request->is_active ? 1 : 0,
         ]);
 
         return redirect()->route('admin.home')->with('success', 'Placement added successfully.');
+    } catch (\Exception $e) {
+        // Log the error for debugging
+        \Log::error('Failed to store placement: ' . $e->getMessage());
+        return redirect()->back()->with('error', 'Failed to add placement: ' . $e->getMessage())->withInput();
     }
+}
 
     public function updatePlacement(Request $request, $id)
     {
