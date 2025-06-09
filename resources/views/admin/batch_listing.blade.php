@@ -17,6 +17,9 @@
             </div>
         @endif
 
+        <!-- Error Message -->
+        <div id="error-message" class="mb-6 p-4 bg-red-100 text-red-700 rounded-lg hidden"></div>
+
         <!-- Add New Batch Button -->
         <div class="mb-6 flex justify-end">
             <a href="{{ route('admin.batches.add') }}"
@@ -35,7 +38,7 @@
                 <p class="text-gray-500">No batches found.</p>
             @else
                 <div class="max-w-5xl overflow-x-scroll">
-                    <table class="" id="batchTable">
+                    <table class="w-full" id="batchTable">
                         <thead>
                             <tr class="bg-gray-100">
                                 <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Start Date</th>
@@ -159,7 +162,7 @@
                                     <i class="fas fa-calendar-day mr-2 text-blue-400"></i>Days of Batch
                                 </label>
                                 <select name="days" id="edit_days" required
-                                    class="w-full px-4 py-2 rounded-lg border border-gray-200">
+                                    class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all">
                                     <option value="SAT - SUN">SAT - SUN</option>
                                     <option value="MON - FRI">MON - FRI</option>
                                 </select>
@@ -169,6 +172,7 @@
                                     <i class="fas fa-clock mr-2 text-blue-400"></i>Class Duration
                                 </label>
                                 <input type="text" name="duration" id="edit_duration" required
+                                    class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
                                     placeholder="e.g., Weekend Class | 6 Months">
                             </div>
                             <div>
@@ -176,6 +180,7 @@
                                     <i class="fas fa-hourglass-start mr-2 text-blue-400"></i>Time Slot
                                 </label>
                                 <input type="text" name="time_slot" id="edit_time_slot" required
+                                    class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
                                     placeholder="e.g., 08:00 PM IST to 11:00 PM IST (GMT +5:30)">
                             </div>
                             <div>
@@ -183,6 +188,7 @@
                                     <i class="fas fa-rupee-sign mr-2 text-blue-400"></i>Price (₹)
                                 </label>
                                 <input type="number" name="price" id="edit_price" required
+                                    class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
                                     placeholder="e.g., 40014">
                             </div>
                             <div>
@@ -190,6 +196,7 @@
                                     <i class="fas fa-rupee-sign mr-2 text-blue-400"></i>EMI Price (₹)
                                 </label>
                                 <input type="number" name="emi_price" id="edit_emi_price"
+                                    class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
                                     placeholder="e.g., 40014">
                             </div>
                             <div>
@@ -212,6 +219,7 @@
                                     <i class="fas fa-chair mr-2 text-blue-400"></i>Slots Available
                                 </label>
                                 <input type="number" name="slots_available" id="edit_slots_available" required
+                                    class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
                                     placeholder="e.g., 90">
                             </div>
                             <div>
@@ -219,6 +227,7 @@
                                     <i class="fas fa-user-check mr-2 text-blue-400"></i>Slots Filled
                                 </label>
                                 <input type="number" name="slots_filled" id="edit_slots_filled" required
+                                    class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
                                     placeholder="e.g., 80">
                             </div>
                             <div>
@@ -226,12 +235,13 @@
                                     <i class="fas fa-tag mr-2 text-blue-400"></i>Discount Info
                                 </label>
                                 <input type="text" name="discount_info" id="edit_discount_info"
+                                    class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
                                     placeholder="e.g., 10% OFF expires in -43d -23h -18m -1s">
                             </div>
                         </div>
                     </div>
 
-                    <!-- EMI Plans Section (Simplified) -->
+                    <!-- EMI Plans Section -->
                     <div class="bg-gray-50 p-4 rounded-lg">
                         <h3 class="text-lg font-semibold mb-3 text-gray-700">
                             <i class="fas fa-money-check-alt mr-2 text-blue-400"></i>EMI Plans
@@ -240,13 +250,13 @@
                             <!-- Dynamically populated via JavaScript -->
                         </div>
                         <button type="button" onclick="addEmiPlan()"
-                            class="mt-2 bg-blue-500 text-white px-4 py-2 rounded">Add EMI Plan</button>
+                            class="mt-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-all">Add EMI Plan</button>
                     </div>
 
                     <!-- Submit Button -->
                     <div class="mt-6 flex justify-center">
                         <button type="submit"
-                            class="w-full sm:w-80 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold py-3 px-6 rounded-xl">
+                            class="w-full sm:w-80 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold py-3 px-6 rounded-xl transition-all">
                             <i class="fas fa-save mr-2"></i>Update Batch
                         </button>
                     </div>
@@ -258,10 +268,17 @@
     <script>
         function openEditModal(batchId) {
             console.log('Fetching batch data for ID:', batchId);
-            fetch(`/admin/batches/${batchId}/edit`)
+            fetch(`/admin/batches/${batchId}/edit`, {
+                headers: {
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                }
+            })
                 .then(response => {
                     console.log('Edit response status:', response.status);
-                    if (!response.ok) throw new Error('Failed to fetch batch data');
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
                     return response.json();
                 })
                 .then(data => {
@@ -282,7 +299,7 @@
 
                     // Populate course dropdown
                     const courseSelect = document.getElementById('edit_course_id');
-                    courseSelect.innerHTML = '';
+                    courseSelect.innerHTML = '<option value="">Select Course</option>';
                     data.courses.forEach(course => {
                         const option = document.createElement('option');
                         option.value = course.id;
@@ -293,7 +310,7 @@
 
                     // Populate teacher dropdown
                     const teacherSelect = document.getElementById('edit_teacher_id');
-                    teacherSelect.innerHTML = '';
+                    teacherSelect.innerHTML = '<option value="">Select Teacher</option>';
                     data.teachers.forEach(teacher => {
                         const option = document.createElement('option');
                         option.value = teacher.id;
@@ -305,73 +322,81 @@
                     // Populate EMI plans
                     const emiContainer = document.getElementById('emi-plans-container');
                     emiContainer.innerHTML = '';
-                    if (data.batch.emi_plans && data.batch.emi_plans.length > 0) {
+                    if (data.batch.emi_plans && Array.isArray(data.batch.emi_plans)) {
                         data.batch.emi_plans.forEach((plan, index) => {
-                            const planDiv = document.createElement('div');
-                            planDiv.className = 'emi-plan mb-2 p-2 border rounded';
-                            planDiv.innerHTML = `
-                                <div class="grid grid-cols-3 gap-2">
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700">Installments</label>
-                                        <input type="number" name="emi_plans[${index}][installments]" value="${plan.installments}" class="w-full px-2 py-1 rounded border">
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700">Amount (₹)</label>
-                                        <input type="number" name="emi_plans[${index}][amount]" value="${plan.amount}" class="w-full px-2 py-1 rounded border">
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700">Interval (Months)</label>
-                                        <input type="number" name="emi_plans[${index}][interval_months]" value="${plan.interval_months}" class="w-full px-2 py-1 rounded border">
-                                    </div>
-                                </div>
-                                <button type="button" onclick="this.parentElement.remove()" class="mt-2 text-red-500">Remove</button>
-                            `;
-                            emiContainer.appendChild(planDiv);
+                            addEmiPlan({
+                                installments: plan.installments,
+                                amount: plan.amount,
+                                index: index
+                            });
                         });
                     }
 
+                    // Show modal
                     document.getElementById('editModal').classList.remove('hidden');
                 })
                 .catch(error => {
                     console.error('Error fetching batch data:', error);
-                    alert('Failed to load batch data.');
+                    showError('Failed to load batch data: ' + error.message);
                 });
         }
 
         function closeEditModal() {
             document.getElementById('editModal').classList.add('hidden');
+            document.getElementById('emi-plans-container').innerHTML = '';
+            hideError();
         }
 
-        function addEmiPlan() {
+        function addEmiPlan(plan = null) {
             const emiContainer = document.getElementById('emi-plans-container');
             const index = emiContainer.children.length;
             const planDiv = document.createElement('div');
             planDiv.className = 'emi-plan mb-2 p-2 border rounded';
             planDiv.innerHTML = `
-                <div class="grid grid-cols-3 gap-2">
+                <div class="grid grid-cols-2 gap-2">
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Installments</label>
-                        <input type="number" name="emi_plans[${index}][installments]" class="w-full px-2 py-1 rounded border">
+                        <input type="number" name="emi_plans[${index}][installments]" value="${plan ? plan.installments || '' : ''}" min="2" class="w-full px-2 py-1 rounded border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all" required>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Amount (₹)</label>
-                        <input type="number" name="emi_plans[${index}][amount]" class="w-full px-2 py-1 rounded border">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Interval (Months)</label>
-                        <input type="number" name="emi_plans[${index}][interval_months]" class="w-full px-2 py-1 rounded border">
+                        <input type="number" name="emi_plans[${index}][amount]" value="${plan ? plan.amount || '' : ''}" min="0" step="0.01" class="w-full px-2 py-1 rounded border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all" required>
                     </div>
                 </div>
-                <button type="button" onclick="this.parentElement.remove()" class="mt-2 text-red-500">Remove</button>
+                <button type="button" onclick="this.parentElement.remove()" class="mt-2 text-red-500 hover:text-red-700">Remove</button>
             `;
             emiContainer.appendChild(planDiv);
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('error-message');
+            errorDiv.textContent = message;
+            errorDiv.classList.remove('hidden');
+            setTimeout(() => hideError(), 10000);
+        }
+
+        function hideError() {
+            const errorDiv = document.getElementById('error-message');
+            errorDiv.textContent = '';
+            errorDiv.classList.add('hidden');
         }
 
         document.getElementById('editBatchForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const batchId = document.getElementById('edit_batch_id').value;
             const formData = new FormData(this);
-            console.log('Submitting form data:', Object.fromEntries(formData));
+
+            // Log FormData for debugging
+            const formDataObj = {};
+            for (let [key, value] of formData.entries()) {
+                if (key.includes('emi_plans')) {
+                    if (!formDataObj[key]) formDataObj[key] = [];
+                    formDataObj[key].push(value);
+                } else {
+                    formDataObj[key] = value;
+                }
+            }
+            console.log('Submitting form data:', formDataObj);
 
             fetch(`/admin/batches/${batchId}`, {
                 method: 'POST',
@@ -383,7 +408,17 @@
             })
                 .then(response => {
                     console.log('Update response status:', response.status);
-                    if (!response.ok) throw new Error('Update failed');
+                    if (!response.ok) {
+                        return response.text().then(text => {
+                            try {
+                                const json = JSON.parse(text);
+                                throw json;
+                            } catch (e) {
+                                // Handle non-JSON response (e.g., HTML redirect)
+                                throw { error: 'Invalid response format. Ensure EMI total equals batch price.', raw: text };
+                            }
+                        });
+                    }
                     return response.json();
                 })
                 .then(data => {
@@ -401,8 +436,8 @@
                             row.cells[5].textContent = `₹${parseFloat(formData.get('price')).toFixed(2)}`;
                             row.cells[6].textContent = formData.get('discount_info') || 'N/A';
                             row.cells[7].textContent = `${formData.get('slots_available')} / ${formData.get('slots_filled')}`;
-                            row.cells[8].textContent = data.course_name;
-                            row.cells[9].textContent = data.teacher_name;
+                            row.cells[8].textContent = data.course_name || 'N/A';
+                            row.cells[9].textContent = data.teacher_name || 'N/A';
                         }
                         // Show success message
                         let successDiv = document.getElementById('success-message');
@@ -413,14 +448,22 @@
                             document.getElementById('batch-table-container').prepend(successDiv);
                         }
                         successDiv.textContent = 'Batch updated successfully!';
-                        setTimeout(() => successDiv.remove(), 5000); // Remove after 5 seconds
+                        setTimeout(() => successDiv.remove(), 5000);
                     } else {
-                        alert('Error updating batch: ' + (data.message || 'Unknown error'));
+                        showError('Error updating batch: ' + (data.error || 'Unknown error'));
                     }
                 })
                 .catch(error => {
                     console.error('Error updating batch:', error);
-                    alert('Error updating batch: ' + error.message);
+                    let errorMessage = 'Error updating batch';
+                    if (error.errors) {
+                        errorMessage += ': ' + Object.values(error.errors).flat().join(', ');
+                    } else if (error.error) {
+                        errorMessage += ': ' + error.error;
+                    } else if (error.message) {
+                        errorMessage += ': ' + error.message;
+                    }
+                    showError(errorMessage);
                 });
         });
     </script>
