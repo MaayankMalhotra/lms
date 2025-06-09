@@ -96,7 +96,7 @@ class AssignmentController extends Controller
     }
 
 
-    public function viewClassAssignments($liveClassId)
+    public function viewClassAssignments_old($liveClassId)
     {
         // Verify the teacher has access to this live class (e.g., via batch ownership)
         $batch = DB::selectOne('SELECT batch_id FROM live_classes WHERE id = ?', [$liveClassId]);
@@ -120,6 +120,60 @@ class AssignmentController extends Controller
             LEFT JOIN users u ON asub.user_id = u.id
             WHERE a.live_class_id = ?
             ORDER BY a.due_date ASC
+        ", [$liveClassId]);
+
+        // Group results by assignment
+        $assignments = collect($assignments)->groupBy('assignment_id')->map(function ($items) {
+            $first = $items->first();
+            return (object) [
+                'id' => $first->assignment_id,
+                'title' => $first->assignment_title,
+                'description' => $first->assignment_description,
+                'due_date' => $first->assignment_due_date,
+                'file_path' => $first->assignment_file_path,
+                'file_url' => $first->assignment_file_path ? Storage::url($first->assignment_file_path) : null,
+                'submissions' => $items->filter(function ($item) {
+                    return !is_null($item->submission_id);
+                })->map(function ($item) {
+                    return (object) [
+                        'id' => $item->submission_id,
+                        'user_id' => $item->user_id,
+                        'student_name' => $item->student_name,
+                        'file_path' => $item->submission_file_path,
+                        'file_url' => $item->submission_file_path ? Storage::url($item->submission_file_path) : null,
+                    ];
+                })->values(),
+            ];
+        })->values();
+
+        $liveClass = DB::selectOne('SELECT topic, class_datetime FROM live_classes WHERE id = ?', [$liveClassId]);
+
+        return view('student.assignment.assubmission', compact('assignments', 'liveClass'));
+    }
+    public function viewClassAssignments($liveClassId)
+    {
+        // Verify the teacher has access to this live class (e.g., via batch ownership)
+        $batch = DB::selectOne('SELECT batch_id FROM live_classes WHERE id = ?', [$liveClassId]);
+        if (!$batch) {
+            return redirect()->back()->with('error', 'Live class not found.');
+        }
+
+        // Fetch all assignments and their submissions for the live class
+        $assignments = DB::select("
+            SELECT a.id AS assignment_id, 
+                   a.title AS assignment_title, 
+                   a.description AS assignment_description, 
+                   a.due_date AS assignment_due_date, 
+                   a.file_path AS assignment_file_path,
+                   asub.id AS submission_id,
+                   asub.user_id,
+                   asub.file_path AS submission_file_path,
+                   u.name AS student_name
+            FROM assignments a
+            LEFT JOIN assignment_submissions asub ON a.id = asub.assignment_id
+            LEFT JOIN users u ON asub.user_id = u.id
+            WHERE a.live_class_id = ?
+            ORDER BY a.due_date ASC, asub.user_id ASC
         ", [$liveClassId]);
 
         // Group results by assignment

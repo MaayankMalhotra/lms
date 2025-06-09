@@ -34,8 +34,8 @@
                 </a>
             @endif
 
+            <h3 class="text-lg font-medium text-gray-800 mb-2">Submissions</h3>
             @if ($assignment->submissions->isNotEmpty())
-                <h3 class="text-lg font-medium text-gray-800 mb-2">Submissions</h3>
                 <div class="space-y-4">
                     @foreach ($assignment->submissions as $submission)
                         <div class="flex items-center justify-between bg-gray-50 p-3 rounded-md">
