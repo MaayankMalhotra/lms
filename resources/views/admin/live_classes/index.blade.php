@@ -1,3 +1,4 @@
+
 @extends('admin.layouts.app')
 
 @section('content')
@@ -37,6 +38,7 @@
                                     @method('DELETE')
                                     <button type="submit" class="text-red-500 hover:underline ml-2" onclick="return confirm('Are you sure?')">Delete</button>
                                 </form>
+                                <a href="{{ route('teacher.assignments.view', $class->id) }}" class="text-green-500 hover:underline ml-2">View Assignments Submissions</a>
 
                                 <!-- Edit Modal -->
                                 <div id="edit-modal-{{ $class->id }}" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
