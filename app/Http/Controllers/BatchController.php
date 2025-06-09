@@ -218,7 +218,7 @@ class BatchController extends Controller
     }
     public function update(Request $request, $id)
     {
-        return $id;
+        return $request->all();
         Log::info('Batch update request:', $request->all());
 
         try {
