@@ -218,7 +218,7 @@ class BatchController extends Controller
     }
     public function update(Request $request, $id)
     {
-        return $request->all();
+       
         Log::info('Batch update request:', $request->all());
 
         try {
@@ -240,7 +240,7 @@ class BatchController extends Controller
                 'emi_plans.*.installments' => 'required_if:emi_available,on|integer|min:2',
                 'emi_plans.*.amount' => 'required_if:emi_available,on|numeric|min:0',
             ]);
-
+            return $validated;
             $batchData = $validated;
             $batchData['emi_available'] = in_array($request->emi_available, ['on', '1', 'true'], true);
 
