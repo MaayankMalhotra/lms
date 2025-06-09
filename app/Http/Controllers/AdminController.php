@@ -215,15 +215,15 @@ public function student_management()
     public function storePlacement(Request $request)
     {
        // dd($request->all());
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'qualification' => 'required|string|max:255',
-            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-            'tags' => 'nullable|string',
-            'company' => 'required|string|max:255',
-            'package' => 'required|string|max:255',
-            'is_active' => 'boolean',
-        ]);
+        // $request->validate([
+        //     'name' => 'required|string|max:255',
+        //     'qualification' => 'required|string|max:255',
+        //     'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+        //     'tags' => 'nullable|string',
+        //     'company' => 'required|string|max:255',
+        //     'package' => 'required|string|max:255',
+        //     'is_active' => 'boolean',
+        // ]);
 //   dd($request->all());
         $imagePath = $request->file('image')->store('images', 'public');
         $imagePath='';
