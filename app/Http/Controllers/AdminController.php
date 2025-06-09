@@ -533,15 +533,15 @@ public function storePlacement(Request $request)
     // Instructors
     public function storeInstructor(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'teaching_hours' => 'required|integer|min:0',
-            'specialization' => 'required|string|max:255',
-            'linkedin_url' => 'nullable|url|max:255',
-            'facebook_url' => 'nullable|url|max:255',
-            'is_active' => 'boolean',
-        ]);
+        // $request->validate([
+        //     'name' => 'required|string|max:255',
+        //     'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        //     'teaching_hours' => 'required|integer|min:0',
+        //     'specialization' => 'required|string|max:255',
+        //     'linkedin_url' => 'nullable|url|max:255',
+        //     'facebook_url' => 'nullable|url|max:255',
+        //     'is_active' => 'boolean',
+        // ]);
 
         $imagePath = $request->file('image')->store('instructors', 'public');
 
