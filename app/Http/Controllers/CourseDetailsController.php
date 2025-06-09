@@ -130,6 +130,7 @@ class CourseDetailsController extends Controller
 
             return redirect()->back()->with('success', 'Course details saved successfully!');
         } catch (\Exception $e) {
+            dd($e);
             Log::error('Course creation failed: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Failed to save course details. Please try again.');
         }
