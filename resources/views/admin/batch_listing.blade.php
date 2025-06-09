@@ -103,7 +103,7 @@
             </div>
 
             <form id="editBatchForm">
-                @csrf
+                
                 @method('PUT')
                 <input type="hidden" name="id" id="edit_batch_id">
 
