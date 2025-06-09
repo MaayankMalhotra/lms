@@ -85,7 +85,7 @@
             <!-- Assignments -->
             <li>
                 <a href="{{ route('student.assignments') }}"
-                    class="flex items-center p-3 {{ request()->routeIs('assignment') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
+                    class="flex items-center p-3 {{ request()->routeIs('student.assignments') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
                     <i class="fas fa-tasks mr-3 text-lg"></i> Assignments
                 </a>
             </li>
