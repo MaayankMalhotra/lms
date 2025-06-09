@@ -30,44 +30,44 @@
                 FOR BEGINNER AND EXPERIENCED LEARNERS
             </p>
             <h1 class="text-4xl md:text-5xl font-bold text-gray-800 leading-tight mb-5">
-                {{ $course_details->name }}
+                {{ $course_details->name ?? 'NA' }}
             </h1>
             <p class="description text-base md:text-lg text-gray-600 leading-relaxed mb-5">
-                {{ $course_details->course_description }}
+                {{ $course_details->course_description ?? 'NA' }}
             </p>
             <div class="flex flex-col sm:flex-row items-center gap-5 mb-5">
                 <button class="bg-orange-500 text-white font-bold py-3 px-6 rounded-md flex items-center gap-2 hover:bg-orange-600 transition-colors">
                     Enroll now <span>→</span>
                 </button>
                 <div class="flex items-center gap-1">
-                    <span class="text-orange-500 text-lg font-bold">{{ $course_details->course_rating }}</span>
+                    <span class="text-orange-500 text-lg font-bold">{{ $course_details->course_rating ?? 'NA' }}</span>
                     <div class="flex">
                         @for ($i = 0; $i < 5; $i++)
                             <span class="text-orange-500 text-lg">★</span>
                         @endfor
                     </div>
-                    <span class="text-gray-600 text-sm">({{ $course_details->course_rating_student_number }}K+ student)</span>
+                    <span class="text-gray-600 text-sm">({{ $course_details->course_rating_student_number ?? 'NA' }}K+ student)</span>
                 </div>
             </div>
             <div class="stats flex flex-col md:flex-row gap-5 mt-5 bg-blue-100 p-5 rounded-lg justify-between max-w-lg mx-auto md:mx-0">
                 <div class="stat text-center">
                     <span class="rating text-orange-500 text-2xl font-bold">
-                        4.8 <span class="star text-xl">★</span>
+                        {{ $course_details->course_rating ?? 'NA' }} <span class="star text-xl">★</span>
                     </span>
-                    <p class="text-sm text-gray-600 mt-1">{{ $course_details->course_learner_enrolled }}K+ Learners enrolled</p>
+                    <p class="text-sm text-gray-600 mt-1">{{ $course_details->course_learner_enrolled ?? 'NA' }}K+ Learners enrolled</p>
                 </div>
                 <div class="stat text-center">
-                    <span class="text-2xl font-bold text-gray-800">{{ $course_details->course_lecture_hours }}+</span>
+                    <span class="text-2xl font-bold text-gray-800">{{ $course_details->course_lecture_hours ?? 'NA' }}+</span>
                     <p class="text-sm text-gray-600 mt-1">Hours of lectures</p>
                 </div>
                 <div class="stat text-center">
-                    <span class="text-2xl font-bold text-gray-800">{{ $course_details->course_problem_counts }}+</span>
+                    <span class="text-2xl font-bold text-gray-800">{{ $course_details->course_problem_counts ?? 'NA' }}+</span>
                     <p class="text-sm text-gray-600 mt-1">Problems</p>
                 </div>
             </div>
         </div>
         <div class="right-section flex-1 min-w-[300px] text-center order-1 md:order-2">
-            <img src="{{ asset('storage/' . $course_details->course_banner) }}" alt="Person studying with laptop and books" class="max-w-full h-auto rounded-lg">
+            <img src="{{ $course_details ? asset('storage/' . ($course_details->course_banner ?? '')) : 'https://via.placeholder.com/600x400?text=NA' }}" alt="Person studying with laptop and books" class="max-w-full h-auto rounded-lg">
         </div>
     </div>
 </div>
@@ -150,17 +150,21 @@
 <div class="container mx-auto px-5 py-10 max-w-7xl bg-gray-50">
     <h2 class="text-3xl font-bold mb-6 text-orange-500">About Course Overview</h2>
     <p class="text-gray-600 mb-6">
-        {{ $course_details->course_overview_description }}
+        {{ $course_details->course_overview_description ?? 'NA' }}
     </p>
     <h3 class="text-2xl font-bold mb-4 text-gray-900">Learning Outcomes:</h3>
     <ul class="list-disc pl-6 mb-6 text-gray-700 space-y-2">
-        @foreach($course_details->learning_outcomes as $outcome)
-            <li>{{ $outcome }}</li>
-        @endforeach
+        @if($course_details && is_array($course_details->learning_outcomes) && count($course_details->learning_outcomes) > 0)
+            @foreach($course_details->learning_outcomes as $outcome)
+                <li>{{ $outcome }}</li>
+            @endforeach
+        @else
+            <li>NA</li>
+        @endif
     </ul>
     <h3 class="text-2xl font-bold mb-4 text-gray-900">Instructor Info:</h3>
     <p class="text-gray-600 mb-6">
-        {{ $course_details->instructor_info }}
+        {{ $course_details->instructor_info ?? 'NA' }}
     </p>
     <h3 class="text-2xl font-bold mb-4 text-gray-900">Additional Benefits:</h3>
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -203,12 +207,12 @@
                             <i class="fas fa-question"></i>
                         @endif
                     </div>
-                    <h4 class="text-lg font-semibold text-gray-800 mb-2">{{ $feature['topic'] ?? 'No Topic' }}</h4>
-                    <p class="text-gray-600">{{ $feature['description'] ?? 'No Description' }}</p>
+                    <h4 class="text-lg font-semibold text-gray-800 mb-2">{{ $feature['topic'] ?? 'NA' }}</h4>
+                    <p class="text-gray-600">{{ $feature['description'] ?? 'NA' }}</p>
                 </div>
             @endforeach
         @else
-            <p class="text-gray-600 text-center col-span-full">No key features available for this course.</p>
+            <p class="text-gray-600 text-center col-span-full">NA</p>
         @endif
     </div>
 </div>
@@ -250,88 +254,112 @@
                 <div class="text-xl font-semibold text-gray-800 mb-6 border-b-2 border-teal-100 pb-3">
                     Demo Syllabus Modules
                 </div>
-                @forelse($course_details->demo_syllabus as $index => $module)
-                    <div class="accordion-item mb-4" x-data="{ open: {{ $index < 2 ? 'true' : 'false' }} }">
-                        <div class="accordion-title flex justify-between items-center p-5 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-200" role="button" @click="open = !open">
-                            <div class="flex items-center space-x-4">
-                                <span class="bg-teal-100 text-teal-800 text-sm font-medium px-4 py-1.5 rounded-sm">
-                                    Module {{ $module['module_number'] }}
-                                </span>
-                                <h3 class="text-lg font-semibold text-gray-800">{{ $module['title'] }}</h3>
-                            </div>
-                            <svg class="chevron w-6 h-6 text-gray-500 transform transition-transform duration-300" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </div>
-                        <div class="accordion-content p-6 bg-white rounded-b-lg shadow-sm border border-gray-100" x-show="open" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform scale-y-0" x-transition:enter-end="opacity-100 transform scale-y-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 transform scale-y-100" x-transition:leave-end="opacity-0 transform scale-y-0">
-                            <div class="flex items-center space-x-3 text-gray-600 mb-4">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                @if($course_details && is_array($course_details->demo_syllabus) && count($course_details->demo_syllabus) > 0)
+                    @forelse($course_details->demo_syllabus as $index => $module)
+                        <div class="accordion-item mb-4" x-data="{ open: {{ $index < 2 ? 'true' : 'false' }} }">
+                            <div class="accordion-title flex justify-between items-center p-5 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-200" role="button" @click="open = !open">
+                                <div class="flex items-center space-x-4">
+                                    <span class="bg-teal-100 text-teal-800 text-sm font-medium px-4 py-1.5 rounded-sm">
+                                        Module {{ $module['module_number'] ?? 'NA' }}
+                                    </span>
+                                    <h3 class="text-lg font-semibold text-gray-800">{{ $module['title'] ?? 'NA' }}</h3>
+                                </div>
+                                <svg class="chevron w-6 h-6 text-gray-500 transform transition-transform duration-300" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                                 </svg>
-                                <span class="text-sm font-medium">{{ $module['duration'] }}</span>
                             </div>
-                            <p class="text-gray-600 text-base leading-relaxed mb-6">{{ $module['description'] }}</p>
-                            <ul class="space-y-4">
-                                @foreach($module['topics'] as $topic)
-                                    <li class="text-gray-700">
-                                        <h4 class="text-lg font-semibold text-gray-800 mb-2">{{ $topic['category'] }}</h4>
-                                        <ul class="ml-5 mt-2 space-y-2 list-disc">
-                                            @foreach($topic['subtopics'] as $subtopic)
-                                                <li class="text-gray-600 text-sm">{{ trim($subtopic) }}</li>
-                                            @endforeach
-                                        </ul>
-                                    </li>
-                                @endforeach
-                            </ul>
+                            <div class="accordion-content p-6 bg-white rounded-b-lg shadow-sm border border-gray-100" x-show="open" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform scale-y-0" x-transition:enter-end="opacity-100 transform scale-y-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 transform scale-y-100" x-transition:leave-end="opacity-0 transform scale-y-0">
+                                <div class="flex items-center space-x-3 text-gray-600 mb-4">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    </svg>
+                                    <span class="text-sm font-medium">{{ $module['duration'] ?? 'NA' }}</span>
+                                </div>
+                                <p class="text-gray-600 text-base leading-relaxed mb-6">{{ $module['description'] ?? 'NA' }}</p>
+                                <ul class="space-y-4">
+                                    @if(is_array($module['topics']) && count($module['topics']) > 0)
+                                        @foreach($module['topics'] as $topic)
+                                            <li class="text-gray-700">
+                                                <h4 class="text-lg font-semibold text-gray-800 mb-2">{{ $topic['category'] ?? 'NA' }}</h4>
+                                                <ul class="ml-5 mt-2 space-y-2 list-disc">
+                                                    @if(is_array($topic['subtopics']) && count($topic['subtopics']) > 0)
+                                                        @foreach($topic['subtopics'] as $subtopic)
+                                                            <li class="text-gray-600 text-sm">{{ trim($subtopic) ?? 'NA' }}</li>
+                                                        @endforeach
+                                                    @else
+                                                        <li class="text-gray-600 text-sm">NA</li>
+                                                    @endif
+                                                </ul>
+                                            </li>
+                                        @endforeach
+                                    @else
+                                        <li class="text-gray-600 text-sm">NA</li>
+                                    @endif
+                                </ul>
+                            </div>
                         </div>
-                    </div>
-                @empty
-                    <p class="text-gray-600 text-center py-8">No demo syllabus modules available for this course.</p>
-                @endforelse
+                    @empty
+                        <p class="text-gray-600 text-center py-8">NA</p>
+                    @endforelse
+                @else
+                    <p class="text-gray-600 text-center py-8">NA</p>
+                @endif
             </div>
             <!-- Course Curriculum Content -->
             <div x-show="activeTab === 'curriculum'" class="mt-6">
                 <div class="text-xl font-semibold text-gray-800 mb-6 border-b-2 border-teal-100 pb-3">
                     Course Curriculum Modules
                 </div>
-                @forelse($course_details->course_curriculum as $index => $module)
-                    <div class="accordion-item mb-4" x-data="{ open: {{ $index < 2 ? 'true' : 'false' }} }">
-                        <div class="accordion-title flex justify-between items-center p-5 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-200" role="button" @click="open = !open">
-                            <div class="flex items-center space-x-4">
-                                <span class="bg-teal-100 text-teal-800 text-sm font-medium px-4 py-1.5 rounded-sm">
-                                    Module {{ $module['module_number'] }}
-                                </span>
-                                <h3 class="text-lg font-semibold text-gray-800">{{ $module['title'] }}</h3>
-                            </div>
-                            <svg class="chevron w-6 h-6 text-gray-500 transform transition-transform duration-300" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </div>
-                        <div class="accordion-content p-6 bg-white rounded-b-lg shadow-sm border border-gray-100" x-show="open" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform scale-y-0" x-transition:enter-end="opacity-100 transform scale-y-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 transform scale-y-100" x-transition:leave-end="opacity-0 transform scale-y-0">
-                            <div class="flex items-center space-x-3 text-gray-600 mb-4">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                @if($course_details && is_array($course_details->course_curriculum) && count($course_details->course_curriculum) > 0)
+                    @forelse($course_details->course_curriculum as $index => $module)
+                        <div class="accordion-item mb-4" x-data="{ open: {{ $index < 2 ? 'true' : 'false' }} }">
+                            <div class="accordion-title flex justify-between items-center p-5 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-200" role="button" @click="open = !open">
+                                <div class="flex items-center space-x-4">
+                                    <span class="bg-teal-100 text-teal-800 text-sm font-medium px-4 py-1.5 rounded-sm">
+                                        Module {{ $module['module_number'] ?? 'NA' }}
+                                    </span>
+                                    <h3 class="text-lg font-semibold text-gray-800">{{ $module['title'] ?? 'NA' }}</h3>
+                                </div>
+                                <svg class="chevron w-6 h-6 text-gray-500 transform transition-transform duration-300" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                                 </svg>
-                                <span class="text-sm font-medium">{{ $module['duration'] }}</span>
                             </div>
-                            <p class="text-gray-600 text-base leading-relaxed mb-6">{{ $module['description'] }}</p>
-                            <ul class="space-y-4">
-                                @foreach($module['topics'] as $topic)
-                                    <li class="text-gray-700">
-                                        <h4 class="text-lg font-semibold text-gray-800 mb-2">{{ $topic['category'] }}</h4>
-                                        <ul class="ml-5 mt-2 space-y-2 list-disc">
-                                            @foreach($topic['subtopics'] as $subtopic)
-                                                <li class="text-gray-600 text-sm">{{ trim($subtopic) }}</li>
-                                            @endforeach
-                                        </ul>
-                                    </li>
-                                @endforeach
-                            </ul>
+                            <div class="accordion-content p-6 bg-white rounded-b-lg shadow-sm border border-gray-100" x-show="open" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform scale-y-0" x-transition:enter-end="opacity-100 transform scale-y-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 transform scale-y-100" x-transition:leave-end="opacity-0 transform scale-y-0">
+                                <div class="flex items-center space-x-3 text-gray-600 mb-4">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    </svg>
+                                    <span class="text-sm font-medium">{{ $module['duration'] ?? 'NA' }}</span>
+                                </div>
+                                <p class="text-gray-600 text-base leading-relaxed mb-6">{{ $module['description'] ?? 'NA' }}</p>
+                                <ul class="space-y-4">
+                                    @if(is_array($module['topics']) && count($module['topics']) > 0)
+                                        @foreach($module['topics'] as $topic)
+                                            <li class="text-gray-700">
+                                                <h4 class="text-lg font-semibold text-gray-800 mb-2">{{ $topic['category'] ?? 'NA' }}</h4>
+                                                <ul class="ml-5 mt-2 space-y-2 list-disc">
+                                                    @if(is_array($topic['subtopics']) && count($topic['subtopics']) > 0)
+                                                        @foreach($topic['subtopics'] as $subtopic)
+                                                            <li class="text-gray-600 text-sm">{{ trim($subtopic) ?? 'NA' }}</li>
+                                                        @endforeach
+                                                    @else
+                                                        <li class="text-gray-600 text-sm">NA</li>
+                                                    @endif
+                                                </ul>
+                                            </li>
+                                        @endforeach
+                                    @else
+                                        <li class="text-gray-600 text-sm">NA</li>
+                                    @endif
+                                </ul>
+                            </div>
                         </div>
-                    </div>
-                @empty
-                    <p class="text-gray-600 text-center py-8">No curriculum modules available for this course.</p>
-                @endforelse
+                    @empty
+                        <p class="text-gray-600 text-center py-8">NA</p>
+                    @endforelse
+                @else
+                    <p class="text-gray-600 text-center py-8">NA</p>
+                @endif
             </div>
         </div>
     </div>
@@ -344,23 +372,38 @@
     </h2>
     <div class="swiper mySwiper">
         <div class="swiper-wrapper">
-            @foreach($course_details->instructor_ids as $instructor)
-                @php
-                    $teacher = \App\Models\User::find($instructor);
-                @endphp
+            @if($course_details && is_array($course_details->instructor_ids) && count($course_details->instructor_ids) > 0)
+                @foreach($course_details->instructor_ids as $instructor)
+                    @php
+                        $teacher = \App\Models\User::find($instructor);
+                    @endphp
+                    <div class="swiper-slide">
+                        <div class="bg-white p-5 rounded-lg shadow-md text-center">
+                            <img src="https://via.placeholder.com/150" alt="Instructor" class="w-24 h-24 rounded-full mx-auto mb-3">
+                            <h3 class="text-lg font-semibold text-gray-800">{{ $teacher->name ?? 'NA' }}</h3>
+                            <p class="text-sm text-gray-600 flex items-center justify-center gap-1 mt-1">
+                                <i class="fas fa-clock text-orange-500"></i>
+                                1600+ hours taught
+                            </p>
+                            <p class="text-sm text-gray-600 mt-1">Courses | teach</p>
+                            <p class="text-sm text-gray-600">Web Development</p>
+                        </div>
+                    </div>
+                @endforeach
+            @else
                 <div class="swiper-slide">
                     <div class="bg-white p-5 rounded-lg shadow-md text-center">
                         <img src="https://via.placeholder.com/150" alt="Instructor" class="w-24 h-24 rounded-full mx-auto mb-3">
-                        <h3 class="text-lg font-semibold text-gray-800">{{ $teacher->name ?? 'teacher' }}</h3>
+                        <h3 class="text-lg font-semibold text-gray-800">NA</h3>
                         <p class="text-sm text-gray-600 flex items-center justify-center gap-1 mt-1">
                             <i class="fas fa-clock text-orange-500"></i>
-                            1600+ hours taught
+                            NA
                         </p>
-                        <p class="text-sm text-gray-600 mt-1">Courses | teach</p>
-                        <p class="text-sm text-gray-600">Web Development</p>
+                        <p class="text-sm text-gray-600 mt-1">NA</p>
+                        <p class="text-sm text-gray-600">NA</p>
                     </div>
                 </div>
-            @endforeach
+            @endif
         </div>
         <div class="swiper-pagination mt-5"></div>
     </div>
@@ -372,19 +415,33 @@
         Wait! I Have Some <span class="text-orange-500">Questions</span>
     </h2>
     <div x-data="{ openAccordion: null }" class="space-y-2">
-        @foreach($course_details->faqs as $index => $faq)
+        @if($course_details && is_array($course_details->faqs) && count($course_details->faqs) > 0)
+            @foreach($course_details->faqs as $index => $faq)
+                <div class="border border-blue-500 rounded-lg">
+                    <button @click="openAccordion = openAccordion === {{ $index + 1 }} ? null : {{ $index + 1 }}" class="w-full flex justify-between items-center p-4 text-left text-gray-800 font-semibold">
+                        <span>{{ $faq['question'] ?? 'NA' }}</span>
+                        <i :class="openAccordion === {{ $index + 1 }} ? 'fa-minus' : 'fa-plus'" class="fas text-blue-500"></i>
+                    </button>
+                    <div x-show="openAccordion === {{ $index + 1 }}" x-transition class="p-4 bg-white">
+                        <p class="text-gray-600">
+                            {{ $faq['answer'] ?? 'NA' }}
+                        </p>
+                    </div>
+                </div>
+            @endforeach
+        @else
             <div class="border border-blue-500 rounded-lg">
-                <button @click="openAccordion = openAccordion === {{ $index + 1 }} ? null : {{ $index + 1 }}" class="w-full flex justify-between items-center p-4 text-left text-gray-800 font-semibold">
-                    <span>{{ $faq['question'] }}</span>
-                    <i :class="openAccordion === {{ $index + 1 }} ? 'fa-minus' : 'fa-plus'" class="fas text-blue-500"></i>
+                <button @click="openAccordion = openAccordion === 1 ? null : 1" class="w-full flex justify-between items-center p-4 text-left text-gray-800 font-semibold">
+                    <span>NA</span>
+                    <i :class="openAccordion === 1 ? 'fa-minus' : 'fa-plus'" class="fas text-blue-500"></i>
                 </button>
-                <div x-show="openAccordion === {{ $index + 1 }}" x-transition class="p-4 bg-white">
+                <div x-show="openAccordion === 1" x-transition class="p-4 bg-white">
                     <p class="text-gray-600">
-                        {{ $faq['answer'] }}
+                        NA
                     </p>
                 </div>
             </div>
-        @endforeach
+        @endif
     </div>
 </div>
 
@@ -437,80 +494,6 @@
     </div>
 </div>
 
-{{-- <!-- Course Certificates Section -->
-<div class="container mx-auto px-5 py-10 max-w-7xl">
-    <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-5">
-        Course <span class="text-orange-500">Certificates</span>
-    </h2>
-    <div class="flex flex-col md:flex-row gap-6">
-        <div class="flex-1">
-            <p class="text-gray-600 mb-4">
-                Our business analyst Master’s program is led by industry experts who will make you proficient in the field of business analytics. The projects and case studies that are provided as part of this course will help you gain industry-grade experience, which will be a bonus in your resume.
-            </p>
-            <p class="text-gray-600 mb-4">
-                Our online business analytics master’s course aims to help you clear several certification exams, including the ones mentioned below:
-            </p>
-            <ul class="space-y-2">
-                <li class="flex items-center gap-2 text-gray-600">
-                    <i class="fas fa-check text-green-500"></i>
-                    CCBA – Certification of Competency in Business Analysis
-                </li>
-                <li class="flex items-center gap-2 text-gray-600">
-                    <i class="fas fa-check text-green-500"></i>
-                    Agile Scrum Foundation
-                </li>
-                <li class="flex items-center gap-2 text-gray-600">
-                    <i class="fas fa-check text-green-500"></i>
-                    Digital Transformation Course for Leaders
-                </li>
-            </ul>
-        </div>
-        <div class="flex-1">
-            <img src="https://media.licdn.com/dms/image/v2/D5622AQGoUBZSCAP82g/feedshare-shrink_2048_1536/feedshare-shrink_2048_1536/0/1731245943907?e=2147483647&v=beta&t=55eBVsL3PaAH74TFdAM3qEz8RBRcwxX_ZHYYpst400I" alt="Certificate" class="w-full rounded-lg shadow-md">
-        </div>
-    </div>
-</div> --}}
-
-<!-- Course Certificates Section -->
-{{-- <div class="container mx-auto px-5 py-10 max-w-7xl">
-    <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-5">
-        Course <span class="text-orange-500">Certificates</span>
-    </h2>
-    <div class="flex flex-col md:flex-row gap-6">
-        <div class="flex-1">
-            @forelse ($course_details->certificate_description as $description)
-                <p class="text-gray-600 mb-4">
-                    {{ $description['text'] }}
-                </p>
-            @empty
-                <p class="text-gray-600 mb-4">
-                    No certificate descriptions available for this course.
-                </p>
-            @endforelse
-            <ul class="space-y-2">
-                @forelse ($courseDetail->certifications as $certification)
-                    <li class="flex items-center gap-2 text-gray-600">
-                        <i class="fas fa-check text-green-500"></i>
-                        {{ $certification['name'] }}
-                    </li>
-                @empty
-                    <li class="flex items-center gap-2 text-gray-600">
-                        <i class="fas fa-check text-green-500"></i>
-                        No certifications listed for this course.
-                    </li>
-                @endforelse
-            </ul>
-        </div>
-        <div class="flex-1">
-            @if ($courseDetail->certificate_image)
-                <img src="{{ asset('storage/' . $courseDetail->certificate_image) }}" alt="Certificate" class="w-full rounded-lg shadow-md">
-            @else
-                <img src="https://via.placeholder.com/600x400?text=No+Certificate+Image" alt="No Certificate" class="w-full rounded-lg shadow-md">
-            @endif
-        </div>
-    </div>
-</div> --}}
-
 <!-- Course Certificates Section -->
 <div class="container mx-auto px-5 py-10 max-w-7xl">
     <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-5">
@@ -521,12 +504,12 @@
             @if($course_details && is_array($course_details->certificate_description) && count($course_details->certificate_description) > 0)
                 @foreach($course_details->certificate_description as $description)
                     <p class="text-gray-600 mb-4">
-                        {{ $description['text'] ?? 'No description available' }}
+                        {{ $description['text'] ?? 'NA' }}
                     </p>
                 @endforeach
             @else
                 <p class="text-gray-600 mb-4">
-                    No certificate descriptions available for this course.
+                    NA
                 </p>
             @endif
             @if($course_details && is_array($course_details->certifications) && count($course_details->certifications) > 0)
@@ -534,13 +517,13 @@
                     @foreach($course_details->certifications as $certification)
                         <li class="flex items-center gap-2 text-gray-600">
                             <i class="fas fa-check text-green-500"></i>
-                            {{ $certification['name'] ?? 'No certification name' }}
+                            {{ $certification['name'] ?? 'NA' }}
                         </li>
                     @endforeach
                 </ul>
             @else
                 <p class="text-gray-600">
-                    No certifications listed for this course.
+                    NA
                 </p>
             @endif
         </div>
@@ -548,14 +531,14 @@
             @if($course_details && $course_details->certificate_image)
                 <img src="{{ asset('storage/' . $course_details->certificate_image) }}" alt="Certificate" class="w-full rounded-lg shadow-md">
             @else
-                <img src="https://via.placeholder.com/600x400?text=No+Certificate+Image" alt="No Certificate" class="w-full rounded-lg shadow-md">
+                <img src="https://via.placeholder.com/600x400?text=NA" alt="No Certificate" class="w-full rounded-lg shadow-md">
             @endif
         </div>
     </div>
 </div>
 
 @php
-    $course_id_detail = \App\Models\Course::where('name',$course_details->name)->value('id');
+    $course_id_detail = $course_details ? \App\Models\Course::where('name', $course_details->name ?? '')->value('id') : null;
 @endphp
 <!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
@@ -587,7 +570,7 @@
 
     // Batch Section JavaScript
     let batches = [];
-    const courseId = "{{ $course_id_detail?? '' }}";
+    const courseId = "{{ $course_id_detail ?? '' }}";
 
     // Function to fetch batches dynamically
     async function fetchBatches() {
@@ -723,8 +706,6 @@
 
             // Update discount info (remove timer for upcoming batches)
             document.getElementById('batch-discount').innerText = `${batch.discount_info}% OFF` || 'No discount available';
-
-     
 
             // Update enroll button
             const enrollStartDate = new Date(batch.startDate);
