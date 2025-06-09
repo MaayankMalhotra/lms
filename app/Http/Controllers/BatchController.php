@@ -12,6 +12,7 @@ use App\Models\Student;
 use App\Models\Registration;
 use App\Models\Enrollment;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Razorpay\Api\Api;
