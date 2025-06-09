@@ -342,15 +342,15 @@ public function storePlacement(Request $request)
     // Courses
     public function storeCourse(Request $request)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'image' => 'required|string|max:255',
-            'duration' => 'required|string|max:255',
-            'placed_count' => 'required|integer|min:0',
-            'rating' => 'required|numeric|min:0|max:5',
-            'student_count' => 'required|integer|min:0',
-            'is_active' => 'boolean',
-        ]);
+        // $request->validate([
+        //     'title' => 'required|string|max:255',
+        //     'image' => 'required|string|max:255',
+        //     'duration' => 'required|string|max:255',
+        //     'placed_count' => 'required|integer|min:0',
+        //     'rating' => 'required|numeric|min:0|max:5',
+        //     'student_count' => 'required|integer|min:0',
+        //     'is_active' => 'boolean',
+        // ]);
 
         DB::insert("
             INSERT INTO home_courses (title, image, duration, placed_count, rating, student_count, is_active, created_at, updated_at)
