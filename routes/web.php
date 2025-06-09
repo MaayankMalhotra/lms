@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminAssignmentController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminInternshipClassCreateController;
@@ -552,3 +553,7 @@ Route::prefix('admin')->group(function () {
     Route::put('/home/faqs/{id}', [AdminController::class, 'updateFaq'])->name('admin.faqs.update');
     Route::delete('/home/faqs/{id}', [AdminController::class, 'deleteFaq'])->name('admin.faqs.delete');
 });
+
+
+   // Route::get('/assignments', [AssignmentController::class, 'assignment'])->name('student.assignments');
+    Route::post('/assignment/{assignmentId}/submit', [AssignmentController::class, 'submitAssignment'])->name('student.assignment.submit');
