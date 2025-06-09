@@ -265,7 +265,7 @@ class BatchController extends Controller
             Log::info('Batch data before update:', $batchData);
 
             $t=$batch->update($batchData);
-            return $t;
+          //  return $t;
 
             Log::info('Batch updated:', ['id' => $batch->id, 'emi_available' => $batch->emi_available, 'emi_plans' => $batch->emi_plans]);
 
