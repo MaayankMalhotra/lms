@@ -2,6 +2,8 @@
 
 @section('content')
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
     <style>
         /* Simplified and professional styles */
         .admin-panel {
@@ -186,13 +188,13 @@
                         <div class="form-grid">
                             <!-- Course Name -->
                             <div class="field-container">
-                                <label for="course_name">Course Name</label>
-                                <select name="course_id" id="course_id">
+                                <label for="course_id">Course Name</label>
+                                <select name="course_id" id="course_id" required>
                                     @foreach($course_name as $course)
                                         <option value="{{ $course->id }}">{{ $course->name }}</option>
                                     @endforeach
                                 </select>
-                                @error('course_name')
+                                @error('course_id')
                                     <div class="error">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -200,7 +202,7 @@
                             <!-- Course Rating -->
                             <div class="field-container">
                                 <label for="course_rating">Course Rating (0-5)</label>
-                                <input type="number" name="course_rating" id="course_rating" step="0.1" min="0" max="5" value="{{ old('course_rating') }}">
+                                <input type="number" name="course_rating" id="course_rating" step="0.1" min="0" max="5" value="{{ old('course_rating') }}" required>
                                 @error('course_rating')
                                     <div class="error">{{ $message }}</div>
                                 @enderror
@@ -209,7 +211,7 @@
                             <!-- Course Rating by Student Number -->
                             <div class="field-container">
                                 <label for="course_rating_student_number">Rated by Students (e.g., 15K)</label>
-                                <input type="text" name="course_rating_student_number" id="course_rating_student_number" value="{{ old('course_rating_student_number') }}">
+                                <input type="text" name="course_rating_student_number" id="course_rating_student_number" value="{{ old('course_rating_student_number') }}" required>
                                 @error('course_rating_student_number')
                                     <div class="error">{{ $message }}</div>
                                 @enderror
@@ -218,7 +220,7 @@
                             <!-- Learners Enrolled -->
                             <div class="field-container">
                                 <label for="course_learner_enrolled">Learners Enrolled (e.g., 30K)</label>
-                                <input type="text" name="course_learner_enrolled" id="course_learner_enrolled" value="{{ old('course_learner_enrolled') }}">
+                                <input type="text" name="course_learner_enrolled" id="course_learner_enrolled" value="{{ old('course_learner_enrolled') }}" required>
                                 @error('course_learner_enrolled')
                                     <div class="error">{{ $message }}</div>
                                 @enderror
@@ -227,7 +229,7 @@
                             <!-- Course Lecture Hours -->
                             <div class="field-container">
                                 <label for="course_lecture_hours">Lecture Hours (e.g., 60)</label>
-                                <input type="number" name="course_lecture_hours" id="course_lecture_hours" min="0" value="{{ old('course_lecture_hours') }}">
+                                <input type="number" name="course_lecture_hours" id="course_lecture_hours" min="0" value="{{ old('course_lecture_hours') }}" required>
                                 @error('course_lecture_hours')
                                     <div class="error">{{ $message }}</div>
                                 @enderror
@@ -236,7 +238,7 @@
                             <!-- Course Problems -->
                             <div class="field-container">
                                 <label for="course_problem_counts">Problems (e.g., 350)</label>
-                                <input type="number" name="course_problem_counts" id="course_problem_counts" min="0" value="{{ old('course_problem_counts') }}">
+                                <input type="number" name="course_problem_counts" id="course_problem_counts" min="0" value="{{ old('course_problem_counts') }}" required>
                                 @error('course_problem_counts')
                                     <div class="error">{{ $message }}</div>
                                 @enderror
@@ -265,7 +267,7 @@
                     <div class="collapsible-content">
                         <div class="field-container">
                             <label for="course_description">Course Description</label>
-                            <textarea name="course_description" id="course_description">{{ old('course_description') }}</textarea>
+                            <textarea name="course_description" id="course_description" required>{{ old('course_description') }}</textarea>
                             @error('course_description')
                                 <div class="error">{{ $message }}</div>
                             @enderror
@@ -284,7 +286,7 @@
                     <div class="collapsible-content">
                         <div class="field-container">
                             <label for="course_overview_description">Course Overview Description</label>
-                            <textarea name="course_overview_description" id="course_overview_description">{{ old('course_overview_description') }}</textarea>
+                            <textarea name="course_overview_description" id="course_overview_description" required>{{ old('course_overview_description') }}</textarea>
                             @error('course_overview_description')
                                 <div class="error">{{ $message }}</div>
                             @enderror
@@ -368,10 +370,16 @@
                                                     <div class="field-container">
                                                         <label>Topic Category (e.g., HTML)</label>
                                                         <input type="text" name="course_curriculum[0][topics][0][category]" required value="{{ old('course_curriculum.0.topics.0.category') }}">
+                                                        @error('course_curriculum.0.topics.0.category')
+                                                            <div class="error">{{ $message }}</div>
+                                                        @enderror
                                                     </div>
                                                     <div class="field-container full-width">
-                                                        <label>Subtopics (use comma(,) for multiple subtopics)</label>
-                                                        <textarea name="course_curriculum[0][topics][0][subtopics]" required placeholder="Enter subtopics, (use comma(,) for multiple subtopics)">{{ old('course_curriculum.0.topics.0.subtopics') }}</textarea>
+                                                        <label>Subtopics (one per line)</label>
+                                                        <textarea name="course_curriculum[0][topics][0][subtopics]" required placeholder="Enter subtopics, one per line">{{ old('course_curriculum.0.topics.0.subtopics') }}</textarea>
+                                                        @error('course_curriculum.0.topics.0.subtopics')
+                                                            <div class="error">{{ $message }}</div>
+                                                        @enderror
                                                     </div>
                                                 </div>
                                                 <button type="button" class="button remove-button mt-2" onclick="removeTopic(0, this)">Remove Topic</button>
@@ -389,76 +397,84 @@
                         </div>
                     </div>
                 </div>
-<!-- Demo Syllabus Section -->
-<div class="collapsible-section full-width">
-    <div class="collapsible-header" onclick="toggleSection(this)">
-        <span>Demo Syllabus</span>
-        <svg class="chevron w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-        </svg>
-    </div>
-    <div class="collapsible-content">
-        <div class="field-container">
-            <div id="demo-syllabus-container" class="dynamic-section">
-                <div class="dynamic-field">
-                    <div class="form-grid">
+
+                <!-- Demo Syllabus Section -->
+                <div class="collapsible-section full-width">
+                    <div class="collapsible-header" onclick="toggleSection(this)">
+                        <span>Demo Syllabus</span>
+                        <svg class="chevron w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
+                    <div class="collapsible-content">
                         <div class="field-container">
-                            <label>Module Number (e.g., Module 0)</label>
-                            <input type="text" name="demo_syllabus[0][module_number]" required value="{{ old('demo_syllabus.0.module_number') }}">
-                            @error('demo_syllabus.0.module_number')
-                                <div class="error">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="field-container">
-                            <label>Title (e.g., Programming Fundamentals)</label>
-                            <input type="text" name="demo_syllabus[0][title]" required value="{{ old('demo_syllabus.0.title') }}">
-                            @error('demo_syllabus.0.title')
-                                <div class="error">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="field-container">
-                            <label>Duration (e.g., 4 Weeks)</label>
-                            <input type="text" name="demo_syllabus[0][duration]" required value="{{ old('demo_syllabus.0.duration') }}">
-                            @error('demo_syllabus.0.duration')
-                                <div class="error">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="field-container full-width">
-                            <label>Description</label>
-                            <textarea name="demo_syllabus[0][description]" required>{{ old('demo_syllabus.0.description') }}</textarea>
-                            @error('demo_syllabus.0.description')
-                                <div class="error">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <!-- Topics Section -->
-                        <div class="field-container full-width">
-                            <label>Topics</label>
-                            <div class="nested-section" id="demo-topics-0-0">
-                                <div class="form-grid">
-                                    <div class="field-container">
-                                        <label>Topic Category (e.g., HTML)</label>
-                                        <input type="text" name="demo_syllabus[0][topics][0][category]" required value="{{ old('demo_syllabus.0.topics.0.category') }}">
+                            <div id="demo-syllabus-container" class="dynamic-section">
+                                <div class="dynamic-field">
+                                    <div class="form-grid">
+                                        <div class="field-container">
+                                            <label>Module Number (e.g., Module 0)</label>
+                                            <input type="text" name="demo_syllabus[0][module_number]" required value="{{ old('demo_syllabus.0.module_number') }}">
+                                            @error('demo_syllabus.0.module_number')
+                                                <div class="error">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                        <div class="field-container">
+                                            <label>Title (e.g., Programming Fundamentals)</label>
+                                            <input type="text" name="demo_syllabus[0][title]" required value="{{ old('demo_syllabus.0.title') }}">
+                                            @error('demo_syllabus.0.title')
+                                                <div class="error">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                        <div class="field-container">
+                                            <label>Duration (e.g., 4 Weeks)</label>
+                                            <input type="text" name="demo_syllabus[0][duration]" required value="{{ old('demo_syllabus.0.duration') }}">
+                                            @error('demo_syllabus.0.duration')
+                                                <div class="error">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                        <div class="field-container full-width">
+                                            <label>Description</label>
+                                            <textarea name="demo_syllabus[0][description]" required>{{ old('demo_syllabus.0.description') }}</textarea>
+                                            @error('demo_syllabus.0.description')
+                                                <div class="error">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                        <!-- Topics Section -->
+                                        <div class="field-container full-width">
+                                            <label>Topics</label>
+                                            <div class="nested-section" id="demo-topics-0-0">
+                                                <div class="form-grid">
+                                                    <div class="field-container">
+                                                        <label>Topic Category (e.g., HTML)</label>
+                                                        <input type="text" name="demo_syllabus[0][topics][0][category]" required value="{{ old('demo_syllabus.0.topics.0.category') }}">
+                                                        @error('demo_syllabus.0.topics.0.category')
+                                                            <div class="error">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+                                                    <div class="field-container full-width">
+                                                        <label>Subtopics (use comma(,) for multiple subtopics)</label>
+                                                        <textarea name="demo_syllabus[0][topics][0][subtopics]" required placeholder="Enter subtopics, (use comma(,) for multiple subtopics)">{{ old('demo_syllabus.0.topics.0.subtopics') }}</textarea>
+                                                        @error('demo_syllabus.0.topics.0.subtopics')
+                                                            <div class="error">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+                                                <button type="button" class="button remove-button mt-2" onclick="removeDemoTopic(0, this)">Remove Topic</button>
+                                            </div>
+                                            <button type="button" class="button add-button mt-2" onclick="addDemoTopic(0)">Add Topic</button>
+                                        </div>
                                     </div>
-                                    <div class="field-container full-width">
-                                        <label>Subtopics (use comma(,) for multiple subtopics)</label>
-                                        <textarea name="demo_syllabus[0][topics][0][subtopics]" required placeholder="Enter subtopics, (use comma(,) for multiple subtopics)">{{ old('demo_syllabus.0.topics.0.subtopics') }}</textarea>
-                                    </div>
+                                    <button type="button" class="button remove-button mt-2" onclick="removeDemoSyllabus(this)">Remove Module</button>
                                 </div>
-                                <button type="button" class="button remove-button mt-2" onclick="removeDemoTopic(0, this)">Remove Topic</button>
                             </div>
-                            <button type="button" class="button add-button mt-2" onclick="addDemoTopic(0)">Add Topic</button>
+                            <button type="button" class="button add-button mt-2" onclick="addDemoSyllabus()">Add Demo Syllabus Module</button>
+                            @error('demo_syllabus')
+                                <div class="error">{{ $message }}</div>
+                            @enderror
                         </div>
                     </div>
-                    <button type="button" class="button remove-button mt-2" onclick="removeDemoSyllabus(this)">Remove Module</button>
                 </div>
-            </div>
-            <button type="button" class="button add-button mt-2" onclick="addDemoSyllabus()">Add Demo Syllabus Module</button>
-            @error('demo_syllabus')
-                <div class="error">{{ $message }}</div>
-            @enderror
-        </div>
-    </div>
-</div>
+
                 <!-- Key Points Section -->
                 <div class="collapsible-section full-width">
                     <div class="collapsible-header" onclick="toggleSection(this)">
@@ -495,22 +511,22 @@
                         </svg>
                     </div>
                     <div class="collapsible-content">
-    <div class="field-container">
-        <label for="instructor_ids">Select Instructors</label>
-        <select name="instructor_ids[]" id="instructor_ids" multiple required>
-            <option value="">Select Instructor</option>
-            @foreach($instructors as $instructor)
-                <option value="{{ $instructor->id }}">{{ $instructor->name }}</option>
-            @endforeach
-        </select>
-        @error('instructor_ids')
-            <div class="error">{{ $message }}</div>
-        @enderror
-        @error('instructor_ids.*')
-            <div class="error">{{ $message }}</div>
-        @enderror
-    </div>
-</div>
+                        <div class="field-container">
+                            <label for="instructor_ids">Select Instructors</label>
+                            <select name="instructor_ids[]" id="instructor_ids" multiple required>
+                                <option value="">Select Instructor</option>
+                                @foreach($instructors as $instructor)
+                                    <option value="{{ $instructor->id }}">{{ $instructor->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('instructor_ids')
+                                <div class="error">{{ $message }}</div>
+                            @enderror
+                            @error('instructor_ids.*')
+                                <div class="error">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
                 </div>
 
                 <!-- FAQs Section -->
@@ -556,11 +572,11 @@
                 </div>
 
                 <!-- Key Features Section -->
-                <div class="collapsible-section full-width" style="background-color: #fefcbf;">
+                <div class="collapsible-section full-width">
                     <div class="collapsible-header" onclick="toggleSection(this)">
                         <span>Key Features</span>
-                        <svg class="chevron w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-width="2" d="M19 9l-7 7-7-7">
+                        <svg class="chevron w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </div>
                     <div class="collapsible-content">
@@ -599,17 +615,17 @@
                             @enderror
                             @error('key_features.*')
                                 <div class="error">{{ $message }}</div>
-                            @endif
+                            @enderror
                         </div>
                     </div>
                 </div>
 
                 <!-- Certifications Section -->
-                <div class="collapsible-section full-width" style="background-color: #fefcbf;">
+                <div class="collapsible-section full-width">
                     <div class="collapsible-header" onclick="toggleSection(this)">
                         <span>Course Certificates</span>
-                        <svg class="chevron w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        <svg class="chevron w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </div>
                     <div class="collapsible-content">
@@ -617,7 +633,7 @@
                             <!-- Certificate Image -->
                             <div class="field-container">
                                 <label for="certificate_image">Certificate Image</label>
-                                <input type="file" name="certificate_image" id="certificate_image" accept="image/*" value="{{ old('certificate_image') }}">
+                                <input type="file" name="certificate_image" id="certificate_image" accept="image/*">
                                 @error('certificate_image')
                                     <div class="error">{{ $message }}</div>
                                 @enderror
@@ -682,12 +698,11 @@
         let moduleCount = 1;
         let demoModuleCount = 1;
         let faqCount = 1;
-        let topicCounts = { 0: 1 }; // Track topic counts for each module
-        let demoTopicCounts = { 0: 1 }; // Track topic counts for demo syllabus modules
+        let topicCounts = { 0: 1 };
+        let demoTopicCounts = { 0: 1 };
         let keyFeatureCount = 1;
         let certificationCount = 1;
         let certificateDescriptionCount = 1;
-
 
         function toggleSection(element) {
             const content = element.nextElementSibling;
@@ -717,7 +732,7 @@
         }
 
         function addCurriculum() {
-            topicCounts[moduleCount] = 1; // Initialize topic count for new module
+            topicCounts[moduleCount] = 1;
             const container = document.getElementById('curriculum-container');
             const div = document.createElement('div');
             div.className = 'dynamic-field';
@@ -808,8 +823,9 @@
                 alert('At least one topic is required per module.');
             }
         }
+
         function addDemoSyllabus() {
-            demoTopicCounts[demoModuleCount] = 1; // Initialize topic count for new demo module
+            demoTopicCounts[demoModuleCount] = 1;
             const container = document.getElementById('demo-syllabus-container');
             const div = document.createElement('div');
             div.className = 'dynamic-field';
@@ -821,13 +837,13 @@
                     </div>
                     <div class="field-container">
                         <label>Title</label>
-                        <input type="text" name="demo_syll 컬럼명abus[${demoModuleCount}][title]" required>
+                        <input type="text" name="demo_syllabus[${demoModuleCount}][title]" required>
                     </div>
                     <div class="field-container">
                         <label>Duration (e.g., 4 Weeks)</label>
                         <input type="text" name="demo_syllabus[${demoModuleCount}][duration]" required>
                     </div>
-                    <div class="field-container full.Width">
+                    <div class="field-container full-width">
                         <label>Description</label>
                         <textarea name="demo_syllabus[${demoModuleCount}][description]" required></textarea>
                     </div>
@@ -953,116 +969,114 @@
         }
 
         function addKeyFeature() {
-                const container = document.getElementById('key-features-container');
-                const div = document.createElement('div');
-                div.className = 'dynamic-field';
-                div.innerHTML = `
-                    <div class="form-grid">
-                        <div class="field-container">
-                            <label>Icon (e.g., (📅 .or fas faq fa-calendar)</label>
-                            <input type="text" name="key_features[${keyFeatureCount}][icon]" required>
-                            </div>
-                        </div class="field-container">
-                            <label>Topic</label>
-                            <input type="text" name="key_features[${keyFeatureCount}][topic]" required>
-                            </div>
-                            </div>
-                        <div class="field-container full-width">
-                            <label>Description</label>
-                            <textarea name="key_features[${keyFeatureCount}][description]" required></textarea>
-                        </div>
+            const container = document.getElementById('key-features-container');
+            const div = document.createElement('div');
+            div.className = 'dynamic-field';
+            div.innerHTML = `
+                <div class="form-grid">
+                    <div class="field-container">
+                        <label>Icon (e.g., 📅 or fas fa-calendar)</label>
+                        <input type="text" name="key_features[${keyFeatureCount}][icon]" required>
                     </div>
+                    <div class="field-container">
+                        <label>Topic</label>
+                        <input type="text" name="key_features[${keyFeatureCount}][topic]" required>
                     </div>
-                    <button type="button" class="button remove-button mt-2" onclick="removeKeyFeature(this)">Remove Feature</button>
-                `;
-                container.appendChild(div);
-                keyFeatureCount++;
-            }
-
-            function removeKeyFeature(button) {
-                const fields = document.querySelectorAll('#key-features-container .dynamic-field');
-                if (fields.length > 1) {
-                    button.parentElement.remove();
-                    keyFeatureCount--;
-                } else {
-                    alert('At least one key feature is required.');
-                }
-            }
-
-            function addCertification() {
-        const container = document.getElementById('certifications-container');
-        if (!container) {
-            console.error('Certifications container not found!');
-            alert('Error: Could not find certifications container.');
-            return;
-        }
-        const div = document.createElement('div');
-        div.className = 'dynamic-field';
-        div.innerHTML = `
-            <div class="form-grid">
-                <div class="field-container full-width">
-                    <label>Certification Name (e.g., CCBA – Certification of Competency in Business Analysis)</label>
-                    <input type="text" name="certifications[${certificationCount}][name]" required placeholder="Enter certification name">
+                    <div class="field-container full-width">
+                        <label>Description</label>
+                        <textarea name="key_features[${keyFeatureCount}][description]" required></textarea>
+                    </div>
                 </div>
-            </div>
-            <button type="button" class="button remove-button mt-2" onclick="removeCertification(this)">Remove Certification</button>
-        `;
-        container.appendChild(div);
-        certificationCount++;
-    }
-
-    function removeCertification(button) {
-        const fields = document.querySelectorAll('#certifications-container .dynamic-field');
-        if (fields.length > 1) {
-            button.parentElement.remove();
-            certificationCount = Math.max(1, certificationCount - 1);
-        } else {
-            alert('At least one certification is required.');
+                <button type="button" class="button remove-button mt-2" onclick="removeKeyFeature(this)">Remove Feature</button>
+            `;
+            container.appendChild(div);
+            keyFeatureCount++;
         }
-    }
 
-    function addCertificateDescription() {
-        const container = document.getElementById('certificate-descriptions-container');
-        if (!container) {
-            console.error('Certificate descriptions container not found!');
-            alert('Error: Could not find certificate descriptions container.');
-            return;
+        function removeKeyFeature(button) {
+            const fields = document.querySelectorAll('#key-features-container .dynamic-field');
+            if (fields.length > 1) {
+                button.parentElement.remove();
+                keyFeatureCount--;
+            } else {
+                alert('At least one key feature is required.');
+            }
         }
-        const div = document.createElement('div');
-        div.className = 'dynamic-field';
-        div.innerHTML = `
-            <div class="form-grid">
-                <div class="field-container full-width">
-                    <label>Certificate Description (e.g., Our business analyst Master’s program...)</label>
-                    <textarea name="certificate_description[${certificateDescriptionCount}][text]" required placeholder="Enter certificate description"></textarea>
+
+        function addCertification() {
+            const container = document.getElementById('certifications-container');
+            const div = document.createElement('div');
+            div.className = 'dynamic-field';
+            div.innerHTML = `
+                <div class="form-grid">
+                    <div class="field-container full-width">
+                        <label>Certification Name (e.g., CCBA – Certification of Competency in Business Analysis)</label>
+                        <input type="text" name="certifications[${certificationCount}][name]" required placeholder="Enter certification name">
+                    </div>
                 </div>
-            </div>
-            <button type="button" class="button remove-button mt-2" onclick="removeCertificateDescription(this)">Remove Description</button>
-        `;
-        container.appendChild(div);
-        certificateDescriptionCount++;
-    }
-
-    function removeCertificateDescription(button) {
-        const fields = document.querySelectorAll('#certificate-descriptions-container .dynamic-field');
-        if (fields.length > 1) {
-            button.parentElement.remove();
-            certificateDescriptionCount = Math.max(1, certificateDescriptionCount - 1);
-        } else {
-            alert('At least one certificate description is required.');
+                <button type="button" class="button remove-button mt-2" onclick="removeCertification(this)">Remove Certification</button>
+            `;
+            container.appendChild(div);
+            certificationCount++;
         }
-    }
 
-   
-         document.addEventListener('DOMContentLoaded', function() {
-        // Initialize Tom Select on the instructor select field
+        function removeCertification(button) {
+            const fields = document.querySelectorAll('#certifications-container .dynamic-field');
+            if (fields.length > 1) {
+                button.parentElement.remove();
+                certificationCount--;
+            } else {
+                alert('At least one certification is required.');
+            }
+        }
+
+        function addCertificateDescription() {
+            const container = document.getElementById('certificate-descriptions-container');
+            const div = document.createElement('div');
+            div.className = 'dynamic-field';
+            div.innerHTML = `
+                <div class="form-grid">
+                    <div class="field-container full-width">
+                        <label>Certificate Description (e.g., Our business analyst Master’s program...)</label>
+                        <textarea name="certificate_description[${certificateDescriptionCount}][text]" required placeholder="Enter certificate description"></textarea>
+                    </div>
+                </div>
+                <button type="button" class="button remove-button mt-2" onclick="removeCertificateDescription(this)">Remove Description</button>
+            `;
+            container.appendChild(div);
+            certificateDescriptionCount++;
+        }
+
+        function removeCertificateDescription(button) {
+            const fields = document.querySelectorAll('#certificate-descriptions-container .dynamic-field');
+            if (fields.length > 1) {
+                button.parentElement.remove();
+                certificateDescriptionCount--;
+            } else {
+                alert('At least one certificate description is required.');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
             new TomSelect("#instructor_ids", {
-            placeholder: "Select Instructor",
-            maxItems: null,  // Allows selecting multiple items
-            create: false,   // Prevents creating new options (optional)
-            sortField: 'text', // Sort options alphabetically by text
-            closeAfterSelect: false // Keeps dropdown open after selection (optional)
+                placeholder: "Select Instructor",
+                maxItems: null,
+                create: false,
+                sortField: 'text',
+                closeAfterSelect: false
+            });
+
+            @if ($errors->any())
+                let errorMessages = '';
+                @foreach ($errors->all() as $error)
+                    errorMessages += '{{ $error }}\n';
+                @endforeach
+                alert('Validation Errors:\n' + errorMessages);
+            @endif
+
+            @if (session('error'))
+                alert('Backend Error:\n{{ session('error') }}');
+            @endif
         });
-    });
     </script>
-    @endsection
+@endsection
