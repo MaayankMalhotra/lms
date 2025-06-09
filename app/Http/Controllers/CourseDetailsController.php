@@ -69,7 +69,7 @@ class CourseDetailsController extends Controller
                 'learning_outcomes.*' => 'required|string',
                 'instructor_info' => 'nullable|string',
                 'instructor_ids' => 'required|array',
-                'instructor_ids.*' => 'exists:instructors,id',
+                'instructor_ids.*' => 'exists:users,id',
                 'faqs' => 'required|array',
                 'faqs.*.question' => 'required|string',
                 'faqs.*.answer' => 'required|string',
