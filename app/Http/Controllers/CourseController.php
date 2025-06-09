@@ -157,6 +157,7 @@ public function courseDetails($slug)
         ->join('courses', 'courses.id', '=', 'course_details.course_id')
         ->select('course_details.*', 'courses.name')
         ->first();
+        dd($course_details);
     if (!$course) {
         return view('website.course_details')->with('error', 'Course not found!');
     }
