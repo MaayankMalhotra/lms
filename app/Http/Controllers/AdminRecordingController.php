@@ -78,4 +78,38 @@ class AdminRecordingController extends Controller
         $recording->delete();
         return redirect()->route('admin.recordings.index')->with('success', 'Recording deleted successfully');
     }
+
+    public function view()
+{
+    $courses = Course::all();
+    return view('admin.recordings.view', compact('courses'));
+}
+
+public function storeView(Request $request)
+{
+    $validatedData = $request->validate([
+        'course_id' => 'required|exists:courses,id',
+        'folder_name' => 'required',
+        'topic_name' => 'required',
+        'topic_discussion' => 'required',
+        'recording_link' => 'required|url',
+    ]);
+
+    Recording::create($validatedData);
+
+    return redirect()->back()->with('success', 'Recording added successfully');
+}
+
+public function getFolders($courseId)
+{
+    $folders = Folder::where('course_id', $courseId)->pluck('name')->toArray();
+    return response()->json(['folders' => $folders]);
+}
+
+public function addFolder(Request $request, $courseId)
+{
+    $folderName = $request->input('folder_name');
+    Folder::create(['course_id' => $courseId, 'name' => $folderName]);
+    return response()->json(['success' => true]);
+}
 }

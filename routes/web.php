@@ -559,3 +559,7 @@ Route::prefix('admin')->group(function () {
     Route::post('/assignment/{assignmentId}/submit', [AssignmentController::class, 'submitAssignment'])->name('student.assignment.submit');
 
     Route::get('/assignments/{liveClassId}', [AssignmentController::class, 'viewClassAssignments'])->name('teacher.assignments.view');
+    Route::get('/recordings/view', [AdminRecordingController::class, 'view'])->name('admin.recordings.view');
+    Route::post('/recordings/view', [AdminRecordingController::class, 'storeView'])->name('admin.recordings.store');
+    Route::get('/get-folders/{courseId}', [AdminRecordingController::class, 'getFolders']);
+    Route::post('/add-folder/{courseId}', [AdminRecordingController::class, 'addFolder']);

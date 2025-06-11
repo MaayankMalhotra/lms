@@ -431,13 +431,13 @@ public function storePlacement(Request $request)
 
     public function updateUpcomingCourse(Request $request, $id)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'image' => 'required|string|max:255',
-            'start_date' => 'required|date',
-            'slots_open' => 'boolean',
-            'is_active' => 'boolean',
-        ]);
+        // $request->validate([
+        //     'title' => 'required|string|max:255',
+        //     'image' => 'required|string|max:255',
+        //     'start_date' => 'required|date',
+        //     'slots_open' => 'boolean',
+        //     'is_active' => 'boolean',
+        // ]);
 
         DB::update("
             UPDATE home_upcoming_courses
@@ -494,16 +494,16 @@ public function storePlacement(Request $request)
 
     public function updateInternship(Request $request, $request_id)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'image' => 'required|string|max:255',
-            'duration' => 'required|string|max:255',
-            'project_count' => 'required|integer|min:0',
-            'rating' => 'required|numeric|min:0|max:5',
-            'applicant_count' => 'required|integer|min:0',
-            'certification' => 'required|string|max:255',
-            'is_active' => 'boolean',
-        ]);
+        // $request->validate([
+        //     'title' => 'required|string|max:255',
+        //     'image' => 'required|string|max:255',
+        //     'duration' => 'required|string|max:255',
+        //     'project_count' => 'required|integer|min:0',
+        //     'rating' => 'required|numeric|min:0|max:5',
+        //     'applicant_count' => 'required|integer|min:0',
+        //     'certification' => 'required|string|max:255',
+        //     'is_active' => 'boolean',
+        // ]);
 
         DB::update("
             UPDATE home_internships
@@ -563,15 +563,15 @@ public function storePlacement(Request $request)
 
     public function updateInstructor(Request $request, $request_id)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'teaching_hours' => 'required|integer|min:0',
-            'specialization' => 'required|string|max:255',
-            'linkedin_url' => 'nullable|url|max:255',
-            'facebook_url' => 'nullable|url|max:255',
-            'is_active' => 'boolean',
-        ]);
+        // $request->validate([
+        //     'name' => 'required|string|max:255',
+        //     'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        //     'teaching_hours' => 'required|integer|min:0',
+        //     'specialization' => 'required|string|max:255',
+        //     'linkedin_url' => 'nullable|url|max:255',
+        //     'facebook_url' => 'nullable|url|max:255',
+        //     'is_active' => 'boolean',
+        // ]);
 
         $instructor = DB::select("SELECT * FROM home_instructors WHERE id = ?", [$request_id])[0] ?? null;
         if (!$instructor) {
