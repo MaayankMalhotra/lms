@@ -7,7 +7,7 @@
             <!-- Form Header -->
             <div class="mb-8 text-center">
                 <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">
-                    <i class="fas fa-briefcase mr-2 text-blue-500"></i>Create New Batch
+                    <i class="fas fa-briefcase mr-2 text-blue-500"></i>Create New Internship Batch
                 </h1>
                 <p class="text-gray-500 text-sm sm:text-base">Fill in the details to add a new batch program</p>
             </div>
@@ -74,18 +74,18 @@
                             <!-- Course Dropdown -->
                             <div class="relative">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    <i class="fas fa-book mr-2 text-blue-400"></i>Select Course
+                                    <i class="fas fa-book mr-2 text-blue-400"></i>Select Internship
                                 </label>
-                                <select name="course_id" required 
+                                <select name="internship_id" required 
                                         class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all">
-                                    <option value="">-- Select Course --</option>
+                                    <option value="">-- Select Internship --</option>
                                     @foreach ($courses as $course)
-                                        <option value="{{ $course->id }}" {{ old('course_id') == $course->id ? 'selected' : '' }}>
+                                        <option value="{{ $course->id }}" {{ old('internship_id') == $course->id ? 'selected' : '' }}>
                                             {{ $course->name }}
                                         </option>
                                     @endforeach
                                 </select>
-                                @error('course_id')
+                                @error('internship_id')
                                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                                 @enderror
                             </div>

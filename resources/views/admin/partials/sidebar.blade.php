@@ -99,7 +99,13 @@
             <li>
                 <a href="{{ route('student.internship.class') }}"
                     class="flex items-center p-3 {{ request()->routeIs('student.internship.class') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
-                    <i class="fas fa-briefcase mr-3 text-lg"></i> Internship Classes and Content
+                    <i class="fas fa-briefcase mr-3 text-lg"></i> Internship Content
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('student.classes.index.int') }}"
+                    class="flex items-center p-3 {{ request()->routeIs('student.classes.index.int') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800] hover:text-white' }} rounded transition">
+                    <i class="fas fa-briefcase mr-3 text-lg"></i> Internship Classes
                 </a>
             </li>
         @endif
@@ -165,9 +171,9 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('admin.internship.content.create') }}"
-                            class="flex items-center p-2 text-sm {{ request()->routeIs('admin.internship.content.create') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
-                            <i class="fas fa-file-circle-plus mr-2"></i> Add Content
+                        <a href="{{ route('course-details-index-int') }}"
+                            class="flex items-center p-2 text-sm {{ request()->routeIs('course-details-index-int') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
+                            <i class="fas fa-table-list mr-2"></i> Add Internship Details
                         </a>
                     </li>
                     <li>
@@ -177,32 +183,32 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('admin.internship-batches.create') }}"
-                            class="flex items-center p-2 text-sm {{ request()->routeIs('admin.internship-batches.create') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
-                            <i class="fas fa-users mr-2"></i> Add Batch
+                        <a href="{{ route('admin.batches.add.int') }}"
+                            class="flex items-center p-2 text-sm {{ request()->routeIs('admin.batches.add.int') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
+                            <i class="fas fa-users mr-2"></i> Add Internship Batch
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('admin.internship-batches.index') }}"
-                            class="flex items-center p-2 text-sm {{ request()->routeIs('admin.internship-batches.index') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
-                            <i class="fas fa-users mr-2"></i> View Batches
+                        <a href="{{ route('admin.batches.index.int') }}"
+                            class="flex items-center p-2 text-sm {{ request()->routeIs('admin.batches.index.int') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
+                            <i class="fas fa-users mr-2"></i> View Internship Batches
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('admin.internship.class.create') }}"
-                            class="flex items-center p-2 text-sm {{ request()->routeIs('admin.internship.class.create') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
+                        <a href="{{ route('admin.live_classes.create.int') }}"
+                            class="flex items-center p-2 text-sm {{ request()->routeIs('admin.live_classes.create.int') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
                             <i class="fas fa-chalkboard mr-2"></i> Add Class
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('admin.internship.class.index') }}"
+                        <a href="{{ route('admin.live_classes.index.int') }}"
                             class="flex items-center p-2 text-sm {{ request()->routeIs('admin.internship.class.index') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
                             <i class="fas fa-chalkboard mr-2"></i> View Classes
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('admin.internship-recording-courses.index') }}"
-                            class="flex items-center p-2 text-sm {{ request()->routeIs('admin.internship-recording-courses.index') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
+                        <a href="{{ route('admin.recordings.index.int') }}"
+                            class="flex items-center p-2 text-sm {{ request()->routeIs('admin.recordings.index.int') ? 'bg-[#ff9800] text-white' : 'hover:bg-[#ff9800]/20' }} rounded transition">
                             <i class="fas fa-video mr-2"></i> View Recordings
                         </a>
                     </li>

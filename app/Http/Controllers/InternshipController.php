@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Internship;
+use App\Models\InternshipDetail;
 use App\Models\InternshipEnrollment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,12 +45,21 @@ class InternshipController extends Controller
         return redirect()->route('admin.internship.add')->with('success', 'Internship created successfully!');
     }
 
-    public function internshipList()
-    {
-        $internships = Internship::latest()->paginate(10);
-        return view('admin.internship-list', compact('internships'));
-    }
+    // public function internshipList()
+    // {
+    //     $internships = Internship::latest()->paginate(10);
+    //     return view('admin.internship-list', compact('internships'));
+    // }
+public function internshipList()
+{
+    $internships = Internship::select(['internships.*', 'internship_details.id as internship_detail_id'])
+        ->leftJoin('internship_details', 'internships.id', '=', 'internship_details.internship_id')
+        ->addSelect(\DB::raw('CASE WHEN internship_details.id IS NOT NULL THEN 1 ELSE 0 END as has_details'))
+        ->latest('internships.created_at')
+        ->paginate(10);
 
+    return view('admin.internship-list', compact('internships'));
+}
     public function edit(Internship $internship)
     {
         return response()->json($internship);
@@ -276,7 +286,29 @@ public function studentInternshipContent($enrollmentId)
         public function internshipclasses()
 {
     $internshipClasses = Internshipclass::with('recording.course')->get();
-   // dd($internshipClasses);
     return view('student.internshipclass', compact('internshipClasses'));
+}
+public function internshipDetails($id)
+{
+    // Slug directly parameter se mil gaya
+    if (!$id || !is_string($id) || empty(trim($id))) {
+        return view('website.internship_details')->with('error', 'Invalid or missing Internship Details!');
+    }
+
+    // Slug se course ki row database se fetch karo
+    // $course = Course::where('slug', $slug)->first();
+    // $course_details = CourseDetail::where('course_id', $course->id)->first();
+    $course = Internship::where('id', $id)->first();
+    $course_details = InternshipDetail::where('internship_id', $course->id)
+        ->join('internships', 'internships.id', '=', 'internship_details.internship_id')
+        ->select('internship_details.*', 'internships.name')
+        ->first();
+        // dd($course_details);
+    if (!$course) {
+        return view('website.internship_details')->with('error', 'internships not found!');
+    }
+
+    // Course details ke saath view pe bhejo
+    return view('website.internship_details', ['course' => $course,'course_details' => $course_details]);
 }
 }

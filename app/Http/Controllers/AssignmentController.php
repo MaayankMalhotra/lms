@@ -10,7 +10,60 @@ use Illuminate\Support\Facades\Storage;
 
 class AssignmentController extends Controller
 {
-    public function assignment()
+  public function assignment()
+    {
+        // Get batch_id for the authenticated user
+        $batch = DB::selectOne('SELECT batch_id FROM enrollments WHERE user_id = ? LIMIT 1', [Auth::id()]);
+        
+        if (!$batch) {
+            return view('student.assignment.assignment', ['liveClasses' => []]);
+        }
+
+        // Fetch assignments with submission details for the authenticated user
+        $assignments = DB::select("
+            SELECT b.id AS batch_id,
+                   a.id AS assignment_id,
+                   a.title AS assignment_title,
+                   a.description AS assignment_description,
+                   a.due_date AS assignment_due_date,
+                   a.file_path AS assignment_file_path,
+                   asub.file_path AS submission_file_path,
+                   asub.id AS submission_id
+            FROM batches b
+            LEFT JOIN assignments a ON b.id = a.batch_id
+            LEFT JOIN assignment_submissions asub ON a.id = asub.assignment_id AND asub.user_id = ?
+            WHERE b.id = ?
+            ORDER BY a.due_date ASC
+        ", [Auth::id(), $batch->batch_id]);
+
+        // Group results to structure like Eloquent collections
+        $liveClasses = collect($assignments)->groupBy('batch_id')->map(function ($items) {
+            $first = $items->first();
+            $batch = (object) [
+                'id' => $first->batch_id,
+                'assignments' => $items->filter(function ($item) {
+                    return !is_null($item->assignment_id);
+                })->map(function ($item) {
+                    return (object) [
+                        'id' => $item->assignment_id,
+                        'title' => $item->assignment_title,
+                        'description' => $item->assignment_description,
+                        'due_date' => $item->assignment_due_date,
+                        'file_path' => $item->assignment_file_path,
+                        'file_url' => $item->assignment_file_path ? Storage::url($item->assignment_file_path) : null,
+                        'submission_file_path' => $item->submission_file_path,
+                        'submission_file_url' => $item->submission_file_path ? Storage::url($item->submission_file_path) : null,
+                        'has_submission' => !is_null($item->submission_id),
+                    ];
+                })->values(),
+            ];
+            return $batch;
+        })->values();
+
+        return view('student.assignment.assignment', compact('liveClasses'));
+    }
+
+        public function assignmentInt()
     {
         // Get batch_id for the authenticated user
         $batch = DB::selectOne('SELECT batch_id FROM enrollments WHERE user_id = ? LIMIT 1', [Auth::id()]);

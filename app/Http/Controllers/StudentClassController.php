@@ -38,6 +38,30 @@ class StudentClassController extends Controller
         }
         return view('student.classes.index', compact('upcomingClasses', 'ongoingClasses', 'endedClasses'));
     }
+      public function indexInt()
+    {
+        $student = Auth::user();
+        $enrollments = $student->enrollmentsInt()->where('status', 'active')->get();
+
+        $upcomingClasses = collect();
+        $ongoingClasses = collect();
+        $endedClasses = collect();
+
+        foreach ($enrollments as $enrollment) {
+            $liveClasses = $enrollment->liveClasses()->where('status', 'Scheduled')->get();
+           
+            foreach ($liveClasses as $class) {
+                if ($class->isUpcoming()) {
+                    $upcomingClasses->push($class);
+                } elseif ($class->isOngoing()) {
+                    $ongoingClasses->push($class);
+                } elseif ($class->isEnded()) {
+                    $endedClasses->push($class);
+                }
+            }
+        }
+        return view('student.classes.index', compact('upcomingClasses', 'ongoingClasses', 'endedClasses'));
+    }
 
     public function joinClass($liveClassId)
     {
@@ -64,25 +88,55 @@ class StudentClassController extends Controller
     }
 
     // Fetch recordings for the student's course or batch
-    public function recordings()
+    // public function recordings()
+    // {
+    //     // Assuming the authenticated student has a course_id or batch_id
+    //     $batchId = Auth::user()->id; // Adjust this based on your User model
+    //     $batchid = Enrollment::where('user_id', $batchId)->first();
+    //     $recordings = Recording::whereHas('liveClass', function ($query) use ($batchid) {
+    //         $query->where('batch_id', $batchid->batch_id);
+    //     })->orderBy('created_at', 'desc')->get();
+    //    // dd($recordings);
+    //     return view('student.recordings.recoring', compact('recordings'));
+    // }
+
+        public function recordings()
     {
-        // Assuming the authenticated student has a course_id or batch_id
-        $batchId = Auth::user()->id; // Adjust this based on your User model
-        $batchid = Enrollment::where('user_id', $batchId)->first();
-$recordings = Recording::whereHas('liveClass', function ($query) use ($batchid) {
-    $query->where('batch_id', $batchid->batch_id);
-})->orderBy('created_at', 'desc')->get();
-// dd($recordings);
-        return view('student.recordings.recoring', compact('recordings'));
+        // Get the authenticated student's ID
+        $studentId = Auth::user()->id;
+
+        // Get the student's batch ID from the Enrollment model
+        $enrollment = Enrollment::where('user_id', $studentId)->first();
+        if (!$enrollment) {
+            return view('student.recordings.recording', ['recordings' => []])->with('error', 'No enrollment found');
+        }
+        $batchId = $enrollment->batch_id;
+
+        // Get the course_id from the batch
+        $batch = Batch::findOrFail($batchId);
+        $courseId = $batch->course_id;
+
+        // Fetch recordings where the folder's course_id matches, and both are unlocked
+        $recordings = Recording::with(['topic.folder'])
+            ->whereHas('topic.folder', function ($query) use ($courseId) {
+                $query->where('course_id', $courseId)->where('locked', '0');
+            })
+            ->where('locked', '0')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('student.recordings.recording', compact('recordings'));
     }
 
     public function assignment(){
         $batchId = Enrollment::where('user_id', Auth::id())->first();
-        $liveClasses = LiveClass::where('batch_id', $batchId->batch_id)
-            ->with('assignments')
-            ->orderBy('class_datetime', 'asc')
+        $liveClasses = DB::table('batches')
+            ->leftJoin('assignments', 'batches.id', '=', 'assignments.batch_id')
+            ->where('batches.id', $batchId->batch_id)
+            ->select('batches.*', 'assignments.*')
+            ->orderBy('batches.id', 'asc')
             ->get();
-            // dd($liveClasses);
+             dd($liveClasses);
            return view('student.assignment.assignment', compact('liveClasses'));
     }
 }

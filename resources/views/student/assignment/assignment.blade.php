@@ -17,17 +17,13 @@
     @endif
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        @forelse ($liveClasses as $class)
-            @if ($class->assignments->isNotEmpty())
-                @foreach ($class->assignments as $assignment)
+        @forelse ($liveClasses as $batch)
+            @if ($batch->assignments->isNotEmpty())
+                @foreach ($batch->assignments as $assignment)
                     <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 p-6">
                         <h5 class="text-xl font-semibold text-gray-900 mb-3">{{ $assignment->title }}</h5>
                         <p class="text-sm text-gray-600 mb-2">
-                            <span class="font-medium">Live Class:</span> {{ $class->topic }}
-                        </p>
-                        <p class="text-sm text-gray-600 mb-2">
-                            <span class="font-medium">Class Date:</span> 
-                            {{ \Carbon\Carbon::parse($class->class_datetime)->format('Y-m-d H:i') }}
+                            <span class="font-medium">Batch:</span> Batch #{{ $batch->id }}
                         </p>
                         <p class="text-sm text-gray-600 mb-2">
                             <span class="font-medium">Due Date:</span> 

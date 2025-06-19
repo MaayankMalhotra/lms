@@ -11,10 +11,10 @@
         <form action="{{ route('admin.assignments.store') }}" method="POST" enctype="multipart/form-data" class="bg-white p-6 rounded-lg shadow-md">
             @csrf
             <div class="mb-4">
-                <label for="live_class_id" class="block text-gray-700 font-medium mb-2">Live Class</label>
+                <label for="live_class_id" class="block text-gray-700 font-medium mb-2">Select Batch</label>
                 <select name="live_class_id" id="live_class_id" class="w-full border-gray-500 border-2 rounded-md p-2 focus:ring focus:ring-blue-200">
                     @foreach ($liveClasses as $class)
-                        <option value="{{ $class->id }}">{{ $class->topic }} ({{ $class->class_datetime->format('Y-m-d H:i') }})</option>
+                        <option value="{{ $class->id }}">{{ $class->batch_name }} ({{ $class->start_date->format('Y-m-d H:i') }})</option>
                     @endforeach
                 </select>
                 @error('live_class_id') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror

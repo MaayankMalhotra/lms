@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Batch;
+use App\Models\InternshipBatch;
+use App\Models\Internship;
 use App\Models\Payment;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use App\Models\Course;
 use App\Models\Student;
 use App\Models\Registration;
+use App\Models\InternshipEnrollment;
 use App\Models\Enrollment;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
@@ -25,12 +28,24 @@ class BatchController extends Controller
         $batches = Batch::with('course', 'teacher')->get();
         return view('admin.batch_listing', compact('batches'));
     }
+     public function indexInt()
+    {
+        $batches = InternshipBatch::with('internship', 'teacher')->get();
+        return view('admin.batch_listing_int', compact('batches'));
+    }
 
     public function create()
     {
         $teachers = User::where('role', 2)->get();
         $courses = Course::all();
         return view('admin.add-batch', compact('teachers', 'courses'));
+    }
+     public function createInt()
+    {
+        //dd('createInt');
+        $teachers = User::where('role', 2)->get();
+        $courses = Internship::all();
+        return view('admin.add-batch-int', compact('teachers', 'courses'));
     }
 
     // public function store(Request $request)
@@ -174,6 +189,91 @@ class BatchController extends Controller
         ]);
 
         return redirect()->route('admin.batches.add')->with('success', 'Batch added successfully!');
+    } catch (\Exception $e) {
+        dd($e);
+        Log::error('Failed to create batch:', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
+        return back()->withErrors(['error' => 'Failed to create batch: ' . $e->getMessage()]);
+    }
+}
+public function storeInt(Request $request)
+{
+    Log::info('Batch store request:', $request->all());
+
+    try {
+        $validated = $request->validate([
+            'batch_name' => 'required|string|max:255',
+            'start_date' => 'required|date',
+            'status' => 'required|in:Batch Started,Upcoming,Soon',
+            'days' => 'required',
+            'duration' => 'required|string',
+            'time_slot' => 'required|string',
+            'price' => 'required|numeric|min:0',
+            'emi_price' => 'nullable|numeric|min:0',
+            'discount_info' => 'nullable|string',
+            'slots_available' => 'required|numeric|min:1',
+            'slots_filled' => 'required|numeric|min:0',
+            'internship_id' => 'required|',
+            'teacher_id' => 'required|exists:users,id',
+            'emi_available' => 'nullable|in:on,1,0,true,false',
+            'emi_plans' => 'nullable:emi_available,on|array',
+            'emi_plans.*.installments' => 'nullable:emi_available,on|integer|min:2',
+            'emi_plans.*.amount' => 'nullable:emi_available,on|numeric|min:0',
+            'emi_plans.*.interval_months' => 'nullable:emi_available,on|integer|min:1',
+        ]);
+
+        $batchData = $validated;
+        $batchData['emi_available'] = in_array($request->emi_available, ['on', '1', 'true'], true);
+        $batchData['discount_info'] = $request->discount ?? 0;
+        $batchData['discounted_price'] = $batchData['price'] - ($batchData['price'] * ($batchData['discount_info'] / 100));
+
+      // Handle EMI plans
+      if ($batchData['emi_available']) {
+        $batchData['emi_plans'] = array_map(function ($plan) {
+            return [
+                'installments' => (int) $plan['installments'],
+                'amount' => round((float) $plan['amount'], 2),
+                'interval_months' => (int) $plan['interval_months'],
+            ];
+        }, $validated['emi_plans']);
+
+        // Validate total EMI amount matches discounted price
+       // Validate total EMI amount matches discounted price with a tolerance of 0.01
+       foreach ($batchData['emi_plans'] as $index => $plan) {
+        $total = round($plan['installments'] * $plan['amount'], 2);
+        $emiPrice = round($batchData['emi_price'], 2);
+        
+        if (abs($total - $emiPrice) > 0.5) { // Increased tolerance
+            Log::warning('EMI plan validation failed:', [
+                'plan_index' => $index,
+                'total' => $total,
+                'emi_price' => $emiPrice,
+                'difference' => abs($total - $emiPrice),
+                'installments' => $plan['installments'],
+                'amount' => $plan['amount'],
+            ]);
+            return back()->withErrors([
+                'emi_plans' => "Total EMI amount for plan " . ($index + 1) . " (₹{$total}) does not match the EMI price (₹{$emiPrice}).",
+            ]);
+        }
+    }
+
+    } else {
+        $batchData['emi_plans'] = null;
+    }
+    // Remove discounted_price from batchData as it's a generated column
+    // unset($batchData['discounted_price']);
+
+        Log::info('Batch data before creation:', $batchData);
+
+        $batch = InternshipBatch::create($batchData);
+
+        Log::info('Batch created:', [
+            'id' => $batch->id,
+            'emi_available' => $batch->emi_available,
+            'emi_plans' => $batch->emi_plans,
+        ]);
+
+        return redirect()->route('admin.batches.add.int')->with('success', ' Internship Batch added successfully!');
     } catch (\Exception $e) {
         dd($e);
         Log::error('Failed to create batch:', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
@@ -324,6 +424,35 @@ class BatchController extends Controller
                     'emi_plans' => $batch->emi_plans ?? [],
                 ];
             });
+
+        return response()->json($batches);
+    }
+    public function getBatchesByCourseInt(Request $request)
+    {
+        $courseId  = $request->query('id');
+        if (!$courseId) {
+            return response()->json(['error' => 'Course ID is required'], 400);
+        }
+
+        $batches = InternshipBatch::where('internship_id', $courseId)
+            ->with('internship', 'teacher')
+            ->get() 
+            ->map(function ($batch) {
+                return [
+                    'id' => $batch->id,
+                    'date' => $batch->start_date->format('d M'),
+                    'price' => $batch->price,
+                    'slotsAvailable' => $batch->slots_available,
+                    'slotsFilled' => $batch->slots_filled,
+                    'mode' => $batch->course->mode ?? 'Online',
+                    'status' => $batch->status === 'Batch Started' ? 'started' : ($batch->status === 'Upcoming' ? 'upcoming' : 'soon'),
+                    'startDate' => $batch->start_date->toISOString(),
+                    'discount_info' => $batch->discount_info,
+                    'emi_available' => $batch->emi_available,
+                    'emi_plans' => $batch->emi_plans ?? [],
+                ];
+            });
+           // dd( $batches);
 
         return response()->json($batches);
     }
@@ -490,6 +619,57 @@ public function show(Request $request)
     ];
 
     return view('register', compact('batchData'));
+}
+
+
+public function showInt(Request $request)
+{
+    $batch = InternshipBatch::with('internship')->findOrFail(session('current_batch_int_id'));
+   // dd($batch);
+    // Parse discount info
+    $discountPercentage = 0;
+    if (is_numeric($batch->discount_info)) {
+        $discountPercentage = (float) $batch->discount_info;
+    }
+
+    // Calculate prices
+    $originalPrice = $batch->price;
+    $discountedPrice = $originalPrice * (1 - $discountPercentage/100);
+    $emiPrice= $batch->emi_price;
+    // dd($discountedPrice);
+
+    // Adjust EMI plans based on discounted price
+    $emiPlans = $batch->emi_plans ?? [];
+    if (!empty($emiPlans)) {
+        $emiPlans = array_map(function ($plan) use ($emiPrice) {
+            $totalInstallments = $plan['installments'];
+            $newEmiAmount = $emiPrice / $totalInstallments;
+            return [
+                'installments' => $plan['installments'],
+                'amount' => round($newEmiAmount, 2),
+                'interval_months' => $plan['interval_months'] ?? 1,
+            ];
+        }, $emiPlans);
+    }
+
+    $batchData = [
+        'id' => $batch->id,
+        'date' => $batch->start_date->format('d M'),
+        'slotsAvailable' => $batch->slots_available,
+        'slotsFilled' => $batch->slots_filled,
+        'mode' => $batch->internship->mode ?? 'Online',
+        'status' => $batch->status === 'Batch Started' ? 'started' : ($batch->status === 'Upcoming' ? 'upcoming' : 'soon'),
+        'startDate' => $batch->start_date->toISOString(),
+        'emi_available' => $batch->emi_available,
+        'course_name' => $batch->internship->name,
+        'price' => $discountedPrice,
+        'emi_price' => $emiPrice,
+        'original_price' => $originalPrice,
+        'discount_percentage' => $discountPercentage,
+        'emi_plans' => $emiPlans,
+    ];
+
+    return view('website.internship-register', compact('batchData'));
 }
 
 // public function submitr(Request $request)
@@ -728,7 +908,164 @@ public function show(Request $request)
 //         return $schedule;
 //     }
 
+public function submitrInt(Request $request)
+{
+  //   dd($request->all());
+    Log::info('Incoming registration request:', $request->all());
 
+    try {
+        // Validate request data
+        $validated = $request->validate([
+            'batch_id' => 'required|exists:internship_batches,id',
+            'batch_date' => 'required|string',
+            'batch_status' => 'required|string',
+            'mode' => 'required|string',
+            'price' => 'required|numeric|min:0',
+            'slots_available' => 'required|integer|min:0',
+            'slots_filled' => 'required|integer|min:0',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email:users,email|max:255',
+            'phone' => 'required|string|max:15',
+            'payment_id' => 'required|string|max:255',
+            'payment_method' => 'required|in:full,emi',
+            'emi_plan' => 'required_if:payment_method,emi|integer|min:0',
+        ]);
+
+        Log::info('Validated data:', $validated);
+
+        // Fetch batch and log EMI plans
+        $batch = InternshipBatch::findOrFail($validated['batch_id']);
+        $batch->emi_plans = $batch->emi_plans ?? [];
+        Log::info('Batch EMI plans:', ['batch_id' => $batch->id, 'emi_plans' => $batch->emi_plans]);
+
+        // Calculate payment amount and EMI plan
+        $paymentAmount = $validated['price'];
+        $emiPlan = null;
+        if ($validated['payment_method'] === 'emi') {
+            if (empty($batch->emi_plans)) {
+                throw new \Exception('No EMI plans available for this batch');
+            }
+            if (!array_key_exists($validated['emi_plan'], $batch->emi_plans)) {
+                throw new \Exception('Invalid EMI plan selected: ' . $validated['emi_plan']);
+            }
+            $emiPlan = $batch->emi_plans[$validated['emi_plan']];
+            if (!isset($emiPlan['installments']) || !isset($emiPlan['amount'])) {
+                throw new \Exception('Invalid EMI plan configuration');
+            }
+            $paymentAmount = $emiPlan['amount'];
+            Log::info('EMI plan selected:', ['emi_plan' => $emiPlan, 'payment_amount' => $paymentAmount]);
+        }
+
+        // Verify Razorpay payment
+        $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
+        $razorpayPayment = $api->payment->fetch($validated['payment_id']);
+        Log::info('Razorpay payment details:', (array) $razorpayPayment);
+
+        $expectedAmount = (int) ($paymentAmount * 100); // Convert to paise
+        if ($razorpayPayment->amount !== $expectedAmount) {
+            throw new \Exception('Amount mismatch: expected ' . $expectedAmount . ', got ' . $razorpayPayment->amount);
+        }
+
+        DB::beginTransaction();
+
+        try {
+            // Create user
+            $user = User::create([
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+                'password' => Hash::make('123456'),
+                'role' => 3,
+                'internship' => '1',
+            ]);
+            Log::info('User created:', ['user_id' => $user->id]);
+
+            // // Create registration
+            // $registration = Registration::create([
+            //     'user_id' => $user->id,
+            //     'batch_date' => $validated['batch_date'],
+            //     'batch_status' => $validated['batch_status'],
+            //     'mode' => $validated['mode'],
+            //     'price' => $validated['price'],
+            //     'slots_available' => $validated['slots_available'],
+            //     'slots_filled' => $validated['slots_filled'],
+            // ]);
+           // Log::info('Registration created:', ['registration_id' => $registration->id]);
+
+            // Create student
+            $student = Student::create([
+                'user_id' => $user->id,
+                'phone' => $validated['phone'],
+            ]);
+            Log::info('Student created:', ['student_id' => $student->id]);
+
+            // Create enrollment
+            $enrollment = InternshipEnrollment::create([
+                'user_id' => $user->id,
+                'email' => $user->email,
+                'batch_id' => $validated['batch_id'],
+                'status' => 'active',
+                 'name' => $validated['name'],
+                 'phone' => $validated['phone'],
+                 'payment_id' => $validated['payment_id'],
+                 'amount' => $paymentAmount,
+
+            ]);
+            Log::info('Enrollment created:', ['enrollment_id' => $enrollment->id]);
+
+            // Use payment creation date as start date for EMI schedule
+            $paymentDate = now()->toDateString();
+
+            // Create payment
+            $paymentData = [
+                'enrollment_id' => $enrollment->id,
+                'user_id' => $user->id,
+                'batch_id' => $validated['batch_id'],
+                'payment_id' => $validated['payment_id'],
+                'amount' => $paymentAmount,
+                'status' => 'completed',
+                'payment_method' => $validated['payment_method'],
+                'emi_installments' => $emiPlan ? $emiPlan['installments'] : null,
+                'emi_amount' => $emiPlan ? $emiPlan['amount'] : null,
+                'emi_schedule' => $emiPlan ? json_encode($this->generateEmiSchedule(
+                    $emiPlan['installments'],
+                    $emiPlan['amount'],
+                    $emiPlan['interval_months'] ?? 1,
+                    $paymentDate
+                )) : null,
+            ];
+            Log::info('Payment data to be saved:', $paymentData);
+
+            $payment = Payment::create($paymentData);
+            Log::info('Payment created:', ['payment_id' => $payment->id, 'emi_details' => [
+                'payment_method' => $payment->payment_method,
+                'emi_installments' => $payment->emi_installments,
+                'emi_amount' => $payment->emi_amount,
+                'emi_schedule' => $payment->emi_schedule,
+            ]]);
+
+            // Update batch slots
+            $batch->slots_filled += 1;
+            $batch->slots_available -= 1;
+            $batch->save();
+            Log::info('Batch slots updated:', ['batch_id' => $batch->id]);
+
+            DB::commit();
+
+            return redirect()->route('login')->with('message', 'Please check your email for credentials to log in.');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Database operation failed:', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
+            throw new \Exception('Registration process failed: ' . $e->getMessage());
+        }
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        Log::error('Validation failed:', $e->errors());
+        return response()->json(['error' => 'Validation failed', 'details' => $e->errors()], 422);
+    } catch (\Exception $e) {
+        Log::error('Registration process failed:', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
+        return response()->json(['error' => $e->getMessage()], 400);
+    }
+}
 
 public function submitr(Request $request)
 {
@@ -918,6 +1255,18 @@ public function storeBatchData(Request $request)
 
     // Store only the batch ID in session
     session(['current_batch_id' => $request->batch_id]);
+
+    return response()->json(['success' => true]);
+}
+
+public function storeBatchDataInt(Request $request)
+{
+    $request->validate([
+        'batch_id' => 'required|exists:internship_batches,id'
+    ]);
+
+    // Store only the batch ID in session
+    session(['current_batch_int_id' => $request->batch_id]);
 
     return response()->json(['success' => true]);
 }

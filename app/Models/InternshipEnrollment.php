@@ -31,5 +31,8 @@ class InternshipEnrollment extends Model
 {
     return $this->belongsToMany(InternshipBatch::class, 'internship_batch_student');
 }
-
+ public function liveClasses()
+    {
+        return $this->hasMany(InternshipClass::class, 'batch_id', 'batch_id');
+    }
 }

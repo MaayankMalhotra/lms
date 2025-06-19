@@ -17,16 +17,16 @@ class CourseController extends Controller
 
     public function storeCourse(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'course_code_id' => 'required|unique:courses|max:255',
-            'logo' => 'nullable|image',
-            'duration' => 'required',
-            'placed_learner' => 'required',
-            'slug' => 'required|unique:courses|max:255',
-            'rating' => 'required',
-            'price' => 'required|numeric',
-        ]);
+        // $validated = $request->validate([
+        //     'name' => 'required|string|max:255',
+        //     'course_code_id' => 'required|unique:courses|max:255',
+        //     'logo' => 'nullable|image',
+        //     'duration' => 'required',
+        //     'placed_learner' => 'required',
+        //     'slug' => 'required|unique:courses|max:255',
+        //     'rating' => 'required',
+        //     'price' => 'required|numeric',
+        // ]);
 
   if ($request->hasFile('logo')) {
             $image = $request->file('logo');
@@ -59,7 +59,7 @@ public function courseList()
     $courses = Course::select('courses.*', 'course_details.id as course_details_id')
         ->leftJoin('course_details', 'course_details.course_id', '=', 'courses.id')
         ->latest('courses.created_at')
-        ->paginate(10);
+        ->paginate(100);
     return view('admin.courses-list', compact('courses'));
 }
 public function edit($id)

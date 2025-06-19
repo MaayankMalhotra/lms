@@ -2,21 +2,23 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Recording extends Model
 {
-    protected $table = 'recordings';
-    protected $fillable = ['live_class_id', 'course_id', 'topic', 'video_url'];
+    protected $fillable = ['topic_id', 'video_url'];
 
-    public function liveClass()
+    public function topic()
     {
-        return $this->belongsTo(LiveClass::class);
+        return $this->belongsTo(Topic::class);
     }
+    public function batches()
+{
+    return $this->hasMany(Batch::class);
+}
 
-    public function course()
+public function liveClasses()
     {
-        return $this->belongsTo(Course::class);
+        return $this->belongsToMany(LiveClass::class, 'live_class_recording');
     }
 }

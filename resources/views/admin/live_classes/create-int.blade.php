@@ -2,16 +2,16 @@
 
 @section('content')
     <div class="container mx-auto px-4 py-8">
-        <h1 class="text-3xl font-bold mb-6">Add New Live Class</h1>
+        <h1 class="text-3xl font-bold mb-6">Add Internship Class</h1>
 
-        <form action="{{ route('admin.live_classes.store') }}" method="POST" class="bg-white p-6 rounded shadow">
+        <form action="{{ route('admin.live_classes.store.int') }}" method="POST" class="bg-white p-6 rounded shadow">
             @csrf
             <div class="mb-4">
                 <label class="block text-gray-700 font-semibold">Batch</label>
                 <select name="batch_id" id="batch_id" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" required>
                     <option value="">Choose a batch</option>
                     @foreach($batches as $batch)
-                        <option value="{{ $batch->id }}">{{ $batch->course->name }} - {{ $batch->start_date->format('Y-m-d') }}</option>
+                        <option value="{{ $batch->id }}">{{ $batch->internship->name }} - {{ $batch->start_date->format('Y-m-d') }}</option>
                     @endforeach
                 </select>
             </div>
@@ -63,9 +63,10 @@
                 const recordingSelect = $('#recording_id');
                 folderSelect.innerHTML = '<option value="">Loading...</option>';
                 recordingSelect.val(null).trigger('change'); // Clear select2
-
+console.log(batchId);
                 if (batchId) {
-                    fetch(`/live-classes/folders/${batchId}`)
+                    fetch(`/live-classes/folders-int/${batchId}`)
+                    
                         .then(response => response.json())
                         .then(data => {
                             folderSelect.innerHTML = '<option value="">Choose a folder</option>';
@@ -94,7 +95,7 @@
                 recordingSelect.html('<option value="">Loading...</option>').trigger('change');
 
                 if (folderId) {
-                    fetch(`/live-classes/recordings/${folderId}`)
+                    fetch(`/live-classes/recordings-int/${folderId}`)
                         .then(response => response.json())
                         .then(data => {
                             recordingSelect.html('<option value="">Choose recordings</option>').trigger('change');

@@ -26,6 +26,7 @@ class User extends Authenticatable
         'qualification',
         'college_company',
         'phone',
+        'internship',
 
     ];
 
@@ -51,6 +52,10 @@ class User extends Authenticatable
     public function enrollments()
 {
     return $this->hasMany(Enrollment::class, 'user_id');
+}
+   public function enrollmentsInt()
+{
+    return $this->hasMany(InternshipEnrollment::class, 'user_id');
 }
 
 public function studentQuizSetAttempts()

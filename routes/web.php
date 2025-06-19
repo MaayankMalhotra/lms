@@ -46,14 +46,18 @@ use App\Http\Controllers\YouTubeReviewController;
 
 Route::get('admin/internship-recordings-by-course/{courseId}', [InternshipRecordingController::class, 'getRecordingsByCourse']);
 Route::get('/api/batches', [BatchController::class, 'getBatchesByCourse'])->name('api.batches');
+Route::get('/api/batches-int', [BatchController::class, 'getBatchesByCourseInt'])->name('api.batches.int');
 Route::get('/register', [BatchController::class, 'show'])->name('register');
+
+Route::get('/register-int', [BatchController::class, 'showInt'])->name('register.int');
 // Route::post('/register/submit', [BatchController::class, 'submit'])->name('register.submit');
 Route::post('/register/submit', [BatchController::class, 'submitr'])->name('register.submit');
+Route::post('/register/submit-int', [BatchController::class, 'submitrInt'])->name('register.submit.int');
 Route::get('/student/quiz-sets', [StudentQuizController::class, 'index'])->name('student.quiz_sets');
 Route::get('/student/quiz-sets/{id}/take', [StudentQuizController::class, 'takeQuiz'])->name('student.quiz_sets.take');
 Route::post('/student/quiz-sets/{id}/submit', [StudentQuizController::class, 'submitQuiz'])->name('student.quiz_sets.submit');
-Route::get('/student/batch/{batchId}/quiz-ranking', [StudentQuizController::class, 'batchQuizRanking'])
-    ->name('student.batch_quiz_ranking');
+//Route::get('/student/batch/{batchId}/quiz-ranking', [StudentQuizController::class, 'batchQuizRanking'])
+  //  ->name('student.batch_quiz_ranking');
 Route::get('/admin/quiz-sets', [QuizController::class, 'index'])->name('admin.quiz_sets');
 Route::get('/admin/quiz-sets/create', [QuizController::class, 'createSet'])->name('admin.quiz_sets.create');
 Route::post('/admin/quiz-sets/store', [QuizController::class, 'storeSet'])->name('admin.quiz_sets.store');
@@ -155,17 +159,17 @@ Route::get('/course', function () {
     return view('website.course', compact('courses'));
 })->name('website.course');
 
-Route::get('/internship_details', function () {
-    if (Auth::user() && Auth::user()->role == 1) {
-        return to_route('admin.dash');
-    } elseif (Auth::user() && Auth::user()->role == 2) {
-        return to_route('trainer.dashboard');
-    } elseif (Auth::user() && Auth::user()->role == 3) {
-        return to_route('student.dashboard');
-    }
-    $internships = Internship::all();
-    return view('website.internship_course', compact('internships'));
-})->name('website.internship_details');
+// Route::get('/internship_details', function () {
+//     if (Auth::user() && Auth::user()->role == 1) {
+//         return to_route('admin.dash');
+//     } elseif (Auth::user() && Auth::user()->role == 2) {
+//         return to_route('trainer.dashboard');
+//     } elseif (Auth::user() && Auth::user()->role == 3) {
+//         return to_route('student.dashboard');
+//     }
+//     $internships = Internship::all();
+//     return view('website.internship_course', compact('internships'));
+// })->name('website.internship_details');
 // Route::get('/course_details', function () {
 //     if (Auth::user() && Auth::user()->role == 1) {
 //         return to_route('admin.dash');
@@ -248,41 +252,58 @@ Route::get('/trainer-dashboard', function () {
             Route::put('/{internship}', [InternshipController::class, 'update'])->name('update');
             Route::delete('/{internship}', [InternshipController::class, 'destroy'])->name('destroy');
         });
-
+//Route::get('/add-int', [BatchController::class, 'createInt'])->name('add.int');
         Route::prefix('batches')->name('batches.')->group(function () {
             Route::get('/add', [BatchController::class, 'create'])->name('add');
+            Route::get('/add-int', [BatchController::class, 'createInt'])->name('add.int');
             Route::post('/store', [BatchController::class, 'store'])->name('store');
+             Route::post('/store-int', [BatchController::class, 'storeInt'])->name('store.int');
             Route::get('/index', [BatchController::class, 'index'])->name('index'); // Listing route
+            Route::get('/index-int', [BatchController::class, 'indexInt'])->name('index.int');
             Route::delete('/batch/{id}', [BatchController::class, 'destroy'])->name('destroy'); // Delete route
             Route::get('/{id}/edit', [BatchController::class, 'edit'])->name('edit');
             Route::put('/{id}', [BatchController::class, 'update'])->name('update');
         });
 
         Route::get('/recordings', [AdminRecordingController::class, 'index'])->name('recordings.index');
-        Route::get('/recordings/create', [AdminRecordingController::class, 'create'])->name('recordings.create');
+
+                Route::get('/recordings-int', [AdminRecordingController::class, 'indexInt'])->name('recordings.index.int');
+       // Route::get('/recordings/create', [AdminRecordingController::class, 'create'])->name('recordings.create');
         Route::post('/recordings', [AdminRecordingController::class, 'store'])->name('recordings.store');
         Route::get('/recordings/{id}/edit', [AdminRecordingController::class, 'edit'])->name('recordings.edit');
         Route::put('/recordings/{id}', [AdminRecordingController::class, 'update'])->name('recordings.update');
         Route::delete('/recordings/{id}', [AdminRecordingController::class, 'destroy'])->name('recordings.destroy');
 
         Route::get('/live-classes', [AdminLiveClassController::class, 'index'])->name('live_classes.index');
+                Route::get('/live-classes-int', [AdminLiveClassController::class, 'indexInt'])->name('live_classes.index.int');
         Route::get('/live-classes/create', [AdminLiveClassController::class, 'create'])->name('live_classes.create');
+       
+                Route::get('/live-classes-int/create', [AdminLiveClassController::class, 'createInt'])->name('live_classes.create.int');
+
         Route::post('/live-classes', [AdminLiveClassController::class, 'store'])->name('live_classes.store');
-        Route::get('/live-classes/recordings/{batchId}', [AdminLiveClassController::class, 'getRecordings'])->name('live_classes.recordings');
+                Route::post('/live-classes-int', [AdminLiveClassController::class, 'storeInt'])->name('live_classes.store.int');
+      //  Route::get('/live-classes/recordings/{batchId}', [AdminLiveClassController::class, 'getRecordings'])->name('live_classes.recordings');
         Route::get('/live-classes/{id}/edit', [AdminLiveClassController::class, 'edit'])->name('live_classes.edit');
         Route::put('/live-classes/{id}', [AdminLiveClassController::class, 'update'])->name('live_classes.update');
         Route::delete('/live-classes/{id}', [AdminLiveClassController::class, 'destroy'])->name('live_classes.destroy');
     });
+Route::get('/live-classes/folders/{batchId}', [AdminLiveClassController::class, 'getFoldersByBatch'])->name('admin.live_classes.folders');
 
+Route::get('/live-classes/folders-int/{batchId}', [AdminLiveClassController::class, 'getFoldersByBatchInt'])->name('admin.live_classes.folders.int');
+
+Route::get('/live-classes/recordings/{folderId}', [AdminLiveClassController::class, 'getRecordingsByFolder'])->name('admin.live_classes.recordings');
+Route::get('/live-classes/recordings-int/{folderId}', [AdminLiveClassController::class, 'getRecordingsByFolderInt'])->name('admin.live_classes.recordings.int');
     Route::get('/attendance/monthly', [AttendanceController::class, 'showMonthlyAttendance']);
-    Route::post('/leave/apply', [AttendanceController::class, 'applyLeave'])->name('leave.apply');
-    Route::post('/leave/{leave}/approve', [AttendanceController::class, 'approveLeave'])->name('leave.approve');
+  //  Route::post('/leave/apply', [AttendanceController::class, 'applyLeave'])->name('leave.apply');
+   // Route::post('/leave/{leave}/approve', [AttendanceController::class, 'approveLeave'])->name('leave.approve');
 
     Route::get('/index-create-cd', [CourseDetailsController::class, 'index'])->name('course-details-index');
+        Route::get('/index-create-cd-int', [CourseDetailsController::class, 'indexInt'])->name('course-details-index-int');
 //});
 
 Route::get('/course-details/{id}/edit', [CourseDetailsController::class, 'edit'])->name('course.edit');
 Route::put('/course-details/{id}', [CourseDetailsController::class, 'update'])->name('course.update');
+
 
 // // Enrollment Management Routes
 // Route::get('/admin/enrollments', [EnrollmentController::class, 'index'])->name('admin.enrollment.index');
@@ -350,6 +371,7 @@ Route::prefix('student')->middleware('auth')->group(function () {
 Route::get('/admin/coding-questions/{id}/submissions', [CodingQuestionController::class, 'showSubmissions'])->name('admin.coding_questions.show_submissions');
 Route::get('course_details/{slug?}', [CourseController::class, 'courseDetails'])->name('website.course_details');
 
+Route::get('internship_details/{id?}', [InternshipController::class, 'internshipDetails'])->name('website.internship_details');
 
 
 Route::middleware('auth')->group(function () {
@@ -359,6 +381,9 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('my-classes', [StudentClassController::class, 'index'])->name('student.classes.index');
+
+Route::get('my-classes-int', [StudentClassController::class, 'indexInt'])->name('student.classes.index.int');
+
 Route::get('/student/join-class/{liveClassId}', [StudentClassController::class, 'joinClass'])->name('student.join-class');
 Route::get('/student/batch/quiz-ranking', [StudentQuizController::class, 'batchQuizRanking'])
     ->name('student.batch_quiz_ranking');
@@ -391,9 +416,9 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/admin/career-highlight/delete-all', [CareerHighlightController::class, 'deleteAll'])->name('admin.career_highlight.deleteAll');
     Route::get('/testimonials/index', [TestimonialController::class, 'index'])->name('admin.testimonials.index');
     Route::get('/testimonials/create', [TestimonialController::class, 'create'])->name('admin.testimonials.create');
-    Route::post('/testimonials/', [TestimonialController::class, 'store'])->name('admin.testimonials.store');
+   // Route::post('/testimonials/', [TestimonialController::class, 'store'])->name('admin.testimonials.store');
     Route::get('/testimonials/{testimonial}/edit', [TestimonialController::class, 'edit'])->name('admin.testimonials.edit');
-    Route::put('/testimonials/{testimonial}', [TestimonialController::class, 'update'])->name('admin.testimonials.update');
+   // Route::put('/testimonials/{testimonial}', [TestimonialController::class, 'update'])->name('admin.testimonials.update');
     Route::delete('/testimonials/{testimonial}', [TestimonialController::class, 'destroy'])->name('admin.testimonials.destroy');
     Route::get('/youtubereview/index', [YouTubeReviewController::class, 'index'])->name('admin.youtubereview.index');
     Route::get('/youtubereview/create', [YouTubeReviewController::class, 'create'])->name('admin.youtubereview.create');
@@ -466,6 +491,7 @@ Route::get('/student/quiz-attempt/{attemptId}', [StudentQuizController::class, '
 
 
 Route::post('/course-form', [CourseDetailsController::class, 'store'])->name('course.store');
+Route::post('/course-form-int', [CourseDetailsController::class, 'storeInt'])->name('course.store.int');
 
 Route::get('/internship/register/{id}', [InternshipRegistrationController::class, 'show'])->name('internship.register');
 Route::post('/internship/register/submit', [InternshipRegistrationController::class, 'store'])->name('internship.register.submit');
@@ -497,6 +523,7 @@ Route::post('/admin/internship-classes', [AdminInternshipClassCreateController::
 
 // routes/web.php
 Route::post('/store-batch-data', [BatchController::class, 'storeBatchData'])->name('store.batch.data');
+Route::post('/store-batch-data-int', [BatchController::class, 'storeBatchDataInt'])->name('store.batch.data.int');
 
 Route::get('/register-website', function () {
     return view('website.register-page');
@@ -559,7 +586,50 @@ Route::prefix('admin')->group(function () {
     Route::post('/assignment/{assignmentId}/submit', [AssignmentController::class, 'submitAssignment'])->name('student.assignment.submit');
 
     Route::get('/assignments/{liveClassId}', [AssignmentController::class, 'viewClassAssignments'])->name('teacher.assignments.view');
-    Route::get('/recordings/view', [AdminRecordingController::class, 'view'])->name('admin.recordings.storeView');
-    Route::post('/recordings/view', [AdminRecordingController::class, 'storeView'])->name('admin.recordings.store');
-    Route::get('/get-folders/{courseId}', [AdminRecordingController::class, 'getFolders']);
-    Route::post('/add-folder/{courseId}', [AdminRecordingController::class, 'addFolder']);
+
+        Route::get('/assignment-int', [AssignmentController::class, 'assignmentInt'])->name('student.assignments.int');
+    Route::post('/assignment-int/{assignmentId}/submit', [AssignmentController::class, 'submitAssignmentInt'])->name('student.assignment.submit.int');
+
+    Route::get('/assignments-int/{liveClassId}', [AssignmentController::class, 'viewClassAssignmentsInt'])->name('teacher.assignments.view.int');
+    //Route::get('/recordings/view', [AdminRecordingController::class, 'view'])->name('admin.recordings.storeView');
+    // Route::post('/recordings/view', [AdminRecordingController::class, 'storeView'])->name('admin.recordings.store');
+    // Route::get('/get-folders/{courseId}', [AdminRecordingController::class, 'getFolders']);
+    // Route::post('/add-folder/{courseId}', [AdminRecordingController::class, 'addFolder']);
+
+ //   Route::prefix('admin')->group(function () {
+    Route::get('/recordings/create', [AdminRecordingController::class, 'create'])->name('admin.recordings.create');
+    Route::post('/recordings/folder', [AdminRecordingController::class, 'storeFolder'])->name('recordings.storeFolder');
+    Route::post('/recordings/topic', [AdminRecordingController::class, 'storeTopic'])->name('recordings.storeTopic');
+    Route::post('/recordings/recording', [AdminRecordingController::class, 'storeRecording'])->name('recordings.storeRecording');
+    Route::get('/recordings/view', [AdminRecordingController::class, 'view'])->name('recordings.view');
+
+Route::post('/admin/{type}', [AdminRecordingController::class, 'store'])->name('store.item');
+//Route::put('/admin/{type}/{id}', [AdminRecordingController::class, 'update'])->name('update.item');
+Route::post('/admin/{type}/{id}/toggle-lock', [AdminRecordingController::class, 'toggleLock'])->name('toggle.lock');
+//});
+Route::post('/admin/topic-and-recording/create', [AdminRecordingController::class, 'createTopicAndRecording'])->name('create.topic.and.recording');
+Route::post('/admin/folder/create', [AdminRecordingController::class, 'createFolder'])->name('create.folder');
+Route::post('/admin/topic/create', [AdminRecordingController::class, 'createTopic'])->name('create.topic');
+Route::post('/admin/recording/create', [AdminRecordingController::class, 'createRecording'])->name('create.recording');
+Route::put('/admin/folder/{id}', [AdminRecordingController::class, 'updateFolder'])->name('update.folder');
+Route::put('/admin/topic/{id}', [AdminRecordingController::class, 'updateTopic'])->name('update.topic');
+Route::put('/admin/recording/{id}', [AdminRecordingController::class, 'updateRecording'])->name('update.recording');
+Route::post('/admin/{type}/{id}/toggle-lock', [AdminRecordingController::class, 'toggleLock'])->name('toggle.lock');
+Route::put('/admin/item/{id}', [AdminRecordingController::class, 'updateItem'])->name('update.item');
+
+
+Route::get('/course-details-int/{id}/edit', [CourseDetailsController::class, 'editInt'])->name('course.edit.int');
+Route::put('/course-details-int-int/{id}', [CourseDetailsController::class, 'updateInt'])->name('course.update.int');
+
+Route::get('/admin-int/{type}/{id}/toggle-lock', [AdminRecordingController::class, 'toggleLockInt'])->name('toggle.lock.int');
+Route::get('/admin-int/folder/create', [AdminRecordingController::class, 'createFolderInt'])->name('create.folder.int');
+Route::get('/admin-int/topic/create', [AdminRecordingController::class, 'createTopicInt'])->name('create.topic.int');
+Route::get('/admin-int/recording/create', [AdminRecordingController::class, 'createRecordingInt'])->name('create.recording.int');
+Route::get('/admin-int/topic-and-recording/create', [AdminRecordingController::class, 'createTopicAndRecordingInt'])->name('create.topic.and.recording.int');
+Route::get('/admin-int/folder/{id}', [AdminRecordingController::class, 'updateFolderInt'])->name('update.folder.int');
+Route::get('/admin-int/item/{id}', [AdminRecordingController::class, 'updateItemInt'])->name('update.item.int');
+
+Route::get('/student/assignments', [AdminAssignmentController::class, 'index'])->name('student.assignments.all');
+Route::get('/student/assignments/batch/{batchId}', [AdminAssignmentController::class, 'getAssignmentsByBatch'])->name('admin.assignments.batch');
+
+Route::get('/admin/assignments/download/{assignmentId}', [AdminAssignmentController::class, 'download'])->name('admin.assignments.download');

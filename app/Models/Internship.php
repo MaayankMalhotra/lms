@@ -22,4 +22,12 @@ class Internship extends Model
     {
         return $this->hasMany(InternshipContent::class, 'internship_id', 'id');
     }
+      public function batches()
+    {
+        return $this->hasMany(InternshipBatch::class,'internship_id');
+    }
+    public function folders()
+    {
+        return $this->hasMany(InternshipFolder::class,'internship_id');
+    }
 }

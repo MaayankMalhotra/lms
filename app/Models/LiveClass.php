@@ -10,17 +10,26 @@ class LiveClass extends Model
 {
     use HasFactory;
     protected $table = 'live_classes';
-    protected $fillable = ['batch_id', 'topic', 'google_meet_link', 'class_datetime', 'duration_minutes', 'status'];
+    protected $fillable = ['batch_id', 'topic', 'google_meet_link', 'class_datetime', 'duration_minutes', 'status', 'folder_id','recording_id'];
     protected $dates = ['class_datetime'];
     public function batch()
     {
         return $this->belongsTo(Batch::class);
     }
-
-    public function recording()
+    public function folder()
     {
-        return $this->hasOne(Recording::class);
+        return $this->belongsTo(Folder::class);
     }
+
+    public function recordings()
+    {
+        return $this->belongsToMany(Recording::class, 'recordings');
+    }
+
+    // public function recording()
+    // {
+    //     return $this->hasOne(Recording::class);
+    // }
 
     // public function getDynamicStatusAttribute()
     // {

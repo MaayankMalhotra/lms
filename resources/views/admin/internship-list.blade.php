@@ -121,7 +121,7 @@
             document.getElementById('edit_duration').value = data.duration;
             document.getElementById('edit_project').value = data.project;
             document.getElementById('edit_applicant').value = data.applicant;
-            document.getElementById('edit_price').value = data.price; // Populate price
+            document.getElementById('edit_price').value = data.price;
 
             // Handle logo preview
             const logoPreview = document.getElementById('logoPreview');
@@ -228,6 +228,13 @@
                                         class="text-blue-500 hover:text-blue-600">
                                     <i class="fas fa-edit"></i>
                                 </button>
+                                @if($internship->has_details)
+                                <a href="{{ route('course.edit.int', $internship->internship_detail_id) }}"
+                                   class="text-green-500 hover:text-green-600"
+                                   title="Edit Course Details">
+                                    <i class="fas fa-book"></i>
+                                </a>
+                                @endif
                                 <form action="{{ route('admin.internship.destroy', $internship->id) }}" method="POST">
                                     @csrf
                                     @method('DELETE')

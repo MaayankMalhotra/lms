@@ -32,4 +32,8 @@ class Course extends Model
     {
         return TrainerDetail::whereJsonContains('course_ids', $this->id)->get();
     }
+    public function folders()
+    {
+        return $this->hasMany(Folder::class);
+    }
 }
