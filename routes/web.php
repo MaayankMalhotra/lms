@@ -634,9 +634,12 @@ Route::get('/student/assignments/batch/{batchId}', [AdminAssignmentController::c
 
 Route::get('/admin/assignments/download/{assignmentId}', [AdminAssignmentController::class, 'download'])->name('admin.assignments.download');
 use App\Http\Controllers\CourseToInternshipController;
-
+use App\Http\Controllers\HireController;
 
 Route::get('/enrollment-report', [CourseToInternshipController::class, 'index'])->name('enrollment.report');
 
- Route::post('/enrollment-report/send-offer', [CourseToInternshipController::class, 'sendOfferLetter'])->name('enrollment.send-offer');
-   Route::get('/test-email', [CourseToInternshipController::class, 'sendTestEmail'])->name('test.email');
+Route::post('/enrollment-report/send-offer', [CourseToInternshipController::class, 'sendOfferLetter'])->name('enrollment.send-offer');
+Route::get('/test-email', [CourseToInternshipController::class, 'sendTestEmail'])->name('test.email');
+
+Route::get('/hire-with-us',[HireController::class, 'index'])->name('hire.index');
+Route::post('/mentor', [HireController::class, 'storeMentor'])->name('mentor.store');
