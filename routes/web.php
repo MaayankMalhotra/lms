@@ -633,3 +633,10 @@ Route::get('/student/assignments', [AdminAssignmentController::class, 'index'])-
 Route::get('/student/assignments/batch/{batchId}', [AdminAssignmentController::class, 'getAssignmentsByBatch'])->name('admin.assignments.batch');
 
 Route::get('/admin/assignments/download/{assignmentId}', [AdminAssignmentController::class, 'download'])->name('admin.assignments.download');
+use App\Http\Controllers\CourseToInternshipController;
+
+
+Route::get('/enrollment-report', [CourseToInternshipController::class, 'index'])->name('enrollment.report');
+
+ Route::post('/enrollment-report/send-offer', [CourseToInternshipController::class, 'sendOfferLetter'])->name('enrollment.send-offer');
+   Route::get('/test-email', [CourseToInternshipController::class, 'sendTestEmail'])->name('test.email');
