@@ -52,10 +52,16 @@
           {{-- <button class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300">
             Register Now
           </button> --}}
-          <a href="{{ route('webinars.show', $webinar->id) }}"
-                   class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 inline-block">
-                    Register Now
-                </a>
+          @if(\Carbon\Carbon::now()->greaterThan(\Carbon\Carbon::parse($webinar->registration_deadline)))
+            <button class="bg-red-500 text-white px-6 py-2 rounded-lg opacity-50 cursor-not-allowed" disabled>
+              Registration Closed
+            </button>
+          @else
+            <a href="{{ route('webinars.show', $webinar->id) }}"
+               class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 inline-block">
+              Register Now
+            </a>
+          @endif
         </div>
       </div>
       @endforeach
