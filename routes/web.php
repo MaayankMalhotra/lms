@@ -41,6 +41,8 @@ use App\Http\Controllers\NewsCategoryController;
 use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\WebinarController;
 use App\Http\Controllers\YouTubeReviewController;
+use App\Http\Controllers\CourseToInternshipController;
+use App\Http\Controllers\HireController;
 
 
 
@@ -432,8 +434,16 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/webinar/{id}/edit', [WebinarController::class, 'edit'])->name('admin.webinar.edit');
     Route::put('/webinar/{id}', [WebinarController::class, 'update'])->name('admin.webinar.update');
     Route::delete('/webinar/{id}', [WebinarController::class, 'destroy'])->name('admin.webinar.destroy');
+    Route::get('/webinar-enrollments',[WebinarController::class, 'enrollments'])->name('admin.webinar.enrollments');
     Route::get('/contact-us', [ContactUsController::class, 'contactindex'])->name('admin.contactus.index');
     Route::post('/contact-us/{id}/resolve', [ContactUsController::class, 'resolve'])->name('admin.contactus.resolve');
+
+    Route::get('/job-roles', [HireController::class, 'index'])->name('admin.job-roles.index');
+    Route::get('/job-roles/create', [HireController::class, 'create'])->name('admin.job-roles.create');
+    Route::post('/job-roles', [HireController::class, 'store'])->name('admin.job-roles.store');
+    Route::get('/job-roles/{id}/edit', [HireController::class, 'edit'])->name('admin.job-roles.edit');
+    Route::put('/job-roles/{id}', [HireController::class, 'update'])->name('admin.job-roles.update');
+    Route::delete('/job-roles/{id}', [HireController::class, 'destroy'])->name('admin.job-roles.destroy');
 
     //end
 
@@ -633,13 +643,12 @@ Route::get('/student/assignments', [AdminAssignmentController::class, 'index'])-
 Route::get('/student/assignments/batch/{batchId}', [AdminAssignmentController::class, 'getAssignmentsByBatch'])->name('admin.assignments.batch');
 
 Route::get('/admin/assignments/download/{assignmentId}', [AdminAssignmentController::class, 'download'])->name('admin.assignments.download');
-use App\Http\Controllers\CourseToInternshipController;
-use App\Http\Controllers\HireController;
+
 
 Route::get('/enrollment-report', [CourseToInternshipController::class, 'index'])->name('enrollment.report');
 
 Route::post('/enrollment-report/send-offer', [CourseToInternshipController::class, 'sendOfferLetter'])->name('enrollment.send-offer');
 Route::get('/test-email', [CourseToInternshipController::class, 'sendTestEmail'])->name('test.email');
 
-Route::get('/hire-with-us',[HireController::class, 'index'])->name('hire.index');
+Route::get('/hire-with-us',[HireController::class, 'show'])->name('hire.show');
 Route::post('/mentor', [HireController::class, 'storeMentor'])->name('mentor.store');

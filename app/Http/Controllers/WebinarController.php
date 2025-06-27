@@ -134,5 +134,10 @@ public function destroy($id)
 
     return redirect()->route('admin.webinar.index')->with('success', 'Webinar deleted successfully!');
 }
+public function enrollments()
+{
+    $enrollments = WebinarEnrollment::latest()->paginate(10);
+    return view('admin.webinar.webinar-enrollment', compact('enrollments'));
+}
 
 }

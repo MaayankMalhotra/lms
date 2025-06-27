@@ -130,7 +130,7 @@
 
                 <a href="{{ route('career_hightlight_show') }}"
                     class="text-white hover:text-amber-400 transition-colors duration-300">Reviews</a>
-                <a href="{{ route('hire.index') }}"
+                <a href="{{ route('hire.show') }}"
                     class="text-white hover:text-amber-400 transition-colors duration-300">Hire With Us</a>
                 <a href="{{ route('website.contact') }}"
                     class="text-white hover:text-amber-400 transition-colors duration-300">Contact</a>
@@ -208,7 +208,7 @@
                             class="block px-4 py-2 text-white hover:bg-orange-500 rounded-md transition-colors">Webinars</a>
                     </div>
                 </div>
-                <a href="{{ route('hire.index')}}" class="text-white hover:text-amber-400 py-2">Hire With Us</a>
+                <a href="{{ route('hire.show')}}" class="text-white hover:text-amber-400 py-2">Hire With Us</a>
                 <a href="{{ route('career_hightlight_show')}}" class="text-white hover:text-amber-400 py-2">Reviews</a>
                 <a href="{{ route('website.contact') }}" class="text-white hover:text-amber-400 py-2">Contact</a>
                 <a href="{{ route('login') }}"
