@@ -15,39 +15,42 @@ class CourseController extends Controller
         return view('admin.add-course');
     }
 
-    public function storeCourse(Request $request)
-    {
-        // $validated = $request->validate([
-        //     'name' => 'required|string|max:255',
-        //     'course_code_id' => 'required|unique:courses|max:255',
-        //     'logo' => 'nullable|image',
-        //     'duration' => 'required',
-        //     'placed_learner' => 'required',
-        //     'slug' => 'required|unique:courses|max:255',
-        //     'rating' => 'required',
-        //     'price' => 'required|numeric',
-        // ]);
+  public function storeCourse(Request $request)
+{
+    // Dump the request data for debugging
+   // dd($request->all());
 
-  if ($request->hasFile('logo')) {
-            $image = $request->file('logo');
-            $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('courses'), $imageName);
-
-            // Store only relative path
-            $validated['logo'] = 'courses/' . $imageName;
-        }
-        // Handle file upload
-        // if ($request->hasFile('logo')) {
-        //     $path = $request->file('logo')->store('public/courses');
-        //     $validated['logo'] = Storage::url($path);
-        // }
-
-        // Create the course using mass assignment
-      $data =  Course::create($validated);
-      Log::info('Course created successfully', ['course' => $data]);
-
-        return redirect()->route('admin.course.add')->with('success', 'Course created successfully!');
+    try {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'course_code_id' => 'required|unique:courses|max:255',
+            'logo' => 'nullable|image',
+            'duration' => 'required',
+            'placed_learner' => 'required',
+            'slug' => 'required|unique:courses|max:255',
+            'rating' => 'required',
+            'price' => 'required|numeric',
+        ]);
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        // Dump the validation errors and stop execution
+        dd($e->errors());
     }
+
+    if ($request->hasFile('logo')) {
+        $image = $request->file('logo');
+        $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+        $image->move(public_path('courses'), $imageName);
+
+        // Store only relative path
+        $validated['logo'] = 'courses/' . $imageName;
+    }
+
+    // Create the course using mass assignment
+    $data = Course::create($validated);
+    Log::info('Course created successfully', ['course' => $data]);
+
+    return redirect()->route('admin.course.add')->with('success', 'Course created successfully!');
+}
 
 //     public function courseList()
 // {
