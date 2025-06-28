@@ -14,6 +14,26 @@
                 + Add Webinar
             </a>
         </div>
+        <div class="mb-6">
+            <form action="{{ route('admin.webinar.index') }}" method="GET" class="flex items-center space-x-4">
+                <div class="w-full max-w-sm">
+                    <select name="tag" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="">Select Tags</option>
+                        @foreach($uniqueTags as $tag)
+                            <option value="{{ $tag }}" {{ request('tag') == $tag ? 'selected' : '' }}>
+                                {{ $tag }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <button type="submit" class="px-4 py-2 text-blue-500 hover:text-blue-700">
+                    <i class="fas fa-search"></i>
+                </button>
+                @if (request('tag'))
+                    <a href="{{ route('admin.webinar.index') }}" class="text-sm text-blue-500 hover:text-blue-700">Clear Filter</a>
+                @endif
+            </form>
+        </div>
 
         <div class="overflow-x-auto">
             <table class="min-w-full bg-white border border-gray-200">

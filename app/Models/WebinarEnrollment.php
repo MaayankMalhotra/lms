@@ -14,6 +14,10 @@ class WebinarEnrollment extends Model
         'email',
         'phone',
         'comments',
+        'attendance_code',
+        'meeting_id',
+        'meeting_link',
+        'meeting_password'
     ];
     public function webinar()
     {

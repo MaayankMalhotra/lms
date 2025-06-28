@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\WebinarConfirmation;
 use App\Models\Webinar;
 use App\Models\WebinarEnrollment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class WebinarController extends Controller
@@ -69,9 +71,18 @@ public function showWebinar($id){
 
 
 
-    public function index(){
-        $webinars = Webinar::latest()->paginate(10);
-        return view('admin.webinar.index', compact('webinars'));
+    public function index(Request $request){
+        $query=Webinar::query();
+
+        if($tag=$request->query('tag')){
+            $query->where('tags','LIKE','%'.$tag.'%');
+        }
+        $webinars = $query->latest()->paginate(10);
+
+        $allTags = Webinar::pluck('tags')->implode(',');
+        $tagsArray = array_filter(array_map('trim', explode(',', $allTags)));
+        $uniqueTags = array_unique($tagsArray);
+        return view('admin.webinar.index', compact('webinars','uniqueTags'));
     }
 
     public function create(){
@@ -134,10 +145,52 @@ public function destroy($id)
 
     return redirect()->route('admin.webinar.index')->with('success', 'Webinar deleted successfully!');
 }
-public function enrollments()
+public function enrollments(Request $request)
 {
-    $enrollments = WebinarEnrollment::latest()->paginate(10);
-    return view('admin.webinar.webinar-enrollment', compact('enrollments'));
+    // $enrollments = WebinarEnrollment::latest()->paginate(10);
+    $webinars = Webinar::all(); // Fetch all webinars for the dropdown
+    $query = WebinarEnrollment::query();
+    if ($webinarId = $request->query('webinar_id')) {
+        $query->where('webinar_id', $webinarId);
+    }
+    $enrollments = $query->with('webinar')->latest()->paginate(10);
+    return view('admin.webinar.webinar-enrollment', compact('enrollments','webinars'));
 }
+public function sendConfirmation(Request $request)
+    {
+        $validated = $request->validate([
+            'attendance_code' => 'required|string',
+            'meeting_id' => 'required|string',
+            'meeting_link' => 'required|url',
+            'meeting_password' => 'required|string',
+            'webinar_id' => 'nullable|exists:webinars,id',
+        ]);
+        // Fetch enrollments based on webinar_id
+        $query = WebinarEnrollment::query();
+        if ($validated['webinar_id']) {
+            $query->where('webinar_id', $validated['webinar_id']);
+            
+        }
+        $enrollments = $query->get();
+
+        if ($enrollments->isEmpty()) {
+            return response()->json(['message' => 'No enrollments found for the selected webinar'], 400);
+        }
+
+        // Update enrollments with confirmation data
+        foreach ($enrollments as $enrollment) {
+            $enrollment->update([
+                'attendance_code' => $validated['attendance_code'],
+                'meeting_id' => $validated['meeting_id'],
+                'meeting_link' => $validated['meeting_link'],
+                'meeting_password' => $validated['meeting_password'],
+            ]);
+
+            // Send email to each enrollee
+             Mail::to(['ashwani.rai@henryharvin.in','sandeep@henryharvin.in'])->send(new WebinarConfirmation($validated, $enrollment));
+        }
+
+        return response()->json(['message' => 'Confirmation emails sent and data saved successfully']);
+    }
 
 }
