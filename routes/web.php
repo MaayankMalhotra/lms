@@ -435,6 +435,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/webinar/{id}', [WebinarController::class, 'update'])->name('admin.webinar.update');
     Route::delete('/webinar/{id}', [WebinarController::class, 'destroy'])->name('admin.webinar.destroy');
     Route::get('/webinar-enrollments',[WebinarController::class, 'enrollments'])->name('admin.webinar.enrollments');
+    Route::post('/webinar/send-confirmation', [WebinarController::class, 'sendConfirmation'])->name('admin.webinar.send-confirmation');
     Route::get('/contact-us', [ContactUsController::class, 'contactindex'])->name('admin.contactus.index');
     Route::post('/contact-us/{id}/resolve', [ContactUsController::class, 'resolve'])->name('admin.contactus.resolve');
 
