@@ -39,6 +39,7 @@ class WebinarConfirmation extends Mailable
                     ->with([
                         'data' => $this->data,
                         'enrollment' => $this->enrollment,
+                        'webinar' => $this->enrollment->webinar,
                     ]);
     }
 }

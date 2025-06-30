@@ -23,6 +23,9 @@
                 <p style="font-size: 16px; color: #333;">
                     Dear <strong>{{ $enrollment['name'] }}</strong>,
                 </p>
+                <p style="font-size: 16px; color: #333;">
+                    You are confirmed for the webinar: <strong>{{ $webinar['title'] }}</strong>
+                </p>
                 
                 <ul style="font-size: 16px; color: #333; padding-left: 20px;">
                     <li><strong>Attendance Verification Code:</strong> {{ $data['attendance_code'] }}</li>
@@ -30,6 +33,15 @@
                     <li><strong>Meeting Link:</strong> <a href="{{ $data['meeting_link'] }}" style="color: #0c3c7c; text-decoration: underline;">Join Meeting</a></li>
                     <li><strong>Meeting Password:</strong> {{ $data['meeting_password'] }}</li>
                 </ul>
+                <p style="font-size: 16px; color: #333;">
+                    Please confirm your presence by clicking the button below:
+                </p>
+                <p style="text-align: center; margin: 20px 0;">
+                    <a href="{{route('webinar-attendance',['email' => $enrollment['email'], 'webinar'=> $webinar['title']])}}" 
+                       style="display: inline-block; padding: 12px 24px; background-color: #0c3c7c; color: #ffffff; text-decoration: none; border-radius: 5px; font-size: 16px; font-weight: bold;">
+                        Verify Your Presence
+                    </a>
+                </p>
                 <p style="font-size: 16px; color: #333;">
                     We look forward to seeing you!
                 </p>

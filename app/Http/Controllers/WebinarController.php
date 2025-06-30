@@ -6,6 +6,7 @@ use App\Mail\WebinarConfirmation;
 use App\Models\Webinar;
 use App\Models\WebinarEnrollment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
@@ -193,4 +194,40 @@ public function sendConfirmation(Request $request)
         return response()->json(['message' => 'Confirmation emails sent and data saved successfully']);
     }
 
+public function verifyPresence(Request $request)
+    {
+        $email = $request->email;
+        $webinar_title = $request->webinar;
+        return view('verify_webinar_presence_form',compact('email','webinar_title'));
+    }
+public function attendanceSubmitWebinar(Request $request)
+{
+    // Optional but recommended validation
+    $request->validate([
+        'email' => 'required|email',
+        'code' => 'required|string',
+        'webinar_title' => 'required|string'
+    ]);
+
+    // Find the correct record
+    $attendance_check = WebinarEnrollment::where('email', $request->email)
+        ->where('attendance_code', $request->code)
+        ->whereHas('webinar', function ($query) use ($request) {
+            $query->where('title', $request->webinar_title);
+        })
+        ->first();
+
+    if ($attendance_check) {
+        $attendance_check->attendance_status = "present";
+        $attendance_check->save();
+
+        return view('webinar_submit_success_msg', [
+            'name' => $attendance_check->name,
+            'webinar_title' => $request->webinar_title
+        ]);
+    }
+
+    // If not found, redirect back with error
+    return back()->withErrors(['Invalid code or webinar title.']);
+}
 }

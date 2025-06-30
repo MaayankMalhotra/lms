@@ -17,7 +17,8 @@ class WebinarEnrollment extends Model
         'attendance_code',
         'meeting_id',
         'meeting_link',
-        'meeting_password'
+        'meeting_password',
+        'attendance_status'
     ];
     public function webinar()
     {
