@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Instructor;
 use App\Models\JobRolesForHiring;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class HireController extends Controller
 {
@@ -56,33 +57,50 @@ class HireController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'technologies' => 'required|json', // Validate as JSON
-        ]);
+{
+    $validator = Validator::make($request->all(), [
+        'title' => 'required|string|max:255',
+        'tech_name.*' => 'required|string|max:255',
+        'tech_url.*' => 'required|url|max:255',
+    ], [
+        'tech_name.*.required' => 'Technology name is required.',
+        'tech_url.*.required' => 'Technology URL is required.',
+        'tech_url.*.url' => 'Technology URL must be valid.',
+    ]);
 
-        // Validate technologies JSON structure
-        $technologies = json_decode($request->technologies, true);
-        if (!is_array($technologies)) {
-            return redirect()->back()->withErrors(['technologies' => 'Technologies must be a valid JSON array.'])->withInput();
+    if ($validator->fails()) {
+        return redirect()->back()->withErrors($validator)->withInput();
+    }
+
+    try {
+        $techNames = $request->input('tech_name', []);
+        $techUrls = $request->input('tech_url', []);
+        $technologiesArray = [];
+
+        foreach ($techNames as $index => $name) {
+            if (isset($techUrls[$index]) && $name && $techUrls[$index]) {
+                $technologiesArray[] = [
+                    'name' => $name,
+                    'image_url' => $techUrls[$index],
+                ];
+            }
         }
-        foreach ($technologies as $tech) {
-            if (!isset($tech['name']) || !is_string($tech['name'])) {
-                return redirect()->back()->withErrors(['technologies' => 'Each technology must have a valid name.'])->withInput();
-            }
-            if (isset($tech['image_url']) && !filter_var($tech['image_url'], FILTER_VALIDATE_URL)) {
-                return redirect()->back()->withErrors(['technologies' => 'Image URLs must be valid.'])->withInput();
-            }
+
+        if (empty($technologiesArray)) {
+            return redirect()->back()->withErrors(['technologies' => 'At least one valid technology with name and URL is required.'])->withInput();
         }
 
         JobRolesForHiring::create([
             'title' => $request->title,
-            'technologies' => $request->technologies,
+            'technologies' => $technologiesArray,
         ]);
-
+        
         return redirect()->route('admin.job-roles.index')->with('success', 'Job role created successfully.');
+    } catch (\Exception $e) {
+        return redirect()->back()->withErrors(['technologies' => 'Error: ' . $e->getMessage()])->withInput();
     }
+}
+
 
     public function edit($id)
     {
@@ -91,34 +109,37 @@ class HireController extends Controller
     }
 
     public function update(Request $request, $id)
-    {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'technologies' => 'required|json',
-        ]);
+{
+    $request->validate([
+        'title' => 'required|string|max:255',
+        'technologies' => 'required|json',
+    ]);
 
-        // Validate technologies JSON structure
-        $technologies = json_decode($request->technologies, true);
-        if (!is_array($technologies)) {
-            return redirect()->back()->withErrors(['technologies' => 'Technologies must be a valid JSON array.'])->withInput();
-        }
-        foreach ($technologies as $tech) {
-            if (!isset($tech['name']) || !is_string($tech['name'])) {
-                return redirect()->back()->withErrors(['technologies' => 'Each technology must have a valid name.'])->withInput();
-            }
-            if (isset($tech['image_url']) && !filter_var($tech['image_url'], FILTER_VALIDATE_URL)) {
-                return redirect()->back()->withErrors(['technologies' => 'Image URLs must be valid.'])->withInput();
-            }
-        }
+    $technologies = json_decode($request->technologies, true);
 
-        $jobRole = JobRolesForHiring::findOrFail($id);
-        $jobRole->update([
-            'title' => $request->title,
-            'technologies' => $request->technologies,
-        ]);
-
-        return redirect()->route('admin.job-roles.index')->with('success', 'Job role updated successfully.');
+    if (!is_array($technologies)) {
+        return redirect()->back()->withErrors(['technologies' => 'Technologies must be a valid JSON array.'])->withInput();
     }
+
+    foreach ($technologies as $tech) {
+        if (!isset($tech['name']) || !is_string($tech['name'])) {
+            return redirect()->back()->withErrors(['technologies' => 'Each technology must have a valid name.'])->withInput();
+        }
+        if (!isset($tech['image_url']) || !filter_var($tech['image_url'], FILTER_VALIDATE_URL)) {
+            return redirect()->back()->withErrors(['technologies' => 'Each technology must have a valid image URL.'])->withInput();
+        }
+    }
+
+    $jobRole = JobRolesForHiring::findOrFail($id);
+
+    $jobRole->update([
+        'title' => $request->title,
+        'technologies' => $technologies, 
+    ]);
+
+    return redirect()->route('admin.job-roles.index')->with('success', 'Job role updated successfully.');
+}
+
 
     public function destroy($id)
     {
