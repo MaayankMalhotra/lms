@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\WebinarCertificateMail;
 use App\Mail\WebinarConfirmation;
 use App\Models\Webinar;
 use App\Models\WebinarEnrollment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
@@ -230,4 +232,96 @@ public function attendanceSubmitWebinar(Request $request)
     // If not found, redirect back with error
     return back()->withErrors(['Invalid code or webinar title.']);
 }
+
+public function sendWebinarCertificate(Request $request, $enrollmentId)
+{
+
+    
+    $enrollment = WebinarEnrollment::with('webinar')->findOrFail($enrollmentId);
+    
+    
+    if ($enrollment->certificate_sent) {
+        return back()->withErrors(['Certificate has already been sent to this attendee.']);
+    }
+
+    if ($enrollment->attendance_status !== 'present') {
+        return back()->withErrors(['Certificate can only be sent to attendees marked as present.']);
+    }
+
+    $date = Carbon::now();
+    $day = $date->format('d');
+    $month = strtoupper($date->format('F'));
+    $year = $date->format('Y');
+    $finalTextDate = "GIVEN ON THE $day DAY OF $month, $year";
+
+
+    $img_url = public_path('images/1750485390DBSBlank_ProvisionalDegree.jpg');
+    $font = public_path('canterbury.regular.ttf');
+
+    // Check font file exists
+    if (!file_exists($font)) {
+       return back()->withErrors(['Font not found at: ' . $font]);
+    }
+
+    // Check image file exists
+    if (!file_exists($img_url)) {
+        return back()->withErrors(['Certificate template image not found at: ' . $img_url]);
+    }
+    
+    $img = imagecreatefromjpeg($img_url);
+    if (!$img) {
+        return back()->withErrors(['Failed to load certificate image.']);
+    }
+
+    $color = imagecolorallocate($img, 0, 0, 0);
+
+    $name = ucwords(strtolower(trim($enrollment->name)));
+    $webinar_title = $enrollment->webinar->title ?? 'Webinar Participant';
+   
+    // Draw text on image
+    imagettftext($img, 150, 0, 2700, 2100, $color, $font, $name);
+    imagettftext($img, 150, 0, 2000, 2600, $color, $font, $webinar_title);
+    imagettftext($img, 120, 0, 2000, 3200, $color, $font, $finalTextDate);
+    
+
+    // Always define $tempPath before use
+    $fileName = uniqid('cert_') . '.jpg';
+    $tempDir = public_path('certificate');
+    $tempPath = $tempDir . '/' . $fileName;
+
+    if (!file_exists($tempDir)) {
+     mkdir($tempDir, 0755, true); // Create directory if missing
+    }
+    
+    // Save the image
+    imagejpeg($img, $tempPath);
+    imagedestroy($img);
+
+    // Check file was written
+    if (!file_exists($tempPath)) {
+        return back()->withErrors(['Failed to generate certificate file.']);
+    }
+
+    // Generate the public URL for storing in DB or displaying
+    $publicUrl = asset('certificate/' . $fileName);
+
+    try{
+        // Send the certificate by email
+        Mail::to($enrollment->email)->send(new WebinarCertificateMail($enrollment, $tempPath));
+        $enrollment->update([
+            'certificate_sent' => true,
+            'certificate_sent_at' => now(),
+            'certificate_path' => $publicUrl, // Save public URL
+        ]);
+    } catch (\Exception $e) {
+        return back()->withErrors(['Failed to send email: ' . $e->getMessage()]);
+    }
+
+    // // Clean up temp file
+    // @unlink($tempPath);
+
+    return back()->with('success', 'Certificate sent successfully to ' . $enrollment->email);
+}
+
+
 }

@@ -438,6 +438,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/webinar/send-confirmation', [WebinarController::class, 'sendConfirmation'])->name('admin.webinar.send-confirmation');
     Route::get('/verify-presence', [WebinarController::class, 'verifyPresence'])->name('webinar-attendance');
     Route::post('/attendance_submit_webinar', [WebinarController::class, 'attendanceSubmitWebinar'])->name('attendance.submit.webinar');
+    Route::post('/webinar/{id}/send-certificate',[WebinarController::class, 'sendWebinarCertificate'])->name('admin.webinar.send-certificate');
     Route::get('/contact-us', [ContactUsController::class, 'contactindex'])->name('admin.contactus.index');
     Route::post('/contact-us/{id}/resolve', [ContactUsController::class, 'resolve'])->name('admin.contactus.resolve');
 

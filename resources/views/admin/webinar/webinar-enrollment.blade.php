@@ -82,6 +82,8 @@
                         <th class="px-4 py-2 text-left text-sm font-semibold">Email</th>
                         <th class="px-4 py-2 text-left text-sm font-semibold">Phone</th>
                         <th class="px-4 py-2 text-left text-sm font-semibold">Comments</th>
+                        <th class="px-4 py-2 text-left text-sm font-semibold">Attendance Status</th>
+                        <th class="px-4 py-2 text-left text-sm font-semibold">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -98,6 +100,34 @@
                             <td class="px-4 py-3 text-sm">{{ $enrollment->email }}</td>
                             <td class="px-4 py-3 text-sm">{{ $enrollment->phone ?? 'N/A' }}</td>
                             <td class="px-4 py-3 text-sm">{{ $enrollment->comments ?? 'N/A' }}</td>
+                            <td class="px-4 py-3 text-sm">
+                                @if($enrollment->attendance_status === 'present')
+                                    <span class="text-green-600 font-semibold">Present</span>
+                                @else
+                                    <span class="text-yellow-500 font-semibold">Pending</span>
+                                @endif
+                            </td>
+                            <td class="px-4 py-3 text-sm">
+
+                                @if ($enrollment->certificate_sent)
+                                    <a href="{{ $enrollment->certificate_path }}" target="_blank" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm inline-block">
+                                        View Certificate
+                                    </a>
+                                @else
+                                @if($enrollment->attendance_status === 'present')
+                                    <form action="{{ route('admin.webinar.send-certificate', $enrollment->id) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm">
+                                    Send Certificate
+                                    </button>
+                                    </form>
+                                @else
+                                    <button class="bg-gray-300 text-gray-600 px-3 py-1 rounded text-sm cursor-not-allowed" disabled>
+                                    Send Certificate
+                                </button>
+                                @endif
+                                @endif
+                            </td>
                         </tr>
                     @empty
                         <tr>
