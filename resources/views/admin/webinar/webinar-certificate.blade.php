@@ -33,11 +33,11 @@
                 </p>
 
                 <p style="font-size: 16px; color: #333;">
-                    Please find your certificate attached to this email, or you may view it using the button below:
+                    Please view your certificate using the button below:
                 </p>
 
                 <p style="text-align: center; margin: 20px 0;">
-                    <a href="{{ $enrollment->certificate_path }}" target="_blank" 
+                    <a href="{{ $certificateUrl }}" target="_blank" 
                        style="display: inline-block; padding: 12px 24px; background-color: #0c3c7c; color: #ffffff; text-decoration: none; border-radius: 5px; font-size: 16px; font-weight: bold;">
                         View Certificate
                     </a>

@@ -241,7 +241,14 @@ public function sendWebinarCertificate(Request $request, $enrollmentId)
     
     
     if ($enrollment->certificate_sent) {
-        return back()->withErrors(['Certificate has already been sent to this attendee.']);
+        // Check if the certificate file still exists
+        $existingPath = public_path(parse_url($enrollment->certificate_path, PHP_URL_PATH));
+        if (file_exists($existingPath)) {
+            return back()->with('success', 'Certificate already sent and available at: ' . $enrollment->certificate_path);
+        } else {
+        // Certificate was sent before but file is missing, regenerate
+        $enrollment->certificate_sent = false;
+    }
     }
 
     if ($enrollment->attendance_status !== 'present') {
@@ -252,7 +259,8 @@ public function sendWebinarCertificate(Request $request, $enrollmentId)
     $day = $date->format('d');
     $month = strtoupper($date->format('F'));
     $year = $date->format('Y');
-    $finalTextDate = "GIVEN ON THE $day DAY OF $month, $year";
+    // $finalTextDate = "GIVEN ON THE $day DAY OF $month, $year";
+    $finalTextDate = "ON $day - $month - $year";
 
 
     $img_url = public_path('images/1750485390DBSBlank_ProvisionalDegree.jpg');
@@ -278,10 +286,36 @@ public function sendWebinarCertificate(Request $request, $enrollmentId)
     $name = ucwords(strtolower(trim($enrollment->name)));
     $webinar_title = $enrollment->webinar->title ?? 'Webinar Participant';
    
-    // Draw text on image
-    imagettftext($img, 150, 0, 2700, 2100, $color, $font, $name);
-    imagettftext($img, 150, 0, 2000, 2600, $color, $font, $webinar_title);
-    imagettftext($img, 120, 0, 2000, 3200, $color, $font, $finalTextDate);
+    // // Draw text on image
+    // imagettftext($img, 150, 0, 2700, 2100, $color, $font, $name);
+    // imagettftext($img, 150, 0, 2700, 2600, $color, $font, $webinar_title);
+    // imagettftext($img, 120, 0, 2000, 3200, $color, $font, $finalTextDate);
+
+    // Get the width of the image
+    $imageWidth = imagesx($img);
+    $angle = 0;
+
+    // Calculate X for $name (centered)
+    $fontSizeName = 150;
+    $bboxName = imagettfbbox($fontSizeName, $angle, $font, $name);
+    $textWidthName = abs($bboxName[2] - $bboxName[0]);
+    $xName = ($imageWidth / 2) - ($textWidthName / 2);
+    imagettftext($img, $fontSizeName, $angle, $xName, 2100, $color, $font, $name);
+
+    // Calculate X for $webinar_title (centered)
+    $fontSizeTitle = 150;
+    $bboxTitle = imagettfbbox($fontSizeTitle, $angle, $font, $webinar_title);
+    $textWidthTitle = abs($bboxTitle[2] - $bboxTitle[0]);
+    $xTitle = ($imageWidth / 2) - ($textWidthTitle / 2);
+    imagettftext($img, $fontSizeTitle, $angle, $xTitle, 2600, $color, $font, $webinar_title);
+
+    // Calculate X for $finalTextDate (centered)
+    $fontSizeDate = 120;
+    $bboxDate = imagettfbbox($fontSizeDate, $angle, $font, $finalTextDate);
+    $textWidthDate = abs($bboxDate[2] - $bboxDate[0]);
+    $xDate = ($imageWidth / 2) - ($textWidthDate / 2);
+    imagettftext($img, $fontSizeDate, $angle, $xDate, 3200, $color, $font, $finalTextDate);
+
     
 
     // Always define $tempPath before use
@@ -307,11 +341,11 @@ public function sendWebinarCertificate(Request $request, $enrollmentId)
 
     try{
         // Send the certificate by email
-        Mail::to($enrollment->email)->send(new WebinarCertificateMail($enrollment, $tempPath));
+        Mail::to($enrollment->email)->send(new WebinarCertificateMail($enrollment, $publicUrl));
         $enrollment->update([
             'certificate_sent' => true,
             'certificate_sent_at' => now(),
-            'certificate_path' => $publicUrl, // Save public URL
+            'certificate_path' => 'certificate/' . $fileName, // relative path to certificate in public folder
         ]);
     } catch (\Exception $e) {
         return back()->withErrors(['Failed to send email: ' . $e->getMessage()]);

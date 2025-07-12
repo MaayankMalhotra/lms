@@ -12,18 +12,18 @@ class WebinarCertificateMail extends Mailable implements ShouldQueue
     use Queueable, SerializesModels;
 
     public $enrollment;
-    public $certificatePath;
+    public $certificateUrl;
 
     /**
      * Create a new message instance.
      *
      * @param  mixed  $enrollment
-     * @param  string $certificatePath
+     * @param  string $certificateUrl
      */
-    public function __construct($enrollment, $certificatePath)
+    public function __construct($enrollment, $certificateUrl)
     {
         $this->enrollment = $enrollment;
-        $this->certificatePath = $certificatePath;
+        $this->certificateUrl = $certificateUrl;
     }
 
     /**
@@ -32,7 +32,11 @@ class WebinarCertificateMail extends Mailable implements ShouldQueue
     public function build()
     {
         return $this->subject('Your Webinar Certificate')
-                    ->view('admin.webinar.webinar-certificate') ;
+                    ->view('admin.webinar.webinar-certificate')
+                    ->with([
+                    'enrollment' => $this->enrollment,
+                    'certificateUrl' => asset($this->certificateUrl),  // Build URL here
+                    ]); 
                     // ->attach($this->certificatePath, [
                     //     'as' => 'webinar_certificate.jpg',
                     //     'mime' => 'image/jpeg',
