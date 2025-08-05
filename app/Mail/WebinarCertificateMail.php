@@ -13,6 +13,8 @@ class WebinarCertificateMail extends Mailable implements ShouldQueue
 
     public $enrollment;
     public $certificateUrl;
+    public $duration;
+    public $certificateId;
 
     /**
      * Create a new message instance.
@@ -20,10 +22,12 @@ class WebinarCertificateMail extends Mailable implements ShouldQueue
      * @param  mixed  $enrollment
      * @param  string $certificateUrl
      */
-    public function __construct($enrollment, $certificateUrl)
+    public function __construct($enrollment, $certificateUrl,$duration,$certificateId)
     {
         $this->enrollment = $enrollment;
         $this->certificateUrl = $certificateUrl;
+        $this->duration = $duration;
+        $this->certificateId = $certificateId;
     }
 
     /**
@@ -36,6 +40,7 @@ class WebinarCertificateMail extends Mailable implements ShouldQueue
                     ->with([
                     'enrollment' => $this->enrollment,
                     'certificateUrl' => asset($this->certificateUrl),  // Build URL here
+                    'certificateId' => $this->certificateId,
                     ]); 
                     // ->attach($this->certificatePath, [
                     //     'as' => 'webinar_certificate.jpg',
